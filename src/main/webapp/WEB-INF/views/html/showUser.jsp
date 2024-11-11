@@ -1,6 +1,7 @@
 <%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse" %>
 <%@ page import="java.time.LocalDateTime" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.LocalDate" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
@@ -25,10 +26,10 @@
             rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="" rel="stylesheet">
+    <link href="<c:url value="/css/sb-admin-2.min.css" />" rel="stylesheet">
 
     <!-- Custom styles for this page -->
-    <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="<c:url value="/datatables/dataTables.bootstrap4.min.css" />" rel="stylesheet">
 
 </head>
 
@@ -53,7 +54,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="../index.html">
+            <a class="nav-link" href="#">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Statistics</span></a>
         </li>
@@ -254,7 +255,7 @@
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="../img/undraw_profile_2.svg" alt="...">
+                                    <img class="rounded-circle" src="<c:url value="/img/undraw_profile_2.svg"/>" alt="...">
                                     <div class="status-indicator"></div>
                                 </div>
                                 <div>
@@ -375,8 +376,9 @@
                                                 <%
                                                     Object obj = pageContext.findAttribute("customer");
                                                     CustomerResponse customerResponse = (CustomerResponse) obj;
-                                                    LocalDateTime dateOfBirth = customerResponse.getDateOfBirth();
+                                                    LocalDate dateOfBirth = customerResponse.getDateOfBirth();
                                                     String formatDate = dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                                                    out.print(formatDate);
                                                 %>
                                             </td>
                                             <td><img src="${customer.avatar}" alt="avatar" width="50" height="50"></td>
@@ -451,21 +453,21 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="../vendor/jquery/jquery.min.js"></script>
-<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<c:url value="/jquery/jquery.min.js" />"></script>
+<script src="<c:url value="/bootstrap/js/bootstrap.bundle.min.js" />"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="<c:url value="/jquery-easing/jquery.easing.min.js" />"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="../js/sb-admin-2.min.js"></script>
+<script src="<c:url value="/js/sb-admin-2.min.js" />"></script>
 
 <!-- Page level plugins -->
-<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="<c:url value="/datatables/jquery.dataTables.min.js" />"></script>
+<script src="<c:url value="/datatables/dataTables.bootstrap4.min.js" />"></script>
 
 <!-- Page level custom scripts -->
-<script src="../js/demo/datatables-demo.js"></script>
+<script src="<c:url value="/js/demo/datatables-demo.js" />"></script>
 
 </body>
 
