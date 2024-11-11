@@ -17,7 +17,6 @@ public class CustomerResponse {
     String id;
     CustomerStatus userStatus;
     String name;
-    String address;
     String phone;
     Gender gender;
     String avatar;

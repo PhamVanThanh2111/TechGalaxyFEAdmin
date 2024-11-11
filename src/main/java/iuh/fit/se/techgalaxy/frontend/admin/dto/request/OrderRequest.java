@@ -16,6 +16,7 @@ public class OrderRequest {
     String id;
     Customer customer;
     SystemUser systemUser;
+    String address;
     PaymentStatus paymentStatus;
     OrderStatus orderStatus;
 }

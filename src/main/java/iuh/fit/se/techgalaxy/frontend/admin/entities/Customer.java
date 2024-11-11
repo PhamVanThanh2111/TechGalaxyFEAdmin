@@ -22,7 +22,6 @@ public class Customer {
     private CustomerStatus userStatus;
     private Account account;
     private String name;
-    private String address;
     private String phone;
     private Gender gender;
     private String avatar;

@@ -18,6 +18,7 @@ public class Order {
     private String id;
     private Customer customer;
     private SystemUser systemUser;
+    private String address;
     private PaymentStatus paymentStatus;
     private OrderStatus orderStatus;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
