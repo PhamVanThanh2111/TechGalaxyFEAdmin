@@ -1,6 +1,7 @@
 package iuh.fit.se.techgalaxy.frontend.admin.entities;
 
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,5 +29,5 @@ public class ProductVariantDetail {
     private LocalDateTime updatedAt;
     private List<Value> values;
     private List<OrderDetail> ordersDetails;
-    private ProductsImage productsImage;
+    private List<ProductsImage> productsImage;
 }

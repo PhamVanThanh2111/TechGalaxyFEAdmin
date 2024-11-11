@@ -1,9 +1,15 @@
+<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse" %>
+<%@ page import="java.time.LocalDateTime" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -330,28 +336,47 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th>Id</th>
                                             <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                            <th>Action</th>
+                                            <th>User Status</th>
+                                            <th>Phone</th>
+                                            <th>Gender</th>
+                                            <th>Date of birth</th>
+                                            <th>Avatar</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
+                                            <th>Id</th>
                                             <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                            <th>Action</th>
+                                            <th>User Status</th>
+                                            <th>Phone</th>
+                                            <th>Gender</th>
+                                            <th>Date of birth</th>
+                                            <th>Avatar</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <tr>
+<c:if test="${customers != null}">
+    <c:forEach items="${customers}" var="customer">
+        <tr>
+            <td>${customer.id}</td>
+            <td>${customer.name}</td>
+            <td>${customer.userStatus}</td>
+            <td>${customer.phone}</td>
+            <td>${customer.gender}</td>
+            <td>
+                <%
+                Object obj = pageContext.findAttribute("customer");
+                CustomerResponse customerResponse = (CustomerResponse) obj;
+                LocalDateTime dateOfBirth = customerResponse.getDateOfBirth();
+                String formatDate = dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                %>
+            </td>
+            <td><img src="${customer.avatar}" alt="avatar" width="50" height="50"></td>
+    </c:forEach>
+</c:if>
+                                    <tr>
                                             <td>Tiger Nixon</td>
                                             <td>System Architect</td>
                                             <td>Edinburgh</td>
