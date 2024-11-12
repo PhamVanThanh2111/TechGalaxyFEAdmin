@@ -16,7 +16,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Show Customer</title>
+    <title>Show User System</title>
 
     <!-- Custom fonts for this template -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
@@ -76,7 +76,7 @@
             <div id="userSystemManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">User System Manage</h6>
-                    <a class="collapse-item" href="">Show</a>
+                    <a class="collapse-item" href="${pageContext.request.contextPath}/userSystem">Show</a>
                     <a class="collapse-item" href="">Add</a>
                 </div>
             </div>
