@@ -34,7 +34,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -46,7 +46,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Statistics</span></a>
             </li>
@@ -60,16 +60,31 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userManage"
-                    aria-expanded="true" aria-controls="userManage">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userSystemManage"
+                   aria-expanded="true" aria-controls="userManage">
                     <i class="fa-solid fa-user"></i>
-                    <span>User</span>
+                    <span>User System</span>
                 </a>
-                <div id="userManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="userSystemManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">User Manage</h6>
-                        <a class="collapse-item" href="html/showCustomer.jsp">Show</a>
-                        <a class="collapse-item" href="html/addCustomer.jsp">Add</a>
+                        <h6 class="collapse-header">User System Manage</h6>
+                        <a class="collapse-item" href="">Show</a>
+                        <a class="collapse-item" href="">Add</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#customerManage"
+                   aria-expanded="true" aria-controls="userManage">
+                    <i class='fas fa-users'></i>
+                    <span>Customer</span>
+                </a>
+                <div id="customerManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Customer Manage</h6>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/customers">Show</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/customers/add">Add</a>
                     </div>
                 </div>
             </li>
