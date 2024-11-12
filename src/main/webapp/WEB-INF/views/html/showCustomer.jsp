@@ -42,7 +42,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.jsp">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -68,16 +68,31 @@
         </div>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userManage"
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userSystemManage"
                aria-expanded="true" aria-controls="userManage">
                 <i class="fa-solid fa-user"></i>
-                <span>User</span>
+                <span>User System</span>
             </a>
-            <div id="userManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div id="userSystemManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">User Manage</h6>
-                    <a class="collapse-item" href="showUser.html">Show</a>
-                    <a class="collapse-item" href="addUser.html">Add</a>
+                    <h6 class="collapse-header">User System Manage</h6>
+                    <a class="collapse-item" href="">Show</a>
+                    <a class="collapse-item" href="">Add</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#customerManage"
+               aria-expanded="true" aria-controls="userManage">
+                <i class='fas fa-users'></i>
+                <span>Customer</span>
+            </a>
+            <div id="customerManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Customer Manage</h6>
+                    <a class="collapse-item" href="${pageContext.request.contextPath}/customers">Show</a>
+                    <a class="collapse-item" href="${pageContext.request.contextPath}/customers/add">Add</a>
                 </div>
             </div>
         </li>
@@ -255,7 +270,8 @@
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="<c:url value="/img/undraw_profile_2.svg"/>" alt="...">
+                                    <img class="rounded-circle" src="<c:url value="/img/undraw_profile_2.svg"/>"
+                                         alt="...">
                                     <div class="status-indicator"></div>
                                 </div>
                                 <div>
@@ -381,7 +397,8 @@
                                                     out.print(formatDate);
                                                 %>
                                             </td>
-                                            <td><img src="${customer.avatar}" alt="avatar" width="50" height="50"></td>
+                                            <td><img src="<c:url value="/img/${customer.avatar}"/>" alt="avatar"
+                                                     width="55" height="55"></td>
                                             <td><a href="updateUser.html" class="btn btn-warning btn-sm">Update</a>
                                                 <a href="#" class="btn btn-danger btn-sm" data-toggle="modal"
                                                    data-target="#deleteUserModal">Delete</a>

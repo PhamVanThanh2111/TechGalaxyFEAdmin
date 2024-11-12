@@ -30,8 +30,16 @@ public class CustomerController {
         if (response != null) {
             customers = (List<CustomerResponse>) response.getData();
         }
-        model.setViewName("html/showUser");
+        model.setViewName("html/showCustomer");
         model.addObject("customers", customers);
+        return model;
+    }
+
+    @GetMapping("/add")
+    public ModelAndView showForm(ModelAndView model) {
+        CustomerResponse customer = new CustomerResponse();
+        model.setViewName("html/addCustomer");
+        model.addObject("customer", customer);
         return model;
     }
 }
