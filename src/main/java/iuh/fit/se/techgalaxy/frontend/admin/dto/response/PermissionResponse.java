@@ -1,6 +1,5 @@
 package iuh.fit.se.techgalaxy.frontend.admin.dto.response;
 
-import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,14 +9,17 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserUpdateResponse {
+@AllArgsConstructor
+public class PermissionResponse {
+
     private String id;
     private String name;
-    private Gender gender;
-    private String address;
-    private int age;
+    private String apiPath;
+    private String method;
+    private String module;
+    private String createdBy;
+    private String updatedBy;
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }

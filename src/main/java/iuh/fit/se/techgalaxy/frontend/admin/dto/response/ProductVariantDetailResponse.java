@@ -14,13 +14,20 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductVariantDetailResponse {
     String id;
-    String name;
     Integer viewsCount;
-    Integer quantity;
     Double price;
     Double sale;
     ProductStatus status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
-    Map<String, String[]> memories;
+    Map<String, ColorQuantity[]> memories;
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public static class ColorQuantity {
+        Integer quantity;
+        String colorId;
+    }
 }

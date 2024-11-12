@@ -1,6 +1,6 @@
 package iuh.fit.se.techgalaxy.frontend.admin.dto.request;
 
-import jakarta.validation.constraints.Size;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,8 +9,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductRequest {
-     @Size(min = 1, max = 20, message = "PRODUCT_NAME_INVALID")
-     String name;
-     String trademarkId;
+public class ProductDetailUpdateRequest {
+    ProductStatus status;
+    Integer quantity;
 }
