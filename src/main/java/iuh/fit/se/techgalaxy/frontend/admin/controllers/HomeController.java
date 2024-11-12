@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping
+@RequestMapping("/")
 public class HomeController {
-    @GetMapping("/")
+    @GetMapping
     public ModelAndView showHome(ModelAndView model) {
         model.setViewName("index");
         return model;

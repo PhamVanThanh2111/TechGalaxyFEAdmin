@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,17 +12,20 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Add Order</title>
+    <title>Show Order</title>
 
-    <!-- Custom fonts for this template-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom fonts for this template -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
+        type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="<c:url value="/css/sb-admin-2.min.css" />" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="<c:url value="/datatables/dataTables.bootstrap4.min.css" />" rel="stylesheet">
 
 </head>
 
@@ -32,7 +38,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.jsp">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -58,16 +64,31 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userManage"
-                    aria-expanded="true" aria-controls="userManage">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userSystemManage"
+                   aria-expanded="true" aria-controls="userManage">
                     <i class="fa-solid fa-user"></i>
-                    <span>User</span>
+                    <span>User System</span>
                 </a>
-                <div id="userManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="userSystemManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">User Manage</h6>
-                        <a class="collapse-item" href="showCustomer.jsp">Show</a>
-                        <a class="collapse-item" href="addCustomer.jsp">Add</a>
+                        <h6 class="collapse-header">User System Manage</h6>
+                        <a class="collapse-item" href="">Show</a>
+                        <a class="collapse-item" href="">Add</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#customerManage"
+                   aria-expanded="true" aria-controls="userManage">
+                    <i class='fas fa-users'></i>
+                    <span>Customer</span>
+                </a>
+                <div id="customerManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Customer Manage</h6>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/customers">Show</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/customers/add">Add</a>
                     </div>
                 </div>
             </li>
@@ -96,8 +117,8 @@
                 <div id="orderManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Order Manage</h6>
-                        <a class="collapse-item" href="showOrder.html">Show</a>
-                        <a class="collapse-item" href="addOrder.html">Add</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/orders">Show</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/orders/add">Add</a>
                     </div>
                 </div>
             </li>
@@ -120,9 +141,11 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
+                    <form class="form-inline">
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </form>
 
                     <!-- Topbar Search -->
                     <form
@@ -312,67 +335,60 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Add Order</h1>
-                    </div>
+                    <h1 class="h3 mb-2 text-gray-800">Orders</h1>
+                    <p class="mb-4">This is a order management table, displaying user and products data such as name, price, and
+                        others.</p>
 
-                    <div class="row">
-
-                        <div class="col-lg-12">
-
-                            <!-- Basic Card Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Order Information</h6>
-                                </div>
-                                <div class="card-body">
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="firstName">First name</label>
-                                            <input type="text" class="form-control" id="firstName" placeholder="Type the first name"
-                                                required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="lastName">Last name</label>
-                                            <input type="text" class="form-control" id="lastName" placeholder="Type the last name"
-                                                required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="birthDate">Birthday</label>
-                                            <input type="date" class="form-control" id="birthDate" required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="gender">Gender</label>
-                                            <select class="form-control" id="gender" required>
-                                                <option value="">Choose gender</option>
-                                                <option value="male">Male</option>
-                                                <option value="female">Female</option>
-                                                <option value="other">Other</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="phoneNumber">Phone number</label>
-                                            <input type="tel" class="form-control" id="phoneNumber"
-                                                placeholder="Type the phone number" required>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" placeholder="Type the email"
-                                                required>
-                                        </div>
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary align-self-center">Add</button>  
-                                        </div>
-                                    </form>
-                                </div>
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Data Order</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Customer</th>
+                                            <th>Employee</th>
+                                            <th>Address</th>
+                                            <th>Payment Status</th>
+                                            <th>Order Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Customer</th>
+                                            <th>Employee</th>
+                                            <th>Address</th>
+                                            <th>Payment Status</th>
+                                            <th>Order Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    <c:if test="${orders != null}">
+                                        <c:forEach var="order" items="${orders}">
+                                            <tr>
+                                                <td>${order.id}</td>
+                                                <td>${order.customer.name}</td>
+                                                <td>${order.systemUser.name}</td>
+                                                <td>${order.address}</td>
+                                                <td>${order.paymentStatus}</td>
+                                                <td>${order.orderStatus}</td>
+                                                <td><a href="updateOrder.html" class="btn btn-warning btn-sm">Update</a>
+                                                    <a href="orderDetail.html" class="btn btn-info btn-sm">Detail</a>
+                                                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#confirmOrderModal">Confirm</a>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </c:if>
+                                    </tbody>
+                                </table>
                             </div>
-
                         </div>
                     </div>
 
@@ -412,15 +428,42 @@
         </div>
     </div>
 
+    <!-- Confirm Order Modal-->
+    <div class="modal fade" id="confirmOrderModal" tabindex="-1" role="dialog" aria-labelledby="confirmOrderModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmOrderModalLabel">Ready to confirm?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Yes" below if you are ready to confirm this order.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="showOrder.html">Yes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<c:url value="/jquery/jquery.min.js" />"></script>
+    <script src="<c:url value="/bootstrap/js/bootstrap.bundle.min.js" />"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="<c:url value="/jquery-easing/jquery.easing.min.js" />"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../js/sb-admin-2.min.js"></script>
+    <script src="<c:url value="/js/sb-admin-2.min.js" />"></script>
+
+    <!-- Page level plugins -->
+    <script src="<c:url value="/datatables/jquery.dataTables.min.js" />"></script>
+    <script src="<c:url value="/datatables/dataTables.bootstrap4.min.js" />"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="<c:url value="/js/demo/datatables-demo.js" />"></script>
 
 </body>
 

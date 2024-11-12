@@ -14,8 +14,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderResponse {
     String id;
-    Customer customer;
-    SystemUser systemUser;
+    CustomerResponse customer;
+    SystemUserResponse systemUser;
     String address;
     PaymentStatus paymentStatus;
     OrderStatus orderStatus;

@@ -121,8 +121,8 @@
             <div id="orderManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Order Manage</h6>
-                    <a class="collapse-item" href="showOrder.html">Show</a>
-                    <a class="collapse-item" href="addOrder.html">Add</a>
+                    <a class="collapse-item" href="${pageContext.request.contextPath}/orders">Show</a>
+                    <a class="collapse-item" href="${pageContext.request.contextPath}/orders/add">Add</a>
                 </div>
             </div>
         </li>
@@ -463,7 +463,7 @@
             <div class="modal-body">Select "Yes" below if you are ready to delete this user.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="showUser.html">Yes</a>
+                <a class="btn btn-primary" href="${pageContext.request.contextPath}/customers">Yes</a>
             </div>
         </div>
     </div>

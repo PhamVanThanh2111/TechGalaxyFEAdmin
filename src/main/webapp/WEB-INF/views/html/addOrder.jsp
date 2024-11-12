@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,17 +12,17 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Update User</title>
+    <title>Add Order</title>
 
     <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="<c:url value="/fontawesome-free/css/all.min.css"/>" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="<c:url value="/css/sb-admin-2.min.css" />" rel="stylesheet">
 
 </head>
 
@@ -58,16 +61,31 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userManage"
-                    aria-expanded="true" aria-controls="userManage">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userSystemManage"
+                   aria-expanded="true" aria-controls="userManage">
                     <i class="fa-solid fa-user"></i>
-                    <span>User</span>
+                    <span>User System</span>
                 </a>
-                <div id="userManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="userSystemManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">User Manage</h6>
-                        <a class="collapse-item" href="showCustomer.jsp">Show</a>
-                        <a class="collapse-item" href="addCustomer.jsp">Add</a>
+                        <h6 class="collapse-header">User System Manage</h6>
+                        <a class="collapse-item" href="">Show</a>
+                        <a class="collapse-item" href="">Add</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#customerManage"
+                   aria-expanded="true" aria-controls="userManage">
+                    <i class='fas fa-users'></i>
+                    <span>Customer</span>
+                </a>
+                <div id="customerManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Customer Manage</h6>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/customers">Show</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/customers/add">Add</a>
                     </div>
                 </div>
             </li>
@@ -97,7 +115,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Order Manage</h6>
                         <a class="collapse-item" href="showOrder.jsp">Show</a>
-                        <a class="collapse-item" href="addOrder.jsp">Add</a>
+                        <a class="collapse-item" href="addOrder.html">Add</a>
                     </div>
                 </div>
             </li>
@@ -313,7 +331,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Update Order</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Add Order</h1>
                     </div>
 
                     <div class="row">
@@ -367,7 +385,7 @@
                                         </div>
 
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary align-self-center">Update</button>  
+                                            <button type="submit" class="btn btn-primary align-self-center">Add</button>  
                                         </div>
                                     </form>
                                 </div>
@@ -413,15 +431,15 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<c:url value="/jquery/jquery.min.js" />"></script>
+    <script src="<c:url value="/bootstrap/js/bootstrap.bundle.min.js" />"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="<c:url value="/jquery-easing/jquery.easing.min.js" />"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../js/sb-admin-2.min.js"></script>
+    <script src="<c:url value="/js/sb-admin-2.min.js" />"></script>
 
 </body>
 
-</html>
+>

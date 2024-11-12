@@ -113,8 +113,8 @@
                 <div id="orderManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Order Manage</h6>
-                        <a class="collapse-item" href="./html/showOrder.html">Show</a>
-                        <a class="collapse-item" href="./html/addOrder.html">Add</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/orders">Show</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/orders/add">Add</a>
                     </div>
                 </div>
             </li>

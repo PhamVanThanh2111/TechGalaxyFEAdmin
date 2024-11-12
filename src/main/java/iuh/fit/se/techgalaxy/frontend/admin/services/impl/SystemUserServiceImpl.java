@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.services.SystemUserService;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+@Service
 public class SystemUserServiceImpl implements SystemUserService {
     private RestClient restClient;
     private ObjectMapper objectMapper;
