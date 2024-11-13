@@ -1,6 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -185,14 +186,14 @@
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
+                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
                                     Alerts Center
                                 </h6>
@@ -236,20 +237,20 @@
                         <!-- Nav Item - Messages -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
                                 <span class="badge badge-danger badge-counter">7</span>
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="messagesDropdown">
+                                 aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
                                     Message Center
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="../img/undraw_profile_1.svg" alt="...">
+                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_1.svg"/> " alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -260,7 +261,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="../img/undraw_profile_2.svg" alt="...">
+                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_2.svg"/> " alt="">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -271,7 +272,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="../img/undraw_profile_3.svg" alt="...">
+                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_3.svg"/> " alt="">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -283,11 +284,11 @@
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
                                         <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="...">
+                                             alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
+                                        <div class="text-truncate">Am I a good boy? The reason I ask is that someone
                                             told me that people say this to all dogs, even if they aren't good...</div>
                                         <div class="small text-gray-500">Chicken the Dog · 2w</div>
                                     </div>
@@ -303,7 +304,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+                                <img class="rounded-circle" src="<c:url value="/img/undraw_profile.svg"/> " alt="">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -330,7 +331,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Add User</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Add Customer</h1>
                     </div>
 
                     <div class="row">
@@ -340,53 +341,60 @@
                             <!-- Basic Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">User Information</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Customer Information</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form>
+                                    <form:form role="form" action="${pageContext.request.contextPath}/customers/save" method="POST" modelAttribute="customerRequest" cssClass="needs-validation" >
                                         <div class="form-group">
-                                            <label for="firstName">First name</label>
-                                            <input type="text" class="form-control" id="firstName" placeholder="Type the first name"
-                                                required>
+                                            <form:label path="name" for="firstName">Name</form:label>
+                                            <form:input path="name" type="text" cssClass="form-control" id="name" placeholder="Name" required="required" />
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="lastName">Last name</label>
-                                            <input type="text" class="form-control" id="lastName" placeholder="Type the last name"
-                                                required>
+                                            <form:label path="email" for="email">Email</form:label>
+                                            <form:input path="email" type="text" cssClass="form-control" id="email" placeholder="E-mail" required="required" />
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="birthDate">Birthday</label>
-                                            <input type="date" class="form-control" id="birthDate" required>
+                                            <form:label path="dateOfBirth" for="birthDate">Birthday</form:label>
+                                            <form:input path="dateOfBirth" type="date" cssClass="form-control" id="birthDate" />
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="gender">Gender</label>
-                                            <select class="form-control" id="gender" required>
-                                                <option value="">Choose gender</option>
-                                                <option value="male">Male</option>
-                                                <option value="female">Female</option>
-                                                <option value="other">Other</option>
-                                            </select>
+                                            <form:label path="gender" for="gender">Gender</form:label>
+                                            <form:select path="gender" cssClass="form-control" id="gender">
+                                                <form:option value="">Choose gender</form:option>
+                                                <form:option value="MALE">Male</form:option>
+                                                <form:option value="FEMALE">Female</form:option>
+                                                <form:option value="OTHER">Other</form:option>
+                                            </form:select>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="phoneNumber">Phone number</label>
-                                            <input type="tel" class="form-control" id="phoneNumber"
-                                                placeholder="Type the phone number" required>
+                                            <form:label path="phone"  for="phoneNumber">Phone number</form:label>
+                                            <form:input path="phone" type="tel" cssClass="form-control" id="phoneNumber"
+                                                placeholder="Type the phone number" />
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" placeholder="Type the email"
-                                                required>
+                                            <form:label path="userStatus" for="status">Status</form:label>
+                                            <form:select path="userStatus" cssClass="form-control" id="status" required="required">
+                                                <form:option value="">Choose status</form:option>
+                                                <form:option value="ACTIVE">Active</form:option>
+                                                <form:option value="INACTIVE">Inactive</form:option>
+                                                <form:option value="SUSPENDED">Suspended</form:option>
+                                            </form:select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <form:label path="avatar" for="avatar">Avatar</form:label>
+                                            <form:input path="avatar" type="file" cssClass="form-control" id="avatar" accept="image/png, image/jpeg" />
                                         </div>
 
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-primary align-self-center">Add</button>
                                         </div>
-                                    </form>
+                                    </form:form>
                                 </div>
                             </div>
 

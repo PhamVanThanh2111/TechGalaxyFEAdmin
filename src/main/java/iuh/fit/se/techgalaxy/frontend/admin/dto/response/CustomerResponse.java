@@ -1,5 +1,6 @@
 package iuh.fit.se.techgalaxy.frontend.admin.dto.response;
 
+import iuh.fit.se.techgalaxy.frontend.admin.entities.Account;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.Gender;
 import lombok.*;
@@ -20,4 +21,6 @@ public class CustomerResponse {
     Gender gender;
     String avatar;
     LocalDate dateOfBirth;
+    String email;
+    Account account;
 }

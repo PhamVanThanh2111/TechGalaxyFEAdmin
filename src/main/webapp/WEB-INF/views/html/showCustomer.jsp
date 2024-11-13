@@ -54,7 +54,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="../index.jsp">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Statistics</span></a>
         </li>
@@ -121,8 +121,8 @@
             <div id="orderManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Order Manage</h6>
-                    <a class="collapse-item" href="${pageContext.request.contextPath}/orders">Show</a>
-                    <a class="collapse-item" href="${pageContext.request.contextPath}/orders/add">Add</a>
+                    <a class="collapse-item" href="showOrder.jsp">Show</a>
+                    <a class="collapse-item" href="addOrder.jsp">Add</a>
                 </div>
             </div>
         </li>
@@ -393,13 +393,15 @@
                                                     Object obj = pageContext.findAttribute("customer");
                                                     CustomerResponse customerResponse = (CustomerResponse) obj;
                                                     LocalDate dateOfBirth = customerResponse.getDateOfBirth();
-                                                    String formatDate = dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                                                    out.print(formatDate);
+                                                    if (dateOfBirth != null){
+                                                        String formatDate = dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                                                        out.print(formatDate);
+                                                    }
                                                 %>
                                             </td>
                                             <td><img src="<c:url value="/img/${customer.avatar}"/>" alt="avatar"
                                                      width="55" height="55"></td>
-                                            <td><a href="updateUser.html" class="btn btn-warning btn-sm">Update</a>
+                                            <td style="width: 18%"><a href="${pageContext.request.contextPath}/customers/update/${customer.id}" class="btn btn-warning btn-sm">Update</a>
                                                 <a href="#" class="btn btn-danger btn-sm" data-toggle="modal"
                                                    data-target="#deleteUserModal">Delete</a>
                                                 <a href="userDetail.html" class="btn btn-info btn-sm">Detail</a>

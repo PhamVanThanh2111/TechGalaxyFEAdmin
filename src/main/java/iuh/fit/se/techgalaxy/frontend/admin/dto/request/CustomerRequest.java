@@ -21,5 +21,6 @@ public class CustomerRequest {
     Gender gender;
     String avatar;
     LocalDate dateOfBirth;
+    String email;
     Account account;
 }
