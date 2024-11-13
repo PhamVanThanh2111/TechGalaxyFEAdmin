@@ -1,19 +1,18 @@
-<%@ page contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Add Customer</title>
+    <title>User Detail</title>
 
     <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" type="text/css">
@@ -23,7 +22,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="<c:url value="/css/sb-admin-2.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/css/sb-admin-2.min.css"/>" rel="stylesheet">
 
 </head>
 
@@ -36,7 +35,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.jsp">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -62,31 +61,16 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userSystemManage"
-                   aria-expanded="true" aria-controls="userManage">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userManage"
+                    aria-expanded="true" aria-controls="userManage">
                     <i class="fa-solid fa-user"></i>
-                    <span>User System</span>
+                    <span>User</span>
                 </a>
-                <div id="userSystemManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="userManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">User System Manage</h6>
-                        <a class="collapse-item" href="">Show</a>
-                        <a class="collapse-item" href="">Add</a>
-                    </div>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#customerManage"
-                   aria-expanded="true" aria-controls="userManage">
-                    <i class='fas fa-users'></i>
-                    <span>Customer</span>
-                </a>
-                <div id="customerManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Customer Manage</h6>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/customers">Show</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/customers/add">Add</a>
+                        <h6 class="collapse-header">User Manage</h6>
+                        <a class="collapse-item" href="showCustomer.jsp">Show</a>
+                        <a class="collapse-item" href="formCustomer.jsp">Add</a>
                     </div>
                 </div>
             </li>
@@ -125,6 +109,7 @@
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
+
         </ul>
         <!-- End of Sidebar -->
 
@@ -186,14 +171,14 @@
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="alertsDropdown">
+                                aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
                                     Alerts Center
                                 </h6>
@@ -237,20 +222,20 @@
                         <!-- Nav Item - Messages -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
                                 <span class="badge badge-danger badge-counter">7</span>
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="messagesDropdown">
+                                aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
                                     Message Center
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_1.svg"/> " alt="">
+                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_1.svg"/>" alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -261,7 +246,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_2.svg"/> " alt="">
+                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_2.svg"/>" alt="">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -272,7 +257,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_3.svg"/> " alt="">
+                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_3.svg"/>" alt="">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -284,11 +269,11 @@
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
                                         <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                             alt="...">
+                                            alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is that someone
+                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
                                             told me that people say this to all dogs, even if they aren't good...</div>
                                         <div class="small text-gray-500">Chicken the Dog · 2w</div>
                                     </div>
@@ -304,7 +289,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="rounded-circle" src="<c:url value="/img/undraw_profile.svg"/> " alt="">
+                                <img class="img-profile rounded-circle" src="<c:url value="/img/undraw_profile.svg"/>" alt="">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -331,7 +316,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Add Customer</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Order Detail</h1>
                     </div>
 
                     <div class="row">
@@ -341,61 +326,70 @@
                             <!-- Basic Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Customer Information</h6>
+                                    <h5 class="m-0 font-weight-bold text-primary">Order Information</h5>
                                 </div>
                                 <div class="card-body">
-                                    <form:form role="form" action="${pageContext.request.contextPath}/customers/save" method="POST" modelAttribute="customerRequest" cssClass="needs-validation" >
-                                        <div class="form-group">
-                                            <form:label path="name" for="firstName">Name</form:label>
-                                            <form:input path="name" type="text" cssClass="form-control" id="name" placeholder="Name" required="required" />
-                                        </div>
-
-                                        <div class="form-group">
-                                            <form:label path="email" for="email">Email</form:label>
-                                            <form:input path="email" type="text" cssClass="form-control" id="email" placeholder="E-mail" required="required" />
-                                        </div>
-
-                                        <div class="form-group">
-                                            <form:label path="dateOfBirth" for="birthDate">Birthday</form:label>
-                                            <form:input path="dateOfBirth" type="date" cssClass="form-control" id="birthDate" />
-                                        </div>
-
-                                        <div class="form-group">
-                                            <form:label path="gender" for="gender">Gender</form:label>
-                                            <form:select path="gender" cssClass="form-control" id="gender">
-                                                <form:option value="">Choose gender</form:option>
-                                                <form:option value="MALE">Male</form:option>
-                                                <form:option value="FEMALE">Female</form:option>
-                                                <form:option value="OTHER">Other</form:option>
-                                            </form:select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <form:label path="phone"  for="phoneNumber">Phone number</form:label>
-                                            <form:input path="phone" type="tel" cssClass="form-control" id="phoneNumber"
-                                                placeholder="Type the phone number" />
-                                        </div>
-
-                                        <div class="form-group">
-                                            <form:label path="userStatus" for="status">Status</form:label>
-                                            <form:select path="userStatus" cssClass="form-control" id="status" required="required">
-                                                <form:option value="">Choose status</form:option>
-                                                <form:option value="ACTIVE">Active</form:option>
-                                                <form:option value="INACTIVE">Inactive</form:option>
-                                                <form:option value="SUSPENDED">Suspended</form:option>
-                                            </form:select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <form:label path="avatar" for="avatar">Avatar</form:label>
-                                            <form:input path="avatar" type="file" cssClass="form-control" id="avatar" accept="image/png, image/jpeg" />
-                                        </div>
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary align-self-center">Add</button>
-                                        </div>
-                                    </form:form>
+                                    <!-- Customer Information -->
+                                    <h5 class="card-title">Customer Detail</h5>
+                                    
+                                    <!-- Profile Picture -->
+                                    <div class="mb-3 text-center">
+                                        <img src="<c:url value="/img/undraw_profile.svg"/>" class="img-thumbnail" alt="Customer Photo" style="width: 200px; height: 200px; border-width: 0">
+                                    </div>
+                                    
+                                    <!-- User General Information -->
+                                    <div class="mb-3">
+                                        <h6 class="font-weight-bold text-primary">User Information</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item"><strong>Full Name:</strong> John Doe</li>
+                                            <li class="list-group-item"><strong>Email:</strong> john.doe@example.com</li>
+                                            <li class="list-group-item"><strong>Phone Number:</strong> (123) 456-7890</li>
+                                            <li class="list-group-item"><strong>Address:</strong> 123 Main St, New York, NY 10001</li>
+                                        </ul>
+                                    </div>
+                                
+                                    <!-- Additional User Details -->
+                                    <div class="mb-3">
+                                        <h6 class="font-weight-bold text-primary">Additional Information</h6>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Attribute</th>
+                                                    <th>Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Date of Birth</td>
+                                                    <td>January 1, 1990</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Gender</td>
+                                                    <td>Male</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Account Created</td>
+                                                    <td>April 15, 2020</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Customer ID</td>
+                                                    <td>123456</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                
+                                    <!-- Membership Information -->
+                                    <div class="mb-3">
+                                        <h6 class="font-weight-bold text-primary">Membership</h6>
+                                        <ul class="list-group">
+                                            <li class="list-group-item"><strong>Status:</strong> Active</li>
+                                            <li class="list-group-item"><strong>Member Since:</strong> April 2020</li>
+                                            <li class="list-group-item"><strong>Loyalty Points:</strong> 1500</li>
+                                        </ul>
+                                    </div>
                                 </div>
+                                                              
                             </div>
 
                         </div>
@@ -449,4 +443,4 @@
 
 </body>
 
->
+</html>

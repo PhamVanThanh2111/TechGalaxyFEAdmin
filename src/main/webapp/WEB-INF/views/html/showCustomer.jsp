@@ -1,5 +1,4 @@
 <%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse" %>
-<%@ page import="java.time.LocalDateTime" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -404,7 +403,7 @@
                                             <td style="width: 18%"><a href="${pageContext.request.contextPath}/customers/update/${customer.id}" class="btn btn-warning btn-sm">Update</a>
                                                 <a href="#" class="btn btn-danger btn-sm" data-toggle="modal"
                                                    data-target="#deleteUserModal">Delete</a>
-                                                <a href="userDetail.html" class="btn btn-info btn-sm">Detail</a>
+                                                <a href="${pageContext.request.contextPath}/customers/detail/${customer.id}" class="btn btn-info btn-sm">Detail</a>
                                             </td>
                                         </tr>
                                     </c:forEach>

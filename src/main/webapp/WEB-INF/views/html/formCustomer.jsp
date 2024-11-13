@@ -1,10 +1,7 @@
-<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse" %>
-<%@ page import="java.time.LocalDateTime" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.time.LocalDate" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,20 +13,18 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Show User System</title>
+    <title>Add Customer</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
           type="text/css">
+    <link href="<c:url value="/fontawesome-free/css/all.min.css"/>" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template-->
     <link href="<c:url value="/css/sb-admin-2.min.css" />" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="<c:url value="/datatables/dataTables.bootstrap4.min.css" />" rel="stylesheet">
 
 </head>
 
@@ -42,7 +37,8 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center"
+           href="${pageContext.request.contextPath}/">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -54,7 +50,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="../index.jsp">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Statistics</span></a>
         </li>
@@ -76,7 +72,7 @@
             <div id="userSystemManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">User System Manage</h6>
-                    <a class="collapse-item" href="${pageContext.request.contextPath}/userSystem">Show</a>
+                    <a class="collapse-item" href="">Show</a>
                     <a class="collapse-item" href="">Add</a>
                 </div>
             </div>
@@ -144,11 +140,9 @@
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                 <!-- Sidebar Toggle (Topbar) -->
-                <form class="form-inline">
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                </form>
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
 
                 <!-- Topbar Search -->
                 <form
@@ -258,7 +252,8 @@
                             </h6>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="../img/undraw_profile_1.svg" alt="...">
+                                    <img class="rounded-circle" src="<c:url value="/img/undraw_profile_1.svg"/> "
+                                         alt="">
                                     <div class="status-indicator bg-success"></div>
                                 </div>
                                 <div class="font-weight-bold">
@@ -270,8 +265,8 @@
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="<c:url value="/img/undraw_profile_2.svg"/>"
-                                         alt="...">
+                                    <img class="rounded-circle" src="<c:url value="/img/undraw_profile_2.svg"/> "
+                                         alt="">
                                     <div class="status-indicator"></div>
                                 </div>
                                 <div>
@@ -283,7 +278,8 @@
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="../img/undraw_profile_3.svg" alt="...">
+                                    <img class="rounded-circle" src="<c:url value="/img/undraw_profile_3.svg"/> "
+                                         alt="">
                                     <div class="status-indicator bg-warning"></div>
                                 </div>
                                 <div>
@@ -300,7 +296,7 @@
                                     <div class="status-indicator bg-success"></div>
                                 </div>
                                 <div>
-                                    <div class="text-truncate">Am I a good boy? The reason I ask is because someone
+                                    <div class="text-truncate">Am I a good boy? The reason I ask is that someone
                                         told me that people say this to all dogs, even if they aren't good...
                                     </div>
                                     <div class="small text-gray-500">Chicken the Dog · 2w</div>
@@ -317,7 +313,8 @@
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                            <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+                            <img class="img-profile rounded-circle" src="<c:url value="/img/undraw_profile.svg"/> "
+                                 alt="">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -343,73 +340,82 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Users</h1>
-                <p class="mb-4">This is a user management table, displaying user data such as name, position, and
-                    salary.</p>
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Add Customer</h1>
+                </div>
 
-                <!-- DataTales Example -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Data User</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>User Status</th>
-                                    <th>Phone</th>
-                                    <th>Gender</th>
-                                    <th>Date of birth</th>
-                                    <th>Avatar</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tfoot>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>User Status</th>
-                                    <th>Phone</th>
-                                    <th>Gender</th>
-                                    <th>Date of birth</th>
-                                    <th>Avatar</th>
-                                    <th>Action</th>
-                                </tr>
-                                </tfoot>
-                                <tbody>
-                                <c:if test="${customers != null}">
-                                    <c:forEach items="${customers}" var="customer">
-                                        <tr>
-                                            <td>${customer.id}</td>
-                                            <td>${customer.name}</td>
-                                            <td>${customer.userStatus}</td>
-                                            <td>${customer.phone}</td>
-                                            <td>${customer.gender}</td>
-                                            <td>
-                                                <%
-                                                    Object obj = pageContext.findAttribute("customer");
-                                                    CustomerResponse customerResponse = (CustomerResponse) obj;
-                                                    LocalDate dateOfBirth = customerResponse.getDateOfBirth();
-                                                    String formatDate = dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                                                    out.print(formatDate);
-                                                %>
-                                            </td>
-                                            <td><img src="<c:url value="/img/${customer.avatar}"/>" alt="avatar"
-                                                     width="55" height="55"></td>
-                                            <td><a href="updateUser.html" class="btn btn-warning btn-sm">Update</a>
-                                                <a href="#" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                   data-target="#deleteUserModal">Delete</a>
-                                                <a href="detailCustomer.jsp" class="btn btn-info btn-sm">Detail</a>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:if>
-                                </tbody>
-                            </table>
+                <div class="row">
+
+                    <div class="col-lg-12">
+
+                        <!-- Basic Card Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Customer Information</h6>
+                            </div>
+                            <div class="card-body">
+                                <form:form role="form" action="${pageContext.request.contextPath}/customers/save"
+                                           method="POST" modelAttribute="customerRequest" cssClass="needs-validation">
+                                    <div class="form-group">
+                                        <form:label path="name" for="firstName">Name</form:label>
+                                        <form:input path="name" type="text" cssClass="form-control" id="name"
+                                                    placeholder="Name" required="required"/>
+                                    </div>
+
+                                    <c:if test="${customerRequest.id == null || customerRequest.id.isEmpty()}">
+                                        <div class="form-group">
+                                            <form:label path="email" for="email">Email</form:label>
+                                            <form:input path="email" type="text" cssClass="form-control" id="email"
+                                                        placeholder="E-mail" required="required"/>
+                                        </div>
+                                    </c:if>
+
+                                    <div class="form-group">
+                                        <form:label path="dateOfBirth" for="birthDate">Birthday</form:label>
+                                        <form:input path="dateOfBirth" type="date" cssClass="form-control"
+                                                    id="birthDate" value="${dateOfBirth}"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <form:label path="gender" for="gender">Gender</form:label>
+                                        <form:select path="gender" cssClass="form-control" id="gender">
+                                            <form:option value="">Choose gender</form:option>
+                                            <form:option value="MALE">Male</form:option>
+                                            <form:option value="FEMALE">Female</form:option>
+                                            <form:option value="OTHER">Other</form:option>
+                                        </form:select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <form:label path="phone" for="phoneNumber">Phone number</form:label>
+                                        <form:input path="phone" type="tel" cssClass="form-control" id="phoneNumber"
+                                                    placeholder="Type the phone number"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <form:label path="userStatus" for="status">Status</form:label>
+                                        <form:select path="userStatus" cssClass="form-control" id="status"
+                                                     required="required">
+                                            <form:option value="">Choose status</form:option>
+                                            <form:option value="ACTIVE">Active</form:option>
+                                            <form:option value="INACTIVE">Inactive</form:option>
+                                            <form:option value="SUSPENDED">Suspended</form:option>
+                                        </form:select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <form:label path="avatar" for="avatar">Avatar</form:label>
+                                        <form:input path="avatar" type="file" cssClass="form-control" id="avatar"
+                                                    accept="image/png, image/jpeg"/>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary align-self-center">Add</button>
+                                    </div>
+                                </form:form>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -449,26 +455,6 @@
     </div>
 </div>
 
-<!-- Delete User Modal-->
-<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteLabel">Ready to delete?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Yes" below if you are ready to delete this user.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="showUser.html">Yes</a>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Bootstrap core JavaScript-->
 <script src="<c:url value="/jquery/jquery.min.js" />"></script>
 <script src="<c:url value="/bootstrap/js/bootstrap.bundle.min.js" />"></script>
@@ -478,13 +464,6 @@
 
 <!-- Custom scripts for all pages-->
 <script src="<c:url value="/js/sb-admin-2.min.js" />"></script>
-
-<!-- Page level plugins -->
-<script src="<c:url value="/datatables/jquery.dataTables.min.js" />"></script>
-<script src="<c:url value="/datatables/dataTables.bootstrap4.min.js" />"></script>
-
-<!-- Page level custom scripts -->
-<script src="<c:url value="/js/demo/datatables-demo.js" />"></script>
 
 </body>
 

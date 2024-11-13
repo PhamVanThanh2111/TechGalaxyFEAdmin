@@ -42,7 +42,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public DataResponse<CustomerResponse> findById(String id) {
-        return null;
+        return restClient.get()
+                .uri(ENDPOINT + "/customers/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
     }
 
     // save account and customer information
