@@ -342,8 +342,8 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Users</h1>
-                <p class="mb-4">This is a user management table, displaying user data such as name, position, and
+                <h1 class="h3 mb-2 text-gray-800">Customers</h1>
+                <p class="mb-4">This is a customers management table, displaying user data such as name, phone, and
                     salary.</p>
 
                 <!-- DataTales Example -->
