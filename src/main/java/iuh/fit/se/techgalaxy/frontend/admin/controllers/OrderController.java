@@ -37,7 +37,7 @@ public class OrderController {
 
     @GetMapping("/add")
     public ModelAndView showForm(ModelAndView model) {
-        model.setViewName("html/addOrder");
+        model.setViewName("html/formOrder");
         return model;
     }
 }
