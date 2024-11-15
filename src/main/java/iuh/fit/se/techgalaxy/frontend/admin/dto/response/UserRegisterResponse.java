@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserRegisterResponse {
     @NotBlank(message = "EMAIL_NOT_EMPTY")
+    private String id;
     private String email;
 
 }

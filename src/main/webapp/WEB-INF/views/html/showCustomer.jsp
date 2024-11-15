@@ -41,7 +41,8 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center"
+           href="${pageContext.request.contextPath}/">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -392,7 +393,7 @@
                                                     Object obj = pageContext.findAttribute("customer");
                                                     CustomerResponse customerResponse = (CustomerResponse) obj;
                                                     LocalDate dateOfBirth = customerResponse.getDateOfBirth();
-                                                    if (dateOfBirth != null){
+                                                    if (dateOfBirth != null) {
                                                         String formatDate = dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                                                         out.print(formatDate);
                                                     }
@@ -400,10 +401,34 @@
                                             </td>
                                             <td><img src="<c:url value="/img/${customer.avatar}"/>" alt="avatar"
                                                      width="55" height="55"></td>
-                                            <td style="width: 18%"><a href="${pageContext.request.contextPath}/customers/update/${customer.id}" class="btn btn-warning btn-sm">Update</a>
-                                                <a href="#" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                   data-target="#deleteUserModal">Delete</a>
-                                                <a href="${pageContext.request.contextPath}/customers/detail/${customer.id}" class="btn btn-info btn-sm">Detail</a>
+                                            <td style="width: 18%">
+                                                <a
+                                                    href="${pageContext.request.contextPath}/customers/update/${customer.id}"
+                                                    class="btn btn-warning btn-sm">Update</a>
+                                                <a href="${pageContext.request.contextPath}/customers/delete/${customer.id}" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                   data-target="#deleteUserModal_${customer.id}">Delete</a>
+                                                <a href="${pageContext.request.contextPath}/customers/detail/${customer.id}"
+                                                   class="btn btn-info btn-sm">Detail</a>
+
+                                                <!-- Delete User Modal-->
+                                                <div class="modal fade" id="deleteUserModal_${customer.id}" tabindex="-1" role="dialog" aria-labelledby="deleteLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="deleteLabel">Ready to delete?</h5>
+                                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">×</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">Select "Yes" below if you are ready to delete this user.</div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                                <a class="btn btn-primary" href="${pageContext.request.contextPath}/customers/delete/${customer.id}">Yes</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -445,26 +470,6 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 <a class="btn btn-primary" href="login.html">Logout</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Delete User Modal-->
-<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteLabel">Ready to delete?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Yes" below if you are ready to delete this user.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="${pageContext.request.contextPath}/customers">Yes</a>
             </div>
         </div>
     </div>

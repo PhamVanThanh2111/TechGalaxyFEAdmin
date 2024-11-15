@@ -3,9 +3,11 @@ package iuh.fit.se.techgalaxy.frontend.admin.controllers;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.mapper.CustomerMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -70,7 +72,26 @@ public class CustomerController {
 
     @GetMapping("/detail/{id}")
     public ModelAndView detailCustomer(@PathVariable String id, ModelAndView model) {
-        model.setViewName("html/detailCustomer"); //
+        List<CustomerResponse> list = (List<CustomerResponse>) customerService.findById(id).getData();
+        CustomerRequest customerRequest = CustomerMapper.INSTANCE.toCustomerRequest(CustomerMapper.INSTANCE.toCustomerFromResponse(list.get(0)));
+        System.out.println(customerRequest.getId());
+        System.out.println(customerRequest.getUserStatus());
+        System.out.println(customerRequest.getName());
+        System.out.println(customerRequest.getPhone());
+        System.out.println(customerRequest.getGender());
+        System.out.println(customerRequest.getAvatar());
+        System.out.println(customerRequest.getDateOfBirth());
+        System.out.println(customerRequest.getAccount().getEmail());
+        model.addObject("customerRequest", customerRequest);
+        model.setViewName("html/detailCustomer");
+
+        return model;
+    }
+
+    @GetMapping("/delete/{id}")
+    public ModelAndView deleteCustomer(@PathVariable String id, ModelAndView model) {
+        customerService.delete(id);
+        model.setViewName("redirect:/customers");
         return model;
     }
 }

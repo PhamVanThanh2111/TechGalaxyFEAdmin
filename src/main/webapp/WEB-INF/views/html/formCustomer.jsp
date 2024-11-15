@@ -364,8 +364,8 @@
 
                                     <c:if test="${customerRequest.id == null || customerRequest.id.isEmpty()}">
                                         <div class="form-group">
-                                            <form:label path="email" for="email">Email</form:label>
-                                            <form:input path="email" type="text" cssClass="form-control" id="email"
+                                            <form:label path="account.email" for="email">Email</form:label>
+                                            <form:input path="account.email" type="text" cssClass="form-control" id="email"
                                                         placeholder="E-mail" required="required"/>
                                         </div>
                                     </c:if>

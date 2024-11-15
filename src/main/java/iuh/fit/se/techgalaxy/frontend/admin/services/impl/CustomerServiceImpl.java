@@ -6,13 +6,17 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.UserRegisterRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
-import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UserRegisteResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UserRegisterResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.Account;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.Gender;
 import iuh.fit.se.techgalaxy.frontend.admin.services.CustomerService;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -65,16 +69,16 @@ public class CustomerServiceImpl implements CustomerService {
             }
         }
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
-        userRegisterRequest.setEmail(customerRequest.getEmail());
+        userRegisterRequest.setEmail(customerRequest.getAccount().getEmail());
         userRegisterRequest.setPassword("123456");
         userRegisterRequest.setFullName(customerRequest.getName());
 
-        DataResponse<UserRegisteResponse> accountResponse = restClient.post()
-                .uri(ENDPOINT + "/api/accounts/auth/register")
+        DataResponse<UserRegisterResponse> accountResponse = restClient.post()
+                .uri(ENDPOINT + "/api/accounts/auth/create-account")
                 .accept(MediaType.APPLICATION_JSON)
                 .body(userRegisterRequest)
                 .exchange((request, response) -> {
-                    DataResponse<UserRegisteResponse> dataAccountResponse = null;
+                    DataResponse<UserRegisterResponse> dataAccountResponse = null;
                     if (response.getBody().available() > 0) {
                         dataAccountResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
                     }
@@ -86,11 +90,24 @@ public class CustomerServiceImpl implements CustomerService {
             throw new RuntimeException("Failed to register account.");
         }
 
+        List<UserRegisterResponse> list = (List<UserRegisterResponse>) accountResponse.getData();
+        UserRegisterResponse userRegisterResponse = list.get(0);
+
+        Account account = new Account();
+        account.setId(userRegisterResponse.getId());
+        customerRequest.setAccount(account);
+
+        if (customerRequest.getPhone().isEmpty())
+            customerRequest.setPhone(null);
+
         return restClient.post()
                 .uri(ENDPOINT + "/customers")
                 .accept(MediaType.APPLICATION_JSON)
                 .body(customerRequest)
                 .exchange((request, response) -> {
+                    String responseBody = new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8);
+                    System.out.println("Response Body: " + responseBody);
+
                     DataResponse<CustomerResponse> dataResponse = null;
                     if (response.getBody().available() > 0) {
                         dataResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {
@@ -108,6 +125,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public DataResponse<Boolean> delete(String id) {
-        return null;
+        return restClient.delete()
+                .uri(ENDPOINT + "/customers/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
     }
 }

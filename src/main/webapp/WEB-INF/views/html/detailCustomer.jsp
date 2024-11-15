@@ -1,3 +1,7 @@
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.request.CustomerRequest" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
@@ -334,17 +338,17 @@
                                     
                                     <!-- Profile Picture -->
                                     <div class="mb-3 text-center">
-                                        <img src="<c:url value="/img/undraw_profile.svg"/>" class="img-thumbnail" alt="Customer Photo" style="width: 200px; height: 200px; border-width: 0">
+                                        <img src="<%--@elvariable id="customerRequest" type="java"--%>
+                                        <c:url value="/img/${customerRequest.avatar}"/>" class="img-thumbnail" alt="Customer Photo" style="width: 200px; height: 200px; border-width: 0">
                                     </div>
                                     
                                     <!-- User General Information -->
                                     <div class="mb-3">
                                         <h6 class="font-weight-bold text-primary">User Information</h6>
                                         <ul class="list-group">
-                                            <li class="list-group-item"><strong>Full Name:</strong> John Doe</li>
-                                            <li class="list-group-item"><strong>Email:</strong> john.doe@example.com</li>
-                                            <li class="list-group-item"><strong>Phone Number:</strong> (123) 456-7890</li>
-                                            <li class="list-group-item"><strong>Address:</strong> 123 Main St, New York, NY 10001</li>
+                                            <li class="list-group-item"><strong>Full Name:</strong> ${customerRequest.name}</li>
+                                            <li class="list-group-item"><strong>Email:</strong> ${customerRequest.account.email}</li>
+                                            <li class="list-group-item"><strong>Phone Number:</strong> ${customerRequest.phone}</li>
                                         </ul>
                                     </div>
                                 
@@ -361,31 +365,33 @@
                                             <tbody>
                                                 <tr>
                                                     <td>Date of Birth</td>
-                                                    <td>January 1, 1990</td>
+                                                    <td><%
+                                                        Object obj = pageContext.findAttribute("customerRequest");
+                                                        CustomerRequest customerRequest = (CustomerRequest) obj;
+                                                        LocalDate dateOfBirth = customerRequest.getDateOfBirth();
+                                                        if (dateOfBirth != null) {
+                                                            String formatDate = dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                                                            out.print(formatDate);
+                                                        }
+                                                    %></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Gender</td>
-                                                    <td>Male</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Account Created</td>
-                                                    <td>April 15, 2020</td>
+                                                    <td>${customerRequest.gender}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Customer ID</td>
-                                                    <td>123456</td>
+                                                    <td>${customerRequest.id}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 
-                                    <!-- Membership Information -->
+                                    <!-- Status Information -->
                                     <div class="mb-3">
-                                        <h6 class="font-weight-bold text-primary">Membership</h6>
+                                        <h6 class="font-weight-bold text-primary">Status</h6>
                                         <ul class="list-group">
-                                            <li class="list-group-item"><strong>Status:</strong> Active</li>
-                                            <li class="list-group-item"><strong>Member Since:</strong> April 2020</li>
-                                            <li class="list-group-item"><strong>Loyalty Points:</strong> 1500</li>
+                                            <li class="list-group-item"><strong>Status:</strong> ${customerRequest.userStatus}</li>
                                         </ul>
                                     </div>
                                 </div>
