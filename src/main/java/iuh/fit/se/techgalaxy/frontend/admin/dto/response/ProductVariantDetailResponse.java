@@ -14,9 +14,6 @@ import java.util.Map;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductVariantDetailResponse {
     String id;
-    Integer viewsCount;
-    Double price;
-    Double sale;
     ProductStatus status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
@@ -27,6 +24,9 @@ public class ProductVariantDetailResponse {
     @AllArgsConstructor
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class ColorQuantity {
+        Integer viewsCount;
+        Double price;
+        Double sale;
         Integer quantity;
         String colorId;
     }

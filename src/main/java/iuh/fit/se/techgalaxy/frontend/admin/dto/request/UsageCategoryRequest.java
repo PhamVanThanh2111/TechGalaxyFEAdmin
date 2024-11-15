@@ -1,6 +1,5 @@
 package iuh.fit.se.techgalaxy.frontend.admin.dto.request;
 
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,8 +8,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductRequest {
-     @Size(min = 5, max = 24, message = "PRODUCT_NAME_INVALID")
-     String name;
-     String trademarkId;
+public class UsageCategoryRequest {
+	String name;
+	String description;
+	String avatar;
+	String status;
 }

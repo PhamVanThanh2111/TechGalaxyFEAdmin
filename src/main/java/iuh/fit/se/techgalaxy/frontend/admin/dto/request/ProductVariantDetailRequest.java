@@ -1,6 +1,5 @@
 package iuh.fit.se.techgalaxy.frontend.admin.dto.request;
 
-import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,19 +11,18 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductVariantDetailRequest {
+    String memid;
     Double price;
     Double sale;
-    ProductStatus status;
-    List<MemoryColorRequest> memoryColorRequests;
+    List<ColorRequest> colors;
 
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @FieldDefaults(level = AccessLevel.PRIVATE)
-    public static class MemoryColorRequest {
+    public static class ColorRequest {
         int quantity;
-        String memoryId;
         String colorId;
     }
 }

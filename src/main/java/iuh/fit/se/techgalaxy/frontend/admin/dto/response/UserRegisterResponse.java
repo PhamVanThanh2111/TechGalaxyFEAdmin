@@ -1,4 +1,4 @@
-package iuh.fit.se.techgalaxy.frontend.admin.dto.request;
+package iuh.fit.se.techgalaxy.frontend.admin.dto.response;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,11 +10,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegisterRequest {
+public class UserRegisterResponse {
     @NotBlank(message = "EMAIL_NOT_EMPTY")
     private String email;
-    @NotBlank(message = "PASSWORD_NOT_EMPTY")
-    private String password;
 
-    private String fullName;
 }

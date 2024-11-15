@@ -1,7 +1,5 @@
 package iuh.fit.se.techgalaxy.frontend.admin.dto.response;
 
-import iuh.fit.se.techgalaxy.frontend.admin.entities.Customer;
-import iuh.fit.se.techgalaxy.frontend.admin.entities.SystemUser;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.OrderStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.PaymentStatus;
 import lombok.*;

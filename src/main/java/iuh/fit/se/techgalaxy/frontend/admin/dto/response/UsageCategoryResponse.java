@@ -8,8 +8,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AttributeRespone {
+public class UsageCategoryResponse {
 	String id;
 	String name;
-	String type;
+	String description;
+	String avatar;
+	String status;
+	
 }

@@ -3,10 +3,10 @@ package iuh.fit.se.techgalaxy.frontend.admin.dto.request;
 import jakarta.validation.constraints.NotBlank;
 
 public class LoginRequest {
-    @NotBlank(message = "username không được để trống")
+    @NotBlank(message = "USERNAME_NOT_EMPTY")
     private String username;
 
-    @NotBlank(message = "password không được để trống")
+    @NotBlank(message = "PASSWORD_NOT_EMPTY")
     private String password;
 
     public String getUsername() {
