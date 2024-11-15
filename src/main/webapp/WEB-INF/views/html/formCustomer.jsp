@@ -357,18 +357,19 @@
                                 <form:form role="form" action="${pageContext.request.contextPath}/customers/save"
                                            method="POST" modelAttribute="customerRequest" cssClass="needs-validation">
                                     <div class="form-group">
-                                        <form:label path="name" for="firstName">Name</form:label>
+                                        <form:input path="id" type="hidden"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <form:label path="name" for="name">Name</form:label>
                                         <form:input path="name" type="text" cssClass="form-control" id="name"
                                                     placeholder="Name" required="required"/>
                                     </div>
 
-                                    <c:if test="${customerRequest.id == null || customerRequest.id.isEmpty()}">
-                                        <div class="form-group">
-                                            <form:label path="account.email" for="email">Email</form:label>
-                                            <form:input path="account.email" type="text" cssClass="form-control" id="email"
-                                                        placeholder="E-mail" required="required"/>
-                                        </div>
-                                    </c:if>
+                                    <div class="form-group">
+                                        <form:label path="account.email" for="email">Email</form:label>
+                                        <form:input path="account.email" type="text" cssClass="form-control" id="email"
+                                                    placeholder="E-mail" required="required"/>
+                                    </div>
 
                                     <div class="form-group">
                                         <form:label path="dateOfBirth" for="birthDate">Birthday</form:label>
@@ -412,6 +413,8 @@
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-primary align-self-center">Add</button>
                                     </div>
+                                    <form:input path="account.id" type="hidden" value="${customerRequest.account.id}" />
+                                    <form:input path="account.password" type="hidden" value="${customerRequest.account.password}" />
                                 </form:form>
                             </div>
                         </div>

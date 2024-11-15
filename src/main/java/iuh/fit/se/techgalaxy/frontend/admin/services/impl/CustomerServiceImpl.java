@@ -40,8 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .uri(ENDPOINT + "/customers")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .body(new ParameterizedTypeReference<>() {
-                });
+                .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
@@ -119,8 +118,46 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public DataResponse<CustomerResponse> update(String id, CustomerRequest customerRequest) {
-        return null;
+    public DataResponse<CustomerResponse> update(CustomerRequest customerRequest) {
+        if (customerRequest.getAvatar() == null || customerRequest.getAvatar().isEmpty()) {
+            if (customerRequest.getGender() != null) {
+                if (customerRequest.getGender() == Gender.MALE) {
+                    customerRequest.setAvatar("undraw_profile.svg");
+                } else if (customerRequest.getGender() == Gender.FEMALE) {
+                    customerRequest.setAvatar("undraw_profile_1.svg");
+                }
+            } else {
+                customerRequest.setAvatar("undraw_profile.svg");
+            }
+        }
+
+        System.out.println(customerRequest.getId());
+        System.out.println(customerRequest.getName());
+        System.out.println(customerRequest.getUserStatus());
+        System.out.println(customerRequest.getPhone());
+        System.out.println(customerRequest.getGender());
+        System.out.println(customerRequest.getAvatar());
+        System.out.println(customerRequest.getDateOfBirth());
+        System.out.println(customerRequest.getAccount());
+        System.out.println(customerRequest.getAccount().getId());
+        System.out.println(customerRequest.getAccount().getPassword());
+        System.out.println(customerRequest.getAccount().getEmail());
+
+        return restClient.put()
+                .uri(ENDPOINT + "/customers/" + customerRequest.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .body(customerRequest)
+                .exchange((request, response) -> {
+                    String responseBody = new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8);
+                    System.out.println("Response Body: " + responseBody);
+
+                    DataResponse<CustomerResponse> dataResponse = null;
+                    if (response.getBody().available() > 0) {
+                        dataResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+                    }
+                    assert dataResponse != null;
+                    return dataResponse;
+                });
     }
 
     @Override

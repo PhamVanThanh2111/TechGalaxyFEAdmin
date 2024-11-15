@@ -15,7 +15,7 @@ public interface CustomerService {
 
     DataResponse<CustomerResponse> save(CustomerRequest customerRequest);
 
-    DataResponse<CustomerResponse> update(String id, CustomerRequest customerRequest);
+    DataResponse<CustomerResponse> update(CustomerRequest customerRequest);
 
     DataResponse<Boolean> delete(String id);
 }

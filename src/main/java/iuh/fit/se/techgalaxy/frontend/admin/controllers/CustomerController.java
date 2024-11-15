@@ -53,8 +53,11 @@ public class CustomerController {
             model.setViewName("html/formCustomer");
             return model;
         }
-
-        customerService.save(customerRequest);
+        if (customerRequest.getId() == null || customerRequest.getId().isEmpty()) { // add new customer
+            customerService.save(customerRequest);
+        } else { // update customer
+            customerService.update(customerRequest);
+        }
         model.setViewName("redirect:/customers");
         return model;
     }
@@ -62,7 +65,7 @@ public class CustomerController {
     @GetMapping("/update/{id}")
     public ModelAndView showFormUpdate(@PathVariable String id, ModelAndView model) {
         List<CustomerResponse> list = (List<CustomerResponse>) customerService.findById(id).getData();
-        CustomerResponse customerRequest = list.get(0);
+        CustomerRequest customerRequest = CustomerMapper.INSTANCE.toCustomerRequest(CustomerMapper.INSTANCE.toCustomerFromResponse(list.get(0)));
         if (customerRequest.getDateOfBirth() != null)
             model.addObject("dateOfBirth", customerRequest.getDateOfBirth().toString());
         model.setViewName("html/formCustomer");
@@ -74,14 +77,6 @@ public class CustomerController {
     public ModelAndView detailCustomer(@PathVariable String id, ModelAndView model) {
         List<CustomerResponse> list = (List<CustomerResponse>) customerService.findById(id).getData();
         CustomerRequest customerRequest = CustomerMapper.INSTANCE.toCustomerRequest(CustomerMapper.INSTANCE.toCustomerFromResponse(list.get(0)));
-        System.out.println(customerRequest.getId());
-        System.out.println(customerRequest.getUserStatus());
-        System.out.println(customerRequest.getName());
-        System.out.println(customerRequest.getPhone());
-        System.out.println(customerRequest.getGender());
-        System.out.println(customerRequest.getAvatar());
-        System.out.println(customerRequest.getDateOfBirth());
-        System.out.println(customerRequest.getAccount().getEmail());
         model.addObject("customerRequest", customerRequest);
         model.setViewName("html/detailCustomer");
 
