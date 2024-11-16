@@ -127,6 +127,36 @@
             </div>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#trademarkManage"
+               aria-expanded="true" aria-controls="trademarkManage">
+                <i class="fa-solid fa-trademark"></i>
+                <span>Trademark</span>
+            </a>
+            <div id="trademarkManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Trademark Manage</h6>
+                    <a class="collapse-item" href="${pageContext.request.contextPath}">Show</a>
+                    <a class="collapse-item" href="${pageContext.request.contextPath}">Add</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#accountManage"
+               aria-expanded="true" aria-controls="accountManage">
+                <i class="fa-solid fa-universal-access"></i>
+                <span>Account</span>
+            </a>
+            <div id="accountManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Account Manage</h6>
+                    <a class="collapse-item" href="${pageContext.request.contextPath}">Show</a>
+                    <a class="collapse-item" href="${pageContext.request.contextPath}">Add</a>
+                </div>
+            </div>
+        </li>
+
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
