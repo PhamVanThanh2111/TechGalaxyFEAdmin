@@ -63,13 +63,13 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userSystemManage"
                    aria-expanded="true" aria-controls="userManage">
                     <i class="fa-solid fa-user"></i>
-                    <span>User System</span>
+                    <span>System User</span>
                 </a>
                 <div id="userSystemManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">User System Manage</h6>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/userSystem">Show</a>
-                        <a class="collapse-item" href="">Add</a>
+                        <h6 class="collapse-header">System User Manage</h6>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/systemUsers">Show</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/systemUsers/add">Add</a>
                     </div>
                 </div>
             </li>

@@ -13,7 +13,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Add Customer</title>
+    <title>Add System User</title>
 
     <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
@@ -52,7 +52,7 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Add Customer</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Add System User</h1>
                 </div>
 
                 <div class="row">
@@ -62,11 +62,11 @@
                         <!-- Basic Card Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Customer Information</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">System User Information</h6>
                             </div>
                             <div class="card-body">
-                                <form:form role="form" action="${pageContext.request.contextPath}/customers/save"
-                                           method="POST" modelAttribute="customerRequest" cssClass="needs-validation" enctype="multipart/form-data">
+                                <form:form role="form" action="${pageContext.request.contextPath}/systemUsers/save"
+                                           method="POST" modelAttribute="systemUserRequestDTO" cssClass="needs-validation">
                                     <div class="form-group">
                                         <form:input path="id" type="hidden"/>
                                     </div>
@@ -78,14 +78,19 @@
 
                                     <div class="form-group">
                                         <form:label path="account.email" for="email">Email</form:label>
-                                        <form:input path="account.email" type="text" cssClass="form-control" id="email"
+                                        <form:input path="account.email" type="email" cssClass="form-control" id="email"
                                                     placeholder="E-mail" required="required"/>
                                     </div>
 
                                     <div class="form-group">
-                                        <form:label path="dateOfBirth" for="birthDate">Birthday</form:label>
-                                        <form:input path="dateOfBirth" type="date" cssClass="form-control"
-                                                    id="birthDate" value="${dateOfBirth}"/>
+                                        <form:label path="phone" for="phone">Phone</form:label>
+                                        <form:input path="phone" type="text" cssClass="form-control" id="phone"
+                                                    placeholder="E-mail" required="required"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <form:label path="address" for="address">Address</form:label>
+                                        <form:input path="address" cssClass="form-control" id="address" placeholder="Address" />
                                     </div>
 
                                     <div class="form-group">
@@ -99,19 +104,24 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <form:label path="phone" for="phoneNumber">Phone number</form:label>
-                                        <form:input path="phone" type="tel" cssClass="form-control" id="phoneNumber"
-                                                    placeholder="Type the phone number"/>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <form:label path="userStatus" for="status">Status</form:label>
-                                        <form:select path="userStatus" cssClass="form-control" id="status"
+                                        <form:label path="systemUserStatus" for="status">Status</form:label>
+                                        <form:select path="systemUserStatus" cssClass="form-control" id="status"
                                                      required="required">
                                             <form:option value="">Choose status</form:option>
                                             <form:option value="ACTIVE">Active</form:option>
                                             <form:option value="INACTIVE">Inactive</form:option>
                                             <form:option value="SUSPENDED">Suspended</form:option>
+                                        </form:select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <form:label path="level" for="level">Level</form:label>
+                                        <form:select path="level" cssClass="form-control" id="level"
+                                                     required="required">
+                                            <form:option value="">Choose level</form:option>
+                                            <form:option value="MANAGER">Manager</form:option>
+                                            <form:option value="DEPUTY_MANAGER">Deputy Manager</form:option>
+                                            <form:option value="STAFF">Staff</form:option>
                                         </form:select>
                                     </div>
 
@@ -122,10 +132,8 @@
                                     </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary align-self-center">Add</button>
+                                        <button type="submit" class="btn btn-primary align-self-center">Save</button>
                                     </div>
-                                    <form:input path="account.id" type="hidden" value="${customerRequest.account.id}" />
-                                    <form:input path="account.password" type="hidden" value="${customerRequest.account.password}" />
                                 </form:form>
                             </div>
                         </div>

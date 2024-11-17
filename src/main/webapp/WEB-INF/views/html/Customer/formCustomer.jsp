@@ -78,7 +78,7 @@
 
                                     <div class="form-group">
                                         <form:label path="account.email" for="email">Email</form:label>
-                                        <form:input path="account.email" type="text" cssClass="form-control" id="email"
+                                        <form:input path="account.email" type="email" cssClass="form-control" id="email"
                                                     placeholder="E-mail" required="required"/>
                                     </div>
 
@@ -122,7 +122,7 @@
                                     </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary align-self-center">Add</button>
+                                        <button type="submit" class="btn btn-primary align-self-center">Save</button>
                                     </div>
                                     <form:input path="account.id" type="hidden" value="${customerRequest.account.id}" />
                                     <form:input path="account.password" type="hidden" value="${customerRequest.account.password}" />
