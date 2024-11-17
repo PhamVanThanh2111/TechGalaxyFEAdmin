@@ -1,10 +1,14 @@
 package iuh.fit.se.techgalaxy.frontend.admin.dto.response;
 
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Role;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.Gender;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.SystemUserLevel;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.SystemUserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,12 +20,12 @@ import java.util.List;
 public class SystemUserResponseDTO {
 
     private String id;
-    private String systemUserStatus;
-    private String level;
+    private SystemUserStatus systemUserStatus;
+    private SystemUserLevel level;
     private String name;
     private String address;
     private String phone;
-    private String gender;
+    private Gender gender;
     private String avatar;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -33,6 +37,7 @@ public class SystemUserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AccountResponse {
+        private String id;
         private String email;
         private List<Role> roles;
     }

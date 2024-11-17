@@ -6,4 +6,8 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponseDTO;
 
 public interface SystemUserService {
     DataResponse<SystemUserResponseDTO> findAll();
+
+    DataResponse<SystemUserResponseDTO> findById(String id);
+
+    DataResponse<SystemUserResponseDTO> create(SystemUserResponseDTO systemUserResponseDTO);
 }

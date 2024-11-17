@@ -10,12 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/userSystem")
+@RequestMapping("/systemUsers")
 public class SystemUserController {
     private final SystemUserService systemUserService;
 
@@ -38,17 +39,40 @@ public class SystemUserController {
 
     @GetMapping("/add")
     public ModelAndView add(ModelAndView model) {
+        SystemUserRequestDTO requestDTO = new SystemUserRequestDTO();
+        model.setViewName("html/SystemUser/formSystemUser");
+        model.addObject("systemUserRequestDTO", requestDTO);
         return model;
     }
 
     @PostMapping("/save")
     public ModelAndView save(@ModelAttribute("systemUserRequestDTO") SystemUserRequestDTO request, BindingResult bindingResult, ModelAndView model) {
+        System.out.println(request.getName());
+        System.out.println(request.getPhone());
+        System.out.println(request.getAddress());
+        System.out.println(request.getSystemUserStatus());
+        System.out.println(request.getLevel());
+        System.out.println(request.getGender());
+        System.out.println(request.getAvatar());
+        System.out.println(request.getAccount());
+        System.out.println(request.getAccount().getEmail());
+
+
+        if (bindingResult.hasErrors()) {
+            System.out.println("Error");
+            model.setViewName("html/SystemUser/formSystemUser");
+            return model;
+        }
+
+        model.setViewName("redirect:/systemUser");
         return model;
     }
 
     @GetMapping("/update/{id}")
     public ModelAndView formUpdate(ModelAndView model, @PathVariable String id) {
-//        model.setViewName("html/SystemUser/formUpdate");
+        List<SystemUserResponseDTO> list = (List<SystemUserResponseDTO>) systemUserService.findById(id);
+        model.addObject("sys_user", list.get(0));
+        model.setViewName("html/SystemUser/formSystemUser");
         return model;
     }
 
