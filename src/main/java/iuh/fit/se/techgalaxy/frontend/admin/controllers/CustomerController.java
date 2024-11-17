@@ -34,7 +34,7 @@ public class CustomerController {
         if (response != null) {
             customers = (List<CustomerResponse>) response.getData();
         }
-        model.setViewName("html/showCustomer");
+        model.setViewName("html/Customer/showCustomer");
         model.addObject("customers", customers);
         return model;
     }
@@ -42,7 +42,7 @@ public class CustomerController {
     @GetMapping("/add")
     public ModelAndView showForm(ModelAndView model) {
         CustomerRequest customerRequest = new CustomerRequest();
-        model.setViewName("html/formCustomer");
+        model.setViewName("html/Customer/formCustomer");
         model.addObject("customerRequest", customerRequest);
         return model;
     }
@@ -51,7 +51,7 @@ public class CustomerController {
     public ModelAndView save(@ModelAttribute("customerRequest") CustomerRequest customerRequest, BindingResult bindingResult) {
         ModelAndView model = new ModelAndView();
         if (bindingResult.hasErrors()) {
-            model.setViewName("html/formCustomer");
+            model.setViewName("html/Customer/formCustomer");
             return model;
         }
         if (customerRequest.getId() == null || customerRequest.getId().isEmpty()) { // add new customer
@@ -69,7 +69,7 @@ public class CustomerController {
         CustomerRequest customerRequest = CustomerMapper.INSTANCE.toCustomerRequest(CustomerMapper.INSTANCE.toCustomerFromResponse(list.get(0)));
         if (customerRequest.getDateOfBirth() != null)
             model.addObject("dateOfBirth", customerRequest.getDateOfBirth().toString());
-        model.setViewName("html/formCustomer");
+        model.setViewName("html/Customer/formCustomer");
         model.addObject("customerRequest", customerRequest);
         return model;
     }
@@ -79,7 +79,7 @@ public class CustomerController {
         List<CustomerResponse> list = (List<CustomerResponse>) customerService.findById(id).getData();
         CustomerRequest customerRequest = CustomerMapper.INSTANCE.toCustomerRequest(CustomerMapper.INSTANCE.toCustomerFromResponse(list.get(0)));
         model.addObject("customerRequest", customerRequest);
-        model.setViewName("html/detailCustomer");
+        model.setViewName("html/Customer/detailCustomer");
 
         return model;
     }

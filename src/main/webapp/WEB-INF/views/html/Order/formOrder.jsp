@@ -1,7 +1,3 @@
-<%@ page import="java.time.LocalDate" %>
-<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.request.CustomerRequest" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
@@ -16,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>User Detail</title>
+    <title>Add Order</title>
 
     <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" type="text/css">
@@ -26,7 +22,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="<c:url value="/css/sb-admin-2.min.css"/>" rel="stylesheet">
+    <link href="<c:url value="/css/sb-admin-2.min.css" />" rel="stylesheet">
 
 </head>
 
@@ -39,7 +35,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.jsp">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../../index.jsp">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -51,7 +47,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="../index.jsp">
+                <a class="nav-link" href="../../index.jsp">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Statistics</span></a>
             </li>
@@ -65,16 +61,31 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userManage"
-                    aria-expanded="true" aria-controls="userManage">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#userSystemManage"
+                   aria-expanded="true" aria-controls="userManage">
                     <i class="fa-solid fa-user"></i>
-                    <span>User</span>
+                    <span>User System</span>
                 </a>
-                <div id="userManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="userSystemManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">User Manage</h6>
-                        <a class="collapse-item" href="showCustomer.jsp">Show</a>
-                        <a class="collapse-item" href="formCustomer.jsp">Add</a>
+                        <h6 class="collapse-header">User System Manage</h6>
+                        <a class="collapse-item" href="">Show</a>
+                        <a class="collapse-item" href="">Add</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#customerManage"
+                   aria-expanded="true" aria-controls="userManage">
+                    <i class='fas fa-users'></i>
+                    <span>Customer</span>
+                </a>
+                <div id="customerManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Customer Manage</h6>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/customers">Show</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/customers/add">Add</a>
                     </div>
                 </div>
             </li>
@@ -88,8 +99,8 @@
                 <div id="phoneManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Phone Manage</h6>
-                        <a class="collapse-item" href="showPhone.html">Show</a>
-                        <a class="collapse-item" href="addPhone.html">Add</a>
+                        <a class="collapse-item" href="../showPhone.html">Show</a>
+                        <a class="collapse-item" href="../addPhone.html">Add</a>
                     </div>
                 </div>
             </li>
@@ -103,8 +114,8 @@
                 <div id="orderManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Order Manage</h6>
-                        <a class="collapse-item" href="showOrder.jsp">Show</a>
-                        <a class="collapse-item" href="formOrder.jsp">Add</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/orders">Show</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/orders/add">Add</a>
                     </div>
                 </div>
             </li>
@@ -269,7 +280,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_1.svg"/>" alt="">
+                                        <img class="rounded-circle" src="../img/undraw_profile_1.svg" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -280,7 +291,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_2.svg"/>" alt="">
+                                        <img class="rounded-circle" src="../img/undraw_profile_2.svg" alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -291,7 +302,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="<c:url value="/img/undraw_profile_3.svg"/>" alt="">
+                                        <img class="rounded-circle" src="../img/undraw_profile_3.svg" alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -323,12 +334,12 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle" src="<c:url value="/img/undraw_profile.svg"/>" alt="">
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="profile.html">
+                                <a class="dropdown-item" href="../profile.html">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -350,7 +361,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Order Detail</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Add Order</h1>
                     </div>
 
                     <div class="row">
@@ -360,72 +371,54 @@
                             <!-- Basic Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">Order Information</h5>
+                                    <h6 class="m-0 font-weight-bold text-primary">Order Information</h6>
                                 </div>
                                 <div class="card-body">
-                                    <!-- Customer Information -->
-                                    <h5 class="card-title">Customer Detail</h5>
-                                    
-                                    <!-- Profile Picture -->
-                                    <div class="mb-3 text-center">
-                                        <img src="<%--@elvariable id="customerRequest" type="java"--%>
-                                        <c:url value="/img/${customerRequest.avatar}"/>" class="img-thumbnail" alt="Customer Photo" style="width: 200px; height: 200px; border-width: 0">
-                                    </div>
-                                    
-                                    <!-- User General Information -->
-                                    <div class="mb-3">
-                                        <h6 class="font-weight-bold text-primary">User Information</h6>
-                                        <ul class="list-group">
-                                            <li class="list-group-item"><strong>Full Name:</strong> ${customerRequest.name}</li>
-                                            <li class="list-group-item"><strong>Email:</strong> ${customerRequest.account.email}</li>
-                                            <li class="list-group-item"><strong>Phone Number:</strong> ${customerRequest.phone}</li>
-                                        </ul>
-                                    </div>
-                                
-                                    <!-- Additional User Details -->
-                                    <div class="mb-3">
-                                        <h6 class="font-weight-bold text-primary">Additional Information</h6>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Attribute</th>
-                                                    <th>Details</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Date of Birth</td>
-                                                    <td><%
-                                                        Object obj = pageContext.findAttribute("customerRequest");
-                                                        CustomerRequest customerRequest = (CustomerRequest) obj;
-                                                        LocalDate dateOfBirth = customerRequest.getDateOfBirth();
-                                                        if (dateOfBirth != null) {
-                                                            String formatDate = dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                                                            out.print(formatDate);
-                                                        }
-                                                    %></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Gender</td>
-                                                    <td>${customerRequest.gender}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Customer ID</td>
-                                                    <td>${customerRequest.id}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                
-                                    <!-- Status Information -->
-                                    <div class="mb-3">
-                                        <h6 class="font-weight-bold text-primary">Status</h6>
-                                        <ul class="list-group">
-                                            <li class="list-group-item"><strong>Status:</strong> ${customerRequest.userStatus}</li>
-                                        </ul>
-                                    </div>
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="firstName">First name</label>
+                                            <input type="text" class="form-control" id="firstName" placeholder="Type the first name"
+                                                required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="lastName">Last name</label>
+                                            <input type="text" class="form-control" id="lastName" placeholder="Type the last name"
+                                                required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="birthDate">Birthday</label>
+                                            <input type="date" class="form-control" id="birthDate" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="gender">Gender</label>
+                                            <select class="form-control" id="gender" required>
+                                                <option value="">Choose gender</option>
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="phoneNumber">Phone number</label>
+                                            <input type="tel" class="form-control" id="phoneNumber"
+                                                placeholder="Type the phone number" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" id="email" placeholder="Type the email"
+                                                required>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary align-self-center">Add</button>  
+                                        </div>
+                                    </form>
                                 </div>
-                                                              
                             </div>
 
                         </div>
@@ -461,7 +454,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="../login.html">Logout</a>
                 </div>
             </div>
         </div>
@@ -479,4 +472,4 @@
 
 </body>
 
-</html>
+>

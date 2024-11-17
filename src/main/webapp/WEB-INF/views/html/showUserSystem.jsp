@@ -121,8 +121,8 @@
             <div id="orderManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Order Manage</h6>
-                    <a class="collapse-item" href="showOrder.jsp">Show</a>
-                    <a class="collapse-item" href="formOrder.jsp">Add</a>
+                    <a class="collapse-item" href="Order/showOrder.jsp">Show</a>
+                    <a class="collapse-item" href="Order/formOrder.jsp">Add</a>
                 </div>
             </div>
         </li>
@@ -432,7 +432,7 @@
                                             <td><a href="updateUser.html" class="btn btn-warning btn-sm">Update</a>
                                                 <a href="#" class="btn btn-danger btn-sm" data-toggle="modal"
                                                    data-target="#deleteUserModal">Delete</a>
-                                                <a href="detailCustomer.jsp" class="btn btn-info btn-sm">Detail</a>
+                                                <a href="Customer/detailCustomer.jsp" class="btn btn-info btn-sm">Detail</a>
                                             </td>
                                         </tr>
                                     </c:forEach>
