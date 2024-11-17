@@ -131,18 +131,6 @@ public class CustomerServiceImpl implements CustomerService {
             }
         }
 
-        System.out.println(customerRequest.getId());
-        System.out.println(customerRequest.getName());
-        System.out.println(customerRequest.getUserStatus());
-        System.out.println(customerRequest.getPhone());
-        System.out.println(customerRequest.getGender());
-        System.out.println(customerRequest.getAvatar());
-        System.out.println(customerRequest.getDateOfBirth());
-        System.out.println(customerRequest.getAccount());
-        System.out.println(customerRequest.getAccount().getId());
-        System.out.println(customerRequest.getAccount().getPassword());
-        System.out.println(customerRequest.getAccount().getEmail());
-
         return restClient.put()
                 .uri(ENDPOINT + "/customers/" + customerRequest.getId())
                 .accept(MediaType.APPLICATION_JSON)
