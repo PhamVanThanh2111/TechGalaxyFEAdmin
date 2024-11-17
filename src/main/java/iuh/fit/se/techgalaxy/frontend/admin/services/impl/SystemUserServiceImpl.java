@@ -3,7 +3,9 @@ package iuh.fit.se.techgalaxy.frontend.admin.services.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.UserRegisterRequest;
-import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponseDTO;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UserRegisterResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.Gender;
 import iuh.fit.se.techgalaxy.frontend.admin.services.SystemUserService;
 import org.springframework.core.ParameterizedTypeReference;
@@ -11,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
