@@ -74,7 +74,9 @@ public class SystemUserController {
 
     @GetMapping("/detail/{id}")
     public ModelAndView detail(ModelAndView model, @PathVariable String id) {
-
+        List<SystemUserResponseDTO> list = (List<SystemUserResponseDTO>) systemUserService.findById(id).getData();
+        model.addObject("systemUser", list.get(0));
+        model.setViewName("html/SystemUser/detailSystemUser");
         return model;
     }
 }

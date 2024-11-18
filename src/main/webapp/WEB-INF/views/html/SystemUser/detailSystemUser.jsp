@@ -1,6 +1,3 @@
-<%@ page import="java.time.LocalDate" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.request.CustomerRequest" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
@@ -70,8 +67,8 @@
 
                                 <!-- Profile Picture -->
                                 <div class="mb-3 text-center">
-                                    <img src="<%--@elvariable id="customerRequest" type="java"--%>
-                                        <c:url value="/img/${customerRequest.avatar}"/>" class="img-thumbnail"
+                                    <img src="<%--@elvariable id="systemUser" type="java"--%>
+                                        <c:url value="/img/${systemUser.avatar}"/>" class="img-thumbnail"
                                          alt="Customer Photo" style="width: 200px; height: 200px; border-width: 0">
                                 </div>
 
@@ -79,12 +76,13 @@
                                 <div class="mb-3">
                                     <h6 class="font-weight-bold text-primary">User Information</h6>
                                     <ul class="list-group">
-                                        <li class="list-group-item"><strong>Full Name:</strong> ${customerRequest.name}
+                                        <li class="list-group-item"><strong>Full Name:</strong> ${systemUser.name}
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Email:</strong> ${customerRequest.account.email}</li>
+                                            <strong>Email:</strong> ${systemUser.account.email}</li>
                                         <li class="list-group-item"><strong>Phone
-                                            Number:</strong> ${customerRequest.phone}</li>
+                                            Number:</strong> ${systemUser.phone}</li>
+                                        <li class="list-group-item"><strong>Address:</strong> ${systemUser.address}</li>
                                     </ul>
                                 </div>
 
@@ -100,24 +98,16 @@
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td>Date of Birth</td>
-                                            <td><%
-                                                Object obj = pageContext.findAttribute("customerRequest");
-                                                CustomerRequest customerRequest = (CustomerRequest) obj;
-                                                LocalDate dateOfBirth = customerRequest.getDateOfBirth();
-                                                if (dateOfBirth != null) {
-                                                    String formatDate = dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                                                    out.print(formatDate);
-                                                }
-                                            %></td>
+                                            <td>Level</td>
+                                            <td>${systemUser.level}</td>
                                         </tr>
                                         <tr>
                                             <td>Gender</td>
-                                            <td>${customerRequest.gender}</td>
+                                            <td>${systemUser.gender}</td>
                                         </tr>
                                         <tr>
                                             <td>Customer ID</td>
-                                            <td>${customerRequest.id}</td>
+                                            <td>${systemUser.id}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -128,7 +118,7 @@
                                     <h6 class="font-weight-bold text-primary">Status</h6>
                                     <ul class="list-group">
                                         <li class="list-group-item">
-                                            <strong>Status:</strong> ${customerRequest.userStatus}</li>
+                                            <strong>Status:</strong> ${systemUser.systemUserStatus}</li>
                                     </ul>
                                 </div>
                             </div>
