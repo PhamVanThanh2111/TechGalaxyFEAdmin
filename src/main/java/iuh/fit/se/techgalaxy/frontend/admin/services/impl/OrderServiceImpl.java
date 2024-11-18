@@ -11,8 +11,8 @@ import org.springframework.web.client.RestClient;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-    private RestClient restClient;
-    private ObjectMapper objectMapper;
+    private final RestClient restClient;
+    private final ObjectMapper objectMapper;
     private static final String ENDPOINT = "http://localhost:8081";
 
     public OrderServiceImpl(ObjectMapper objectMapper, RestClient restClient) {
@@ -26,6 +26,6 @@ public class OrderServiceImpl implements OrderService {
                 .uri(ENDPOINT + "/orders")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .body(new ParameterizedTypeReference<DataResponse<OrderResponse>>() {});
+                .body(new ParameterizedTypeReference<>() {});
     }
 }

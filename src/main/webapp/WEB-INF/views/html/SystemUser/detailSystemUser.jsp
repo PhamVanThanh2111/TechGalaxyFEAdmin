@@ -1,5 +1,4 @@
 <%@ page import="java.time.LocalDate" %>
-<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.request.CustomerRequest" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"

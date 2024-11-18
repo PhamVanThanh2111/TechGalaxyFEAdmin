@@ -12,4 +12,6 @@ public interface SystemUserService {
     DataResponse<SystemUserResponseDTO> create(SystemUserRequestDTO systemUserRequestDTO);
 
     DataResponse<SystemUserResponseDTO> update(SystemUserRequestDTO systemUserRequestDTO);
+
+    DataResponse<Void> delete(String id);
 }

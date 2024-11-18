@@ -61,25 +61,14 @@ public class SystemUserController {
     public ModelAndView formUpdate(ModelAndView model, @PathVariable String id) {
         List<SystemUserResponseDTO> list = (List<SystemUserResponseDTO>) systemUserService.findById(id).getData();
         model.addObject("systemUserRequestDTO", list.get(0));
-//        System.out.println(id);
-//        System.out.println( list.get(0).getId());
-//        System.out.println( list.get(0).getName());
-//        System.out.println( list.get(0).getPhone());
-//        System.out.println( list.get(0).getAddress());
-//        System.out.println( list.get(0).getSystemUserStatus());
-//        System.out.println( list.get(0).getLevel());
-//        System.out.println( list.get(0).getGender());
-//        System.out.println( list.get(0).getAvatar());
-//        System.out.println( list.get(0).getAccount());
-//        System.out.println( list.get(0).getAccount().getEmail());
         model.setViewName("html/SystemUser/formSystemUser");
         return model;
     }
 
     @GetMapping("/delete/{id}")
     public ModelAndView delete(ModelAndView model, @PathVariable String id) {
-//        systemUserService.delete(id);
-//        model.setViewName("redirect:/userSystem");
+        systemUserService.delete(id);
+        model.setViewName("redirect:/systemUsers");
         return model;
     }
 
