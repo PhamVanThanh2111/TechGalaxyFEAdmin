@@ -8,9 +8,11 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductVariantResponse;
 
+import java.util.List;
+
 public interface ProductService {
     public DataResponse<ProductResponse> createProduct(ProductRequest productRequest);
     public DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest);
-    public DataResponse<ProductVariantDetailResponse> createVariantDetail(String variantId, ProductVariantDetailRequest detailRequest);
+    public DataResponse<ProductVariantDetailResponse> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest);
 
     }

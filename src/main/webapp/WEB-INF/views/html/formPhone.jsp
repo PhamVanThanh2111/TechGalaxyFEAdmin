@@ -6,7 +6,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,100 +24,62 @@
 
     <!-- Custom styles for this template-->
     <link href="<c:url value="/css/sb-admin-2.min.css" />" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
-
-<!-- Page Wrapper -->
 <div id="wrapper">
-
-    <!-- Sidebar -->
     <jsp:include page="./layout/sidebar.jsp" />
-    <!-- End of Sidebar -->
-
-    <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
-
-        <!-- Main Content -->
         <div id="content">
-
-            <!-- Topbar -->
             <jsp:include page="./layout/topbar.jsp" />
-            <!-- End of Topbar -->
-
-            <!-- Begin Page Content -->
             <div class="container-fluid">
-
-                <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Add product</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Add Product</h1>
                 </div>
 
                 <div class="row">
-
                     <div class="col-lg-12">
-
-                        <!-- Basic Card Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Product Information</h6>
                             </div>
                             <div class="card-body">
-                                <form:form role="form" action="${pageContext.request.contextPath}/products/add"
+                                <form:form id="addProductForm" role="form" action="${pageContext.request.contextPath}/products/add"
                                            method="POST" modelAttribute="productFullRequest" cssClass="needs-validation" enctype="multipart/form-data">
                                     <!-- Thông tin cơ bản của sản phẩm -->
                                     <div class="form-group mb-3">
-                                        <label for="name" class="form-label font-weight-bold font-styles-italic text-dark">Tên Sản Phẩm</label>
-                                        <form:input path="name" class="form-control form-control-user" id="name" placeholder="Nhập tên sản phẩm"
-                                                    required="true" />
+                                        <label for="name" class="form-label font-weight-bold">Tên Sản Phẩm</label>
+                                        <form:input path="name" class="form-control form-control-user" id="name" placeholder="Nhập tên sản phẩm" required="true" />
+                                        <form:errors path="name" cssClass="text-danger" />
                                     </div>
 
                                     <!-- Combobox Trademark -->
                                     <div class="form-group mb-3">
-                                        <label for="trademark" class="form-label font-weight-bold font-styles-italic text-dark">Trademark</label>
-                                        <form:select path="trademarkId" class="form-control form-control-user" id="trademark">
+                                        <label for="trademark" class="form-label font-weight-bold">Trademark</label>
+                                        <form:select path="trademarkId" class="form-control" id="trademark">
                                             <form:option value="" label="Chọn Trademark" />
                                             <form:options items="${trademarks}" itemValue="id" itemLabel="name" />
                                         </form:select>
+                                        <form:errors path="trademarkId" cssClass="text-danger" />
                                     </div>
 
                                     <!-- Khu vực để thêm Variants -->
                                     <div id="variantsContainer" class="mb-3">
-                                        <h4 class="font-weight-bold font-styles-italic text-dark">Variants</h4>
+                                        <h4 class="font-weight-bold">Variants</h4>
                                     </div>
-                                    <button type="button" class="btn btn-info btn-icon-split mb-3" onclick="addVariant()">
-                                        <span class="icon"><i class="fas fa-plus"></i></span>
-                                        <span class="text">Thêm Variant</span>
-                                    </button>
-
+                                    <button type="button" class="btn btn-info mb-3" onclick="addVariant()">Thêm Variant</button>
                                     <button type="submit" class="btn btn-primary btn-user btn-block">Lưu Sản Phẩm</button>
                                 </form:form>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
-            <!-- /.container-fluid -->
-
         </div>
-        <!-- End of Main Content -->
     </div>
-    <!-- End of Content Wrapper -->
-
 </div>
-<!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
-<jsp:include page="./layout/LogoutModal.jsp" />
-<!-- Usage Category Template -->
+<!-- Templates -->
 <script id="usageCategoryTemplate" type="text/template">
     <option value="">Chọn Usage Category</option>
     <c:forEach items="${usageCategories}" var="category">
@@ -126,7 +87,6 @@
     </c:forEach>
 </script>
 
-<!-- Memory Template -->
 <script id="memoryTemplate" type="text/template">
     <option value="">Chọn Memory</option>
     <c:forEach items="${memories}" var="memory">
@@ -134,7 +94,6 @@
     </c:forEach>
 </script>
 
-<!-- Color Template -->
 <script id="colorTemplate" type="text/template">
     <option value="">Chọn Color</option>
     <c:forEach items="${colors}" var="color">
@@ -147,12 +106,9 @@
 <script src="<c:url value="/bootstrap/js/bootstrap.bundle.min.js" />"></script>
 <script src="<c:url value="/js/add-product.js" />"></script>
 
-<!-- Core plugin JavaScript-->
 <script src="<c:url value="/jquery-easing/jquery.easing.min.js" />"></script>
-
-<!-- Custom scripts for all pages-->
 <script src="<c:url value="/js/sb-admin-2.min.js" />"></script>
 
 </body>
 
->
+</html>

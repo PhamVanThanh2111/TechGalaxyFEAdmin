@@ -1,10 +1,11 @@
 package iuh.fit.se.techgalaxy.frontend.admin.dto.request;
 
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -13,6 +14,7 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
 public class ProductFullRequest {
+    @Size(min = 5, max = 24, message = "PRODUCT_NAME_INVALID")
     String name;
     String trademarkId;
     List<ProductVariantRequest> variants;
@@ -27,7 +29,7 @@ public class ProductFullRequest {
         String name;
         String description;
         String content;
-        String avatar;
+        MultipartFile avatar;
         Boolean featured;
         String usageCategoryId;
         List<ProductVariantDetailRequest> details;
@@ -53,6 +55,7 @@ public class ProductFullRequest {
             public static class ColorRequest {
                 String colorId;
                 Integer quantity;
+                MultipartFile[] images;
             }
         }
     }

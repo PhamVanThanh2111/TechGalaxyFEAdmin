@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductVariantDetailRequest {
     String memid;
@@ -20,6 +21,7 @@ public class ProductVariantDetailRequest {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
+    @ToString
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class ColorRequest {
         int quantity;

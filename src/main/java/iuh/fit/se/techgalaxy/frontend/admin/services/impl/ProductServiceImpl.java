@@ -70,18 +70,22 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public DataResponse<ProductVariantDetailResponse> createVariantDetail(String variantId, ProductVariantDetailRequest detailRequest) {
+    public DataResponse<ProductVariantDetailResponse> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest) {
         DataResponse<ProductVariantDetailResponse> detailResponse = restClient.post()
                 .uri(ENDPOINT + "/variants/" + variantId + "/details")
                 .body(detailRequest)
                 .exchange((request, response) -> {
                             System.out.println(response.getStatusCode());
                             System.out.println(response.getBody());
+                            if (response.getBody().available() > 0) {
+                                System.out.println(new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8));
+                            }
                             DataResponse<ProductVariantDetailResponse> detailResponseDataResponse = null;
                             if (response.getBody().available() > 0) {
                                 detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
                                 });
                             }
+                            System.out.println("detailResponseDataResponse: " + detailResponseDataResponse);
                             assert detailResponseDataResponse != null;
                             return detailResponseDataResponse;
                         }

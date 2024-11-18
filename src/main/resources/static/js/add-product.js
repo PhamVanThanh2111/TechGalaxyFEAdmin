@@ -1,4 +1,5 @@
 let variantCount = 0;
+
 function addVariant() {
     const variantIndex = variantCount++;
     const variantContainer = document.createElement('div');
@@ -10,6 +11,27 @@ function addVariant() {
         <div class="form-group mb-2">
             <label for="variants${variantIndex}.name" class="form-label font-weight-bold text-dark">Tên Variant</label>
             <input type="text" class="form-control form-control-user" name="variants[${variantIndex}].name" placeholder="Nhập tên variant" required>
+            <small class="text-danger"></small>
+        </div>
+
+        <!-- Mô Tả -->
+        <div class="form-group">
+            <label for="variants${variantIndex}.description" class="form-label font-weight-bold text-dark">Mô Tả</label>
+            <textarea class="form-control" name="variants[${variantIndex}].description" placeholder="Nhập mô tả"></textarea>
+            <small class="text-danger"></small>
+        </div>
+
+        <!-- Nội Dung -->
+        <div class="form-group">
+            <label for="variants${variantIndex}.content" class="form-label font-weight-bold text-dark">Nội Dung</label>
+            <textarea class="form-control" name="variants[${variantIndex}].content" placeholder="Nhập nội dung"></textarea>
+            <small class="text-danger"></small>
+        </div>
+
+        <!-- Avatar -->
+        <div class="form-group">
+            <label for="variants${variantIndex}.avatar" class="form-label font-weight-bold text-dark">Avatar</label>
+            <input type="file" class="form-control" name="variants[${variantIndex}].avatar" accept=".jpg, .jpeg, .png, .svg">
         </div>
 
         <!-- Usage Category Combobox -->
@@ -18,6 +40,7 @@ function addVariant() {
             <select class="form-control" name="variants[${variantIndex}].usageCategoryId">
                 ${document.getElementById('usageCategoryTemplate').innerHTML}
             </select>
+            <small class="text-danger"></small>
         </div>
 
         <!-- Variant Details Section -->
@@ -28,6 +51,7 @@ function addVariant() {
     `;
     document.getElementById('variantsContainer').appendChild(variantContainer);
 }
+
 function addVariantDetail(variantIndex) {
     const detailContainer = document.createElement('div');
     const detailIndex = document.querySelectorAll(`#detailsContainer${variantIndex} .detail-container`).length;
@@ -41,12 +65,21 @@ function addVariantDetail(variantIndex) {
             <select class="form-control" name="variants[${variantIndex}].details[${detailIndex}].memid">
                 ${document.getElementById('memoryTemplate').innerHTML}
             </select>
+            <small class="text-danger"></small>
         </div>
 
         <!-- Giá -->
         <div class="form-group">
             <label class="form-label font-weight-bold text-dark">Giá</label>
             <input type="number" class="form-control" name="variants[${variantIndex}].details[${detailIndex}].price" placeholder="Nhập giá" required>
+            <small class="text-danger"></small>
+        </div>
+
+        <!-- Sale -->
+        <div class="form-group">
+            <label class="form-label font-weight-bold text-dark">Giảm Giá</label>
+            <input type="number" class="form-control" name="variants[${variantIndex}].details[${detailIndex}].sale" placeholder="Nhập giảm giá">
+            <small class="text-danger"></small>
         </div>
 
         <!-- Color Section -->
@@ -68,15 +101,76 @@ function addColor(variantIndex, detailIndex) {
             <select class="form-control" name="variants[${variantIndex}].details[${detailIndex}].colors[${colorIndex}].colorId">
                 ${document.getElementById('colorTemplate').innerHTML}
             </select>
+            <small class="text-danger"></small>
         </div>
         <div class="col-md-3">
             <label class="form-label font-weight-bold text-dark">Số Lượng</label>
             <input type="number" class="form-control" name="variants[${variantIndex}].details[${detailIndex}].colors[${colorIndex}].quantity" placeholder="Nhập số lượng" required>
+            <small class="text-danger"></small>
         </div>
         <div class="col-md-3">
             <label class="form-label font-weight-bold text-dark">Ảnh</label>
-            <input type="file" class="form-control" name="variants[${variantIndex}].details[${detailIndex}].colors[${colorIndex}].image" required>
+            <input type="file" class="form-control" name="variants[${variantIndex}].details[${detailIndex}].colors[${colorIndex}].images" required accept=".jpg, .jpeg, .png, .svg" multiple>
         </div>
     `;
     document.getElementById(`colorContainer${variantIndex}_${detailIndex}`).appendChild(colorContainer);
+}
+
+// Validation function
+document.getElementById('addProductForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent form submission
+    let isValid = true;
+
+    // Kiểm tra tên sản phẩm
+    const productName = document.getElementById('name');
+    if (productName.value.trim().length < 5 || productName.value.trim().length > 24) {
+        showError(productName, 'Tên sản phẩm phải từ 5 đến 24 ký tự.');
+        isValid = false;
+    } else {
+        clearError(productName);
+    }
+
+    // Kiểm tra các trường bên trong Variants
+    document.querySelectorAll('.variant-container').forEach((variant, index) => {
+        const variantName = variant.querySelector(`input[name="variants[${index}].name"]`);
+        const variantDescription = variant.querySelector(`textarea[name="variants[${index}].description"]`);
+        const variantContent = variant.querySelector(`textarea[name="variants[${index}].content"]`);
+
+        if (!variantName.value.trim()) {
+            showError(variantName, `Tên Variant ${index + 1} không được để trống.`);
+            isValid = false;
+        } else {
+            clearError(variantName);
+        }
+
+        if (!variantDescription.value.trim()) {
+            showError(variantDescription, `Mô tả Variant ${index + 1} không được để trống.`);
+            isValid = false;
+        } else {
+            clearError(variantDescription);
+        }
+
+        if (!variantContent.value.trim()) {
+            showError(variantContent, `Nội dung Variant ${index + 1} không được để trống.`);
+            isValid = false;
+        } else {
+            clearError(variantContent);
+        }
+    });
+
+    if (isValid) {
+        this.submit();
+    }
+});
+
+function showError(input, message) {
+    const error = input.nextElementSibling;
+    error.textContent = message;
+}
+
+function clearError(input) {
+    const error = input.nextElementSibling;
+    if (error) {
+        error.textContent = '';
+    }
 }
