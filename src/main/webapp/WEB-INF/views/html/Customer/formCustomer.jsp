@@ -13,7 +13,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Add Customer</title>
+    <c:if test="${customerRequest.getId() == null || customerRequest.getId().isEmpty()}">
+        <title>Add Customer</title>
+    </c:if>
+    <c:if test="${customerRequest.getId() != null && !customerRequest.getId().isEmpty()}">
+        <title>Update Customer</title>
+    </c:if>
 
     <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
@@ -34,7 +39,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <jsp:include page="../General/Sidebar.jsp" />
+    <jsp:include page="../General/Sidebar.jsp"/>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -44,7 +49,7 @@
         <div id="content">
 
             <!-- Topbar -->
-            <jsp:include page="../General/Topbar.jsp" />
+            <jsp:include page="../General/Topbar.jsp"/>
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
@@ -52,7 +57,12 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Add Customer</h1>
+                    <c:if test="${customerRequest.getId() == null || customerRequest.getId().isEmpty()}">
+                        <h1 class="h3 mb-0 text-gray-800">Add Customer</h1>
+                    </c:if>
+                    <c:if test="${customerRequest.getId() != null && !customerRequest.getId().isEmpty()}">
+                        <h1 class="h3 mb-0 text-gray-800">Update Customer</h1>
+                    </c:if>
                 </div>
 
                 <div class="row">
@@ -62,11 +72,12 @@
                         <!-- Basic Card Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Customer Information</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Information</h6>
                             </div>
                             <div class="card-body">
                                 <form:form role="form" action="${pageContext.request.contextPath}/customers/save"
-                                           method="POST" modelAttribute="customerRequest" cssClass="needs-validation" enctype="multipart/form-data">
+                                           method="POST" modelAttribute="customerRequest" cssClass="needs-validation"
+                                           enctype="multipart/form-data">
                                     <div class="form-group">
                                         <form:input path="id" type="hidden"/>
                                     </div>
@@ -124,8 +135,9 @@
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-primary align-self-center">Save</button>
                                     </div>
-                                    <form:input path="account.id" type="hidden" value="${customerRequest.account.id}" />
-                                    <form:input path="account.password" type="hidden" value="${customerRequest.account.password}" />
+                                    <form:input path="account.id" type="hidden" value="${customerRequest.account.id}"/>
+                                    <form:input path="account.password" type="hidden"
+                                                value="${customerRequest.account.password}"/>
                                 </form:form>
                             </div>
                         </div>

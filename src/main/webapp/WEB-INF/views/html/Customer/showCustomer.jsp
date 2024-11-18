@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Show Customer</title>
+    <title>Customer</title>
 
     <!-- Custom fonts for this template -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
@@ -56,13 +56,12 @@
 
                 <!-- Page Heading -->
                 <h1 class="h3 mb-2 text-gray-800">Customers</h1>
-                <p class="mb-4">This is a customers management table, displaying user data such as name, phone, and
-                    salary.</p>
+                <p class="mb-4">This is a customers management table, displaying user data such as name, phone, gender, birth and so on.</p>
 
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Data User</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Data Customer</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

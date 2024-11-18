@@ -13,7 +13,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Add System User</title>
+    <c:if test="${systemUserRequestDTO.getId() == null || systemUserRequestDTO.getId().isEmpty()}">
+        <title>Add System User</title>
+    </c:if>
+    <c:if test="${systemUserRequestDTO.getId() != null && !systemUserRequestDTO.getId().isEmpty()}">
+        <title>Update System User</title>
+    </c:if>
 
     <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
