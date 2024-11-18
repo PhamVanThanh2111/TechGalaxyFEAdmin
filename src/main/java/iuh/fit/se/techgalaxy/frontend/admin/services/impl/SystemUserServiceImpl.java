@@ -2,7 +2,9 @@ package iuh.fit.se.techgalaxy.frontend.admin.services.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.request.SystemUserRequestDTO;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.UserRegisterRequest;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponseDTO;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UserRegisterResponse;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -44,24 +47,24 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public DataResponse<SystemUserResponseDTO> create(SystemUserResponseDTO systemUserResponseDTO) {
-        if (systemUserResponseDTO.getAvatar() == null || systemUserResponseDTO.getAvatar().isEmpty()) {
-            if (systemUserResponseDTO.getGender() != null) {
-                if (systemUserResponseDTO.getGender() == Gender.MALE) {
+    public DataResponse<SystemUserResponseDTO> create(SystemUserRequestDTO systemUserRequestDTO) {
+        if (systemUserRequestDTO.getAvatar() == null || systemUserRequestDTO.getAvatar().isEmpty()) {
+            if (systemUserRequestDTO.getGender() != null) {
+                if (systemUserRequestDTO.getGender() == Gender.MALE) {
                     // set MultipartFile avatar
-                    systemUserResponseDTO.setAvatar("undraw_profile.svg");
-                } else if (systemUserResponseDTO.getGender() == Gender.FEMALE) {
-                    systemUserResponseDTO.setAvatar("undraw_profile_1.svg");
+                    systemUserRequestDTO.setAvatar("undraw_profile.svg");
+                } else if (systemUserRequestDTO.getGender() == Gender.FEMALE) {
+                    systemUserRequestDTO.setAvatar("undraw_profile_1.svg");
                 }
             } else {
-                systemUserResponseDTO.setAvatar("undraw_profile.svg");
+                systemUserRequestDTO.setAvatar("undraw_profile.svg");
             }
         }
 
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
-        userRegisterRequest.setEmail(systemUserResponseDTO.getAccount().getEmail());
+        userRegisterRequest.setEmail(systemUserRequestDTO.getAccount().getEmail());
         userRegisterRequest.setPassword("123456");
-        userRegisterRequest.setFullName(systemUserResponseDTO.getName());
+        userRegisterRequest.setFullName(systemUserRequestDTO.getName());
 
         DataResponse<UserRegisterResponse> accountResponse = restClient.post()
                 .uri(ENDPOINT + "/api/accounts/auth/create-account")
@@ -89,12 +92,40 @@ public class SystemUserServiceImpl implements SystemUserService {
         return restClient.post()
                 .uri(ENDPOINT + "/system-users")
                 .accept(MediaType.APPLICATION_JSON)
-                .body(systemUserResponseDTO)
+                .body(systemUserRequestDTO)
                 .exchange((request, response) -> {
                     DataResponse<SystemUserResponseDTO> dataResponse = null;
                     if (response.getBody().available() > 0) {
                         dataResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {
                         });
+                    }
+                    assert dataResponse != null;
+                    return dataResponse;
+                });
+    }
+
+    @Override
+    public DataResponse<SystemUserResponseDTO> update(SystemUserRequestDTO systemUserRequestDTO) {
+        if (systemUserRequestDTO.getAvatar() == null || systemUserRequestDTO.getAvatar().isEmpty()) {
+            if (systemUserRequestDTO.getGender() != null) {
+                if (systemUserRequestDTO.getGender() == Gender.MALE) {
+                    systemUserRequestDTO.setAvatar("undraw_profile.svg");
+                } else if (systemUserRequestDTO.getGender() == Gender.FEMALE) {
+                    systemUserRequestDTO.setAvatar("undraw_profile_1.svg");
+                }
+            } else {
+                systemUserRequestDTO.setAvatar("undraw_profile.svg");
+            }
+        }
+
+        return restClient.put()
+                .uri(ENDPOINT + "/system-users/" + systemUserRequestDTO.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .body(systemUserRequestDTO)
+                .exchange((request, response) -> {
+                    DataResponse<SystemUserResponseDTO> dataResponse = null;
+                    if (response.getBody().available() > 0) {
+                        dataResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
                     }
                     assert dataResponse != null;
                     return dataResponse;

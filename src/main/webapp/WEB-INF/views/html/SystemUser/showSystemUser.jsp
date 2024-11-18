@@ -106,11 +106,11 @@
                                                      width="55" height="55"></td>
                                             <td style="width: 18%">
                                                 <a
-                                                    href="${pageContext.request.contextPath}/systemUser/update/${sys_user.id}"
+                                                    href="${pageContext.request.contextPath}/systemUsers/update/${sys_user.id}"
                                                     class="btn btn-warning btn-sm">Update</a>
-                                                <a href="${pageContext.request.contextPath}/systemUser/delete/${sys_user.id}" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                <a href="${pageContext.request.contextPath}/systemUsers/delete/${sys_user.id}" class="btn btn-danger btn-sm" data-toggle="modal"
                                                    data-target="#deleteUserModal_${sys_user.id}">Delete</a>
-                                                <a href="${pageContext.request.contextPath}/systemUser/detail/${sys_user.id}"
+                                                <a href="${pageContext.request.contextPath}/systemUsers/detail/${sys_user.id}"
                                                    class="btn btn-info btn-sm">Detail</a>
                                             </td>
 

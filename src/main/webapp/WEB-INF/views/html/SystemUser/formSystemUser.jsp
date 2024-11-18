@@ -67,9 +67,11 @@
                             <div class="card-body">
                                 <form:form role="form" action="${pageContext.request.contextPath}/systemUsers/save"
                                            method="POST" modelAttribute="systemUserRequestDTO" cssClass="needs-validation">
-                                    <div class="form-group">
-                                        <form:input path="id" type="hidden"/>
-                                    </div>
+                                    <c:if test="${systemUserRequestDTO.getId() != null}">
+                                        <div class="form-group">
+                                            <form:input path="id" type="hidden"/>
+                                        </div>
+                                    </c:if>
                                     <div class="form-group">
                                         <form:label path="name" for="name">Name</form:label>
                                         <form:input path="name" type="text" cssClass="form-control" id="name"
@@ -77,7 +79,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <form:label path="account.email" for="email">Email</form:label>
+                                        <form:label path="account.email" for="email">E-mail</form:label>
                                         <form:input path="account.email" type="email" cssClass="form-control" id="email"
                                                     placeholder="E-mail" required="required"/>
                                     </div>
@@ -85,7 +87,7 @@
                                     <div class="form-group">
                                         <form:label path="phone" for="phone">Phone</form:label>
                                         <form:input path="phone" type="text" cssClass="form-control" id="phone"
-                                                    placeholder="E-mail" required="required"/>
+                                                    placeholder="Phone" required="required"/>
                                     </div>
 
                                     <div class="form-group">
