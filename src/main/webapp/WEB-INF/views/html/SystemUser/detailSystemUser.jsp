@@ -51,7 +51,7 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Customer Detail</h1>
+                    <h1 class="h3 mb-0 text-gray-800">System User Detail</h1>
                 </div>
 
                 <div class="row">
@@ -61,7 +61,7 @@
                         <!-- Basic Card Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h5 class="m-0 font-weight-bold text-primary">Customer Information</h5>
+                                <h5 class="m-0 font-weight-bold text-primary">Information</h5>
                             </div>
                             <div class="card-body">
 
@@ -83,6 +83,7 @@
                                         <li class="list-group-item"><strong>Phone
                                             Number:</strong> ${systemUser.phone}</li>
                                         <li class="list-group-item"><strong>Address:</strong> ${systemUser.address}</li>
+                                        <li class="list-group-item"><strong>Gender:</strong> ${systemUser.gender}</li>
                                     </ul>
                                 </div>
 
@@ -100,10 +101,6 @@
                                         <tr>
                                             <td>Level</td>
                                             <td>${systemUser.level}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gender</td>
-                                            <td>${systemUser.gender}</td>
                                         </tr>
                                         <tr>
                                             <td>Customer ID</td>

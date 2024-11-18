@@ -34,7 +34,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <jsp:include page="../General/Sidebar.jsp" />
+    <jsp:include page="../General/Sidebar.jsp"/>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -44,7 +44,7 @@
         <div id="content">
 
             <!-- Topbar -->
-            <jsp:include page="../General/Topbar.jsp" />
+            <jsp:include page="../General/Topbar.jsp"/>
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
@@ -52,7 +52,12 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Add System User</h1>
+                    <c:if test="${systemUserRequestDTO.getId() == null || systemUserRequestDTO.getId().isEmpty()}">
+                        <h1 class="h3 mb-0 text-gray-800">Add System User</h1>
+                    </c:if>
+                    <c:if test="${systemUserRequestDTO.getId() != null && !systemUserRequestDTO.getId().isEmpty()}">
+                        <h1 class="h3 mb-0 text-gray-800">Update System User</h1>
+                    </c:if>
                 </div>
 
                 <div class="row">
@@ -62,11 +67,12 @@
                         <!-- Basic Card Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">System User Information</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Information</h6>
                             </div>
                             <div class="card-body">
                                 <form:form role="form" action="${pageContext.request.contextPath}/systemUsers/save"
-                                           method="POST" modelAttribute="systemUserRequestDTO" cssClass="needs-validation">
+                                           method="POST" modelAttribute="systemUserRequestDTO"
+                                           cssClass="needs-validation">
                                     <c:if test="${systemUserRequestDTO.getId() != null}">
                                         <div class="form-group">
                                             <form:input path="id" type="hidden"/>
@@ -92,7 +98,8 @@
 
                                     <div class="form-group">
                                         <form:label path="address" for="address">Address</form:label>
-                                        <form:input path="address" cssClass="form-control" id="address" placeholder="Address" />
+                                        <form:input path="address" cssClass="form-control" id="address"
+                                                    placeholder="Address"/>
                                     </div>
 
                                     <div class="form-group">
