@@ -29,6 +29,24 @@ public class TrademarkServiceImpl implements TrademarkService {
                 });
     }
 
+    @Override
+    public DataResponse<TrademarkResponse> findById(String id) {
+        return restClient.get()
+                .uri(ENDPOINT + "/trademarks/id/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    @Override
+    public DataResponse<TrademarkResponse> save(String name) {
+        return restClient.post()
+                .uri(ENDPOINT + "/trademarks?name=" + name)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
 
 
 
