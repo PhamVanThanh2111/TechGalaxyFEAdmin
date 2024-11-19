@@ -1,6 +1,7 @@
 package iuh.fit.se.techgalaxy.frontend.admin.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.request.TrademarkRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.TrademarkResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.services.TrademarkService;
@@ -52,6 +53,16 @@ public class TrademarkServiceImpl implements TrademarkService {
         return restClient.delete()
                 .uri(ENDPOINT + "/trademarks/" + id)
                 .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    @Override
+    public DataResponse<TrademarkResponse> update(TrademarkRequest trademarkRequest) {
+        return restClient.put()
+                .uri(ENDPOINT + "/trademarks")
+                .accept(MediaType.APPLICATION_JSON)
+                .body(trademarkRequest)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }

@@ -67,7 +67,11 @@ public class TrademarkController {
 
     @PostMapping("/save")
     public ModelAndView save(@ModelAttribute("trademarkRequest") TrademarkRequest trademarkRequest, ModelAndView model, BindingResult binding) {
-        trademarkService.save(trademarkRequest.getName());
+        if (trademarkRequest.getId() == null && trademarkRequest.getId().isEmpty()) {
+            trademarkService.save(trademarkRequest.getName());
+        } else {
+            trademarkService.update(trademarkRequest);
+        }
         model.setViewName("redirect:/trademarks");
         return model;
     }
