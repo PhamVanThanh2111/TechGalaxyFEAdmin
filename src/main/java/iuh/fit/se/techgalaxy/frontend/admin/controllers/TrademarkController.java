@@ -45,4 +45,37 @@ public class TrademarkController {
         return model;
     }
 
+    @GetMapping("/update/{id}")
+    public ModelAndView showUpdate(ModelAndView model, @PathVariable String id) {
+        DataResponse<TrademarkResponse> response = trademarkServicema.findById(id);
+        TrademarkResponse trademarkResponse = ((List<TrademarkResponse>) response.getData()).get(0);
+        Trademark trademark = TrademarkMapper.INSTANCE.toTrademarkFromResponse(trademarkResponse);
+        TrademarkRequest trademarkRequest = TrademarkMapper.INSTANCE.toTrademarkRequest(trademark);
+        model.setViewName("html/Trademark/formTrademark");
+        model.addObject("trademarkRequest", trademarkRequest);
+        return model;
+    }
+
+    @GetMapping("/detail/{id}")
+    public ModelAndView detail(ModelAndView model, @PathVariable String id) {
+        DataResponse<TrademarkResponse> response = trademarkService.findById(id);
+        TrademarkResponse trademarkResponse = ((List<TrademarkResponse>) response.getData()).get(0);
+        model.setViewName("html/Trademark/detailTrademark");
+        model.addObject("trademarkResponse", trademarkResponse);
+        return model;
+    }
+
+    @PostMapping("/save")
+    public ModelAndView save(@ModelAttribute("trademarkRequest") TrademarkRequest trademarkRequest, ModelAndView model, BindingResult binding) {
+        trademarkService.save(trademarkRequest.getName());
+        model.setViewName("redirect:/trademarks");
+        return model;
+    }
+
+    @GetMapping("/delete/{id}")
+    public ModelAndView delete(ModelAndView model, @PathVariable String id) {
+        trademarkService.delete(id);
+        model.setViewName("redirect:/trademarks");
+        return model;
+    }
 }
