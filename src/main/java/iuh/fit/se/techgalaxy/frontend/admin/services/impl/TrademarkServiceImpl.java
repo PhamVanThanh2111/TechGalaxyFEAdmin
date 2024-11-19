@@ -47,7 +47,14 @@ public class TrademarkServiceImpl implements TrademarkService {
                 .body(new ParameterizedTypeReference<>() {});
     }
 
-
+    @Override
+    public DataResponse<Object> delete(String id) {
+        return restClient.delete()
+                .uri(ENDPOINT + "/trademarks/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
 
 
 }
