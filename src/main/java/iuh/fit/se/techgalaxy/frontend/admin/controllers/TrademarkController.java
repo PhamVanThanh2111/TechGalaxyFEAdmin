@@ -47,7 +47,7 @@ public class TrademarkController {
 
     @GetMapping("/update/{id}")
     public ModelAndView showUpdate(ModelAndView model, @PathVariable String id) {
-        DataResponse<TrademarkResponse> response = trademarkServicema.findById(id);
+        DataResponse<TrademarkResponse> response = trademarkService.findById(id);
         TrademarkResponse trademarkResponse = ((List<TrademarkResponse>) response.getData()).get(0);
         Trademark trademark = TrademarkMapper.INSTANCE.toTrademarkFromResponse(trademarkResponse);
         TrademarkRequest trademarkRequest = TrademarkMapper.INSTANCE.toTrademarkRequest(trademark);
