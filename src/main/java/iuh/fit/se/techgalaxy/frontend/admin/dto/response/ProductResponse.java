@@ -11,4 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class ProductResponse {
      String id;
      String name;
+     TrademarkResponse trademark;
 }

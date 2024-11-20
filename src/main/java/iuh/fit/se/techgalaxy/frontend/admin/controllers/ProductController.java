@@ -11,10 +11,7 @@ import iuh.fit.se.techgalaxy.frontend.admin.services.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,7 +25,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("/products")
 public class ProductController {
-    private final TrademarkImpl trademarkService;
+    private final TrademarkServiceImpl trademarkService;
     private final ColorServiceImpl colorService;
     private final MemoryServiceImpl memoryService;
     private final UsageCategoryServiceImpl usageCategoryService;
@@ -38,7 +35,7 @@ public class ProductController {
     private final ProductServiceImpl productService;
 
     @Autowired
-    public ProductController(TrademarkImpl trademarkService, ColorServiceImpl colorService, MemoryServiceImpl memoryService, UsageCategoryServiceImpl usageCategoryService, ProductServiceImpl productService, FileServiceImpl fileService) {
+    public ProductController(TrademarkServiceImpl trademarkService, ColorServiceImpl colorService, MemoryServiceImpl memoryService, UsageCategoryServiceImpl usageCategoryService, ProductServiceImpl productService, FileServiceImpl fileService) {
         this.trademarkService = trademarkService;
         this.colorService = colorService;
         this.memoryService = memoryService;
@@ -212,4 +209,64 @@ public class ProductController {
         modelAndView.addObject("usageCategories", usageCategoryService.getAllUsageCategories().getData());
         return modelAndView;
     }
+
+    @GetMapping("/edit/{id}")
+    public ModelAndView showUpdateProductForm(@PathVariable String id) {
+        ModelAndView modelAndView = new ModelAndView("html/updateProduct");
+        DataResponse<ProductResponse> productResponse = productService.getProductById(id);
+        if (productResponse == null || productResponse.getStatus() != 200 || productResponse.getData() == null) {
+            System.out.println("Error fetching product details.");
+            return new ModelAndView("redirect:/products");
+        }
+        List<ProductResponse> products = (List<ProductResponse>) productResponse.getData();
+        ProductResponse product = products.get(0);
+        if (product.getId() == null || product.getId().isEmpty()) {
+            System.out.println("Product ID is missing or invalid.");
+            return new ModelAndView("redirect:/products");
+        }
+        modelAndView.addObject("trademarks", trademarkService.getAllTrademarks().getData());
+        modelAndView.addObject("product", product);
+        return modelAndView;
+    }
+
+
+
+    @PostMapping("/update/{id}")
+    public String updateProduct(@PathVariable String id, @ModelAttribute("product") ProductRequest productRequest) {
+        try {
+
+            DataResponse<ProductResponse> productVariantDetailResponseDataResponse = productService.updateProduct(id, productRequest);
+            if (productVariantDetailResponseDataResponse == null || productVariantDetailResponseDataResponse.getStatus() != 200 || productVariantDetailResponseDataResponse.getData() == null) {
+                System.out.println("Error updating product.");
+                return "redirect:/products/edit/" + id;
+            }else {
+                List<ProductResponse> productResponses = (List<ProductResponse>) productVariantDetailResponseDataResponse.getData();
+                ProductResponse productResponse = productResponses.get(0);
+                System.out.println("Product updated successfully: " + productResponse.getId());
+                return "redirect:/products";
+            }
+        } catch (Exception e) {
+            System.out.println("Error updating product: " + e.getMessage());
+            return "redirect:/products/edit/" + id;
+        }
+    }
+    @GetMapping
+    public ModelAndView showProductList() {
+        ModelAndView modelAndView = new ModelAndView("html/showPhone");
+        System.out.println("Fetching product list...");
+        DataResponse<ProductResponse> productResponseDataResponse = productService.getAllProducts();
+
+        if (productResponseDataResponse == null || productResponseDataResponse.getStatus() != 200 || productResponseDataResponse.getData() == null){
+            System.out.println("Error fetching product list.");
+            modelAndView.addObject("errorMessage", "Unable to fetch product list. Please try again later.");
+            return modelAndView;
+        }
+
+        List<ProductResponse> productResponses = (List<ProductResponse>) productResponseDataResponse.getData();
+        modelAndView.addObject("products", productResponses);
+
+        return modelAndView;
+    }
+
+
 }
