@@ -12,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Detail System User</title>
+    <title>Detail Trademark</title>
 
     <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
@@ -51,7 +51,7 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">System User Detail</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Trademark Detail</h1>
                 </div>
 
                 <div class="row">
@@ -65,59 +65,20 @@
                             </div>
                             <div class="card-body">
 
-                                <!-- Profile Picture -->
-                                <div class="mb-3 text-center">
-                                    <img src="<%--@elvariable id="systemUser" type="java"--%>
-                                        <c:url value="/img/${systemUser.avatar}"/>" class="img-thumbnail"
-                                         alt="Customer Photo" style="width: 200px; height: 200px; border-width: 0">
-                                </div>
-
                                 <!-- User General Information -->
                                 <div class="mb-3">
-                                    <h6 class="font-weight-bold text-primary">User Information</h6>
+                                    <h6 class="font-weight-bold text-primary">Information</h6>
                                     <ul class="list-group">
-                                        <li class="list-group-item"><strong>Full Name:</strong> ${systemUser.name}
+                                        <li class="list-group-item"><strong>Id:</strong> ${trademarkResponse.id}
+                                        </li>
+                                        <li class="list-group-item"><strong>Name:</strong> ${trademarkResponse.name}
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Email:</strong> ${systemUser.account.email}</li>
-                                        <li class="list-group-item"><strong>Phone
-                                            Number:</strong> ${systemUser.phone}</li>
-                                        <li class="list-group-item"><strong>Address:</strong> ${systemUser.address}</li>
-                                        <li class="list-group-item"><strong>Gender:</strong> ${systemUser.gender}</li>
+                                            <strong>Date add:</strong> ${trademarkResponse.createdAt}</li>
+                                        <li class="list-group-item"><strong>Date update:</strong> ${trademarkResponse.updatedAt}</li>
                                     </ul>
                                 </div>
 
-                                <!-- Additional User Details -->
-                                <div class="mb-3">
-                                    <h6 class="font-weight-bold text-primary">Additional Information</h6>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>Attribute</th>
-                                            <th>Details</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>Level</td>
-                                            <td>${systemUser.level}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Customer ID</td>
-                                            <td>${systemUser.id}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <!-- Status Information -->
-                                <div class="mb-3">
-                                    <h6 class="font-weight-bold text-primary">Status</h6>
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <strong>Status:</strong> ${systemUser.systemUserStatus}</li>
-                                    </ul>
-                                </div>
                             </div>
 
                         </div>

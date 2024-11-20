@@ -129,8 +129,8 @@
         <div id="trademarkManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Trademark Manage</h6>
-                <a class="collapse-item" href="${pageContext.request.contextPath}">Show</a>
-                <a class="collapse-item" href="${pageContext.request.contextPath}">Add</a>
+                <a class="collapse-item" href="${pageContext.request.contextPath}/trademarks">Show</a>
+                <a class="collapse-item" href="${pageContext.request.contextPath}/trademarks/add">Add</a>
             </div>
         </div>
     </li>
@@ -144,8 +144,8 @@
         <div id="accountManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Account Manage</h6>
-                <a class="collapse-item" href="${pageContext.request.contextPath}">Show</a>
-                <a class="collapse-item" href="${pageContext.request.contextPath}">Add</a>
+                <a class="collapse-item" href="${pageContext.request.contextPath}/accounts">Show</a>
+                <a class="collapse-item" href="${pageContext.request.contextPath}/accounts/add">Add</a>
             </div>
         </div>
     </li>

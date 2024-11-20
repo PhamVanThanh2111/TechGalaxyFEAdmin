@@ -44,45 +44,39 @@ public class SystemUserController {
 
     @PostMapping("/save")
     public ModelAndView save(@ModelAttribute("systemUserRequestDTO") SystemUserRequestDTO request, BindingResult bindingResult, ModelAndView model) {
-        System.out.println(request.getName());
-        System.out.println(request.getPhone());
-        System.out.println(request.getAddress());
-        System.out.println(request.getSystemUserStatus());
-        System.out.println(request.getLevel());
-        System.out.println(request.getGender());
-        System.out.println(request.getAvatar());
-        System.out.println(request.getAccount());
-        System.out.println(request.getAccount().getEmail());
-
-
         if (bindingResult.hasErrors()) {
-            System.out.println("Error");
             model.setViewName("html/SystemUser/formSystemUser");
             return model;
         }
-
-        model.setViewName("redirect:/systemUser");
+        if (request.getId() == null || request.getId().isEmpty()) {
+            systemUserService.create(request);
+        } else {
+            systemUserService.update(request);
+        }
+        model.setViewName("redirect:/systemUsers");
         return model;
     }
 
     @GetMapping("/update/{id}")
     public ModelAndView formUpdate(ModelAndView model, @PathVariable String id) {
-        List<SystemUserResponseDTO> list = (List<SystemUserResponseDTO>) systemUserService.findById(id);
-        model.addObject("sys_user", list.get(0));
+        List<SystemUserResponseDTO> list = (List<SystemUserResponseDTO>) systemUserService.findById(id).getData();
+        model.addObject("systemUserRequestDTO", list.get(0));
         model.setViewName("html/SystemUser/formSystemUser");
         return model;
     }
 
     @GetMapping("/delete/{id}")
     public ModelAndView delete(ModelAndView model, @PathVariable String id) {
-//        systemUserService.delete(id);
-//        model.setViewName("redirect:/userSystem");
+        systemUserService.delete(id);
+        model.setViewName("redirect:/systemUsers");
         return model;
     }
 
     @GetMapping("/detail/{id}")
     public ModelAndView detail(ModelAndView model, @PathVariable String id) {
-
+        List<SystemUserResponseDTO> list = (List<SystemUserResponseDTO>) systemUserService.findById(id).getData();
+        model.addObject("systemUser", list.get(0));
+        model.setViewName("html/SystemUser/detailSystemUser");
         return model;
     }
 }

@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Customer</title>
+    <title>Trademarks</title>
 
     <!-- Custom fonts for this template -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
@@ -55,13 +55,13 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Customers</h1>
-                <p class="mb-4">This is a customers management table, displaying user data such as name, phone, gender, birth and so on.</p>
+                <h1 class="h3 mb-2 text-gray-800">Trademarks</h1>
+                <p class="mb-4">This is a trademarks management table, displaying trademark data such as name.</p>
 
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Data Customer</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Data Trademark</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -69,57 +69,31 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>User Status</th>
-                                    <th>Phone</th>
-                                    <th>Gender</th>
-                                    <th>Date of birth</th>
-                                    <th>Avatar</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
                                     <th>Name</th>
-                                    <th>User Status</th>
-                                    <th>Phone</th>
-                                    <th>Gender</th>
-                                    <th>Date of birth</th>
-                                    <th>Avatar</th>
                                     <th>Action</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <c:if test="${customers != null}">
-                                    <c:forEach items="${customers}" var="customer">
+                                <c:if test="${trademarks != null}">
+                                    <c:forEach items="${trademarks}" var="trademark">
                                         <tr>
-                                            <td>${customer.name}</td>
-                                            <td>${customer.userStatus}</td>
-                                            <td>${customer.phone}</td>
-                                            <td>${customer.gender}</td>
-                                            <td>
-                                                <%
-                                                    Object obj = pageContext.findAttribute("customer");
-                                                    CustomerResponse customerResponse = (CustomerResponse) obj;
-                                                    LocalDate dateOfBirth = customerResponse.getDateOfBirth();
-                                                    if (dateOfBirth != null) {
-                                                        String formatDate = dateOfBirth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                                                        out.print(formatDate);
-                                                    }
-                                                %>
-                                            </td>
-                                            <td><img src="<c:url value="/img/${customer.avatar}"/>" alt="avatar"
-                                                     width="55" height="55"></td>
+                                            <td>${trademark.name}</td>
                                             <td style="width: 18%">
                                                 <a
-                                                    href="${pageContext.request.contextPath}/customers/update/${customer.id}"
+                                                    href="${pageContext.request.contextPath}/trademarks/update/${trademark.id}"
                                                     class="btn btn-warning btn-sm">Update</a>
-                                                <a href="${pageContext.request.contextPath}/customers/delete/${customer.id}" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                   data-target="#deleteUserModal_${customer.id}">Delete</a>
-                                                <a href="${pageContext.request.contextPath}/customers/detail/${customer.id}"
+                                                <a href="${pageContext.request.contextPath}/trademarks/delete/${trademark.id}" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                   data-target="#deleteUserModal_${trademark.id}">Delete</a>
+                                                <a href="${pageContext.request.contextPath}/trademarks/detail/${trademark.id}"
                                                    class="btn btn-info btn-sm">Detail</a>
 
                                                 <!-- Delete User Modal-->
-                                                <div class="modal fade" id="deleteUserModal_${customer.id}" tabindex="-1" role="dialog" aria-labelledby="deleteLabel"
+                                                <div class="modal fade" id="deleteUserModal_${trademark.id}" tabindex="-1" role="dialog" aria-labelledby="deleteLabel"
                                                      aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
@@ -129,10 +103,10 @@
                                                                     <span aria-hidden="true">×</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">Select "Yes" below if you are ready to delete this user.</div>
+                                                            <div class="modal-body">Select "Yes" below if you are ready to delete this trademark.</div>
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                                                <a class="btn btn-primary" href="${pageContext.request.contextPath}/customers/delete/${customer.id}">Yes</a>
+                                                                <a class="btn btn-primary" href="${pageContext.request.contextPath}/trademarks/delete/${trademark.id}">Yes</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -190,7 +164,7 @@
 <!-- Core plugin JavaScript-->
 <script src="<c:url value="/jquery-easing/jquery.easing.min.js" />"></script>
 
-<!-- Custom scripts for all pages-->
+<!-- Custom scripts     for all pages-->
 <script src="<c:url value="/js/sb-admin-2.min.js" />"></script>
 
 <!-- Page level plugins -->

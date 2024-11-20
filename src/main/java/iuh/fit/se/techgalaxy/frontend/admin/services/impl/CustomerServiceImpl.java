@@ -24,6 +24,26 @@ public class CustomerServiceImpl implements CustomerService {
     private final ObjectMapper objectMapper;
     private static final String ENDPOINT = "http://localhost:8081";
 
+    private static final String DEFAULT_MALE_AVATAR = "undraw_profile.svg";
+    private static final String DEFAULT_FEMALE_AVATAR = "undraw_profile_1.svg";
+
+    private void setDefaultAvatarIfMissing(CustomerRequest customerRequest) {
+        if (isAvatarMissing(customerRequest)) {
+            customerRequest.setAvatar(getAvatarBasedOnGender(customerRequest));
+        }
+    }
+
+    private boolean isAvatarMissing(CustomerRequest customerRequest) {
+        return customerRequest.getAvatar() == null || customerRequest.getAvatar().isEmpty();
+    }
+
+    private String getAvatarBasedOnGender(CustomerRequest customerRequest) {
+        if (customerRequest.getGender() == Gender.FEMALE) {
+            return DEFAULT_FEMALE_AVATAR;
+        }
+        return DEFAULT_MALE_AVATAR;
+    }
+
     public CustomerServiceImpl(RestClient restClient, ObjectMapper objectMapper) {
         this.restClient = restClient;
         this.objectMapper = objectMapper;
@@ -56,17 +76,6 @@ public class CustomerServiceImpl implements CustomerService {
     // save account and customer information
     @Override
     public DataResponse<CustomerResponse> save(CustomerRequest customerRequest) {
-        if (customerRequest.getAvatar() == null || customerRequest.getAvatar().isEmpty()) {
-            if (customerRequest.getGender() != null) {
-                if (customerRequest.getGender() == Gender.MALE) {
-                    customerRequest.setAvatar("undraw_profile.svg");
-                } else if (customerRequest.getGender() == Gender.FEMALE) {
-                    customerRequest.setAvatar("undraw_profile_1.svg");
-                }
-            } else {
-                customerRequest.setAvatar("undraw_profile.svg");
-            }
-        }
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setEmail(customerRequest.getAccount().getEmail());
         userRegisterRequest.setPassword("123456");
@@ -99,6 +108,8 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerRequest.getPhone().isEmpty())
             customerRequest.setPhone(null);
 
+        setDefaultAvatarIfMissing(customerRequest);
+
         return restClient.post()
                 .uri(ENDPOINT + "/customers")
                 .accept(MediaType.APPLICATION_JSON)
@@ -119,18 +130,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public DataResponse<CustomerResponse> update(CustomerRequest customerRequest) {
-        if (customerRequest.getAvatar() == null || customerRequest.getAvatar().isEmpty()) {
-            if (customerRequest.getGender() != null) {
-                if (customerRequest.getGender() == Gender.MALE) {
-                    customerRequest.setAvatar("undraw_profile.svg");
-                } else if (customerRequest.getGender() == Gender.FEMALE) {
-                    customerRequest.setAvatar("undraw_profile_1.svg");
-                }
-            } else {
-                customerRequest.setAvatar("undraw_profile.svg");
-            }
-        }
-
+        setDefaultAvatarIfMissing(customerRequest);
         return restClient.put()
                 .uri(ENDPOINT + "/customers/" + customerRequest.getId())
                 .accept(MediaType.APPLICATION_JSON)

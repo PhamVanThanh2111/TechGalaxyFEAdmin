@@ -16,7 +16,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>User Detail</title>
+    <title>Detail Customer</title>
 
     <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
@@ -65,7 +65,7 @@
                         <!-- Basic Card Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h5 class="m-0 font-weight-bold text-primary">Customer Information</h5>
+                                <h5 class="m-0 font-weight-bold text-primary">Information</h5>
                             </div>
                             <div class="card-body">
 

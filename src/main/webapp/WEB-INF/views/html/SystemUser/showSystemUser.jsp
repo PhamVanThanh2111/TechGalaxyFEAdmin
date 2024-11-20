@@ -1,8 +1,4 @@
-<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.time.LocalDate" %>
-<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponse" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
@@ -16,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Show System User</title>
+    <title>System User</title>
 
     <!-- Custom fonts for this template -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
@@ -39,7 +35,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <jsp:include page="../General/Sidebar.jsp" />
+    <jsp:include page="../General/Sidebar.jsp"/>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -49,21 +45,21 @@
         <div id="content">
 
             <!-- Topbar -->
-            <jsp:include page="../General/Topbar.jsp" />
+            <jsp:include page="../General/Topbar.jsp"/>
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Customers</h1>
-                <p class="mb-4">This is a customers management table, displaying user data such as name, phone, and
-                    salary.</p>
+                <h1 class="h3 mb-2 text-gray-800">System Users</h1>
+                <p class="mb-4">This is a system user management table, displaying user data such as name, phone,
+                    status and so on.</p>
 
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Data User</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Data System User</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -106,29 +102,38 @@
                                                      width="55" height="55"></td>
                                             <td style="width: 18%">
                                                 <a
-                                                    href="${pageContext.request.contextPath}/systemUser/update/${sys_user.id}"
-                                                    class="btn btn-warning btn-sm">Update</a>
-                                                <a href="${pageContext.request.contextPath}/systemUser/delete/${sys_user.id}" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                        href="${pageContext.request.contextPath}/systemUsers/update/${sys_user.id}"
+                                                        class="btn btn-warning btn-sm">Update</a>
+                                                <a href="${pageContext.request.contextPath}/systemUsers/delete/${sys_user.id}"
+                                                   class="btn btn-danger btn-sm" data-toggle="modal"
                                                    data-target="#deleteUserModal_${sys_user.id}">Delete</a>
-                                                <a href="${pageContext.request.contextPath}/systemUser/detail/${sys_user.id}"
+                                                <a href="${pageContext.request.contextPath}/systemUsers/detail/${sys_user.id}"
                                                    class="btn btn-info btn-sm">Detail</a>
-                                            </td>
+
 
                                                 <!-- Delete User Modal-->
-                                                <div class="modal fade" id="deleteUserModal_${sys_user.id}" tabindex="-1" role="dialog" aria-labelledby="deleteLabel"
+                                                <div class="modal fade" id="deleteUserModal_${sys_user.id}"
+                                                     tabindex="-1" role="dialog" aria-labelledby="deleteLabel"
                                                      aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="deleteLabel">Ready to delete?</h5>
-                                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <h5 class="modal-title" id="deleteLabel">Ready to
+                                                                    delete?</h5>
+                                                                <button class="close" type="button" data-dismiss="modal"
+                                                                        aria-label="Close">
                                                                     <span aria-hidden="true">×</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">Select "Yes" below if you are ready to delete this user.</div>
+                                                            <div class="modal-body">Select "Yes" below if you are ready
+                                                                to delete this user.
+                                                            </div>
                                                             <div class="modal-footer">
-                                                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                                                <a class="btn btn-primary" href="${pageContext.request.contextPath}/customers/delete/${sys_user.id}">Yes</a>
+                                                                <button class="btn btn-secondary" type="button"
+                                                                        data-dismiss="modal">Cancel
+                                                                </button>
+                                                                <a class="btn btn-primary"
+                                                                   href="${pageContext.request.contextPath}/systemUsers/delete/${sys_user.id}">Yes</a>
                                                             </div>
                                                         </div>
                                                     </div>

@@ -13,11 +13,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <c:if test="${customerRequest.getId() == null || customerRequest.getId().isEmpty()}">
-        <title>Add Customer</title>
+    <c:if test="${trademarkRequest.getId() == null || trademarkRequest.getId().isEmpty()}">
+        <title>Add Trademark</title>
     </c:if>
-    <c:if test="${customerRequest.getId() != null && !customerRequest.getId().isEmpty()}">
-        <title>Update Customer</title>
+    <c:if test="${trademarkRequest.getId() != null && !trademarkRequest.getId().isEmpty()}">
+        <title>Update Trademark</title>
     </c:if>
 
     <!-- Custom fonts for this template-->
@@ -57,11 +57,11 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <c:if test="${customerRequest.getId() == null || customerRequest.getId().isEmpty()}">
-                        <h1 class="h3 mb-0 text-gray-800">Add Customer</h1>
+                    <c:if test="${trademarkRequest.getId() == null || trademarkRequest.getId().isEmpty()}">
+                        <h1 class="h3 mb-0 text-gray-800">Add Trademark</h1>
                     </c:if>
-                    <c:if test="${customerRequest.getId() != null && !customerRequest.getId().isEmpty()}">
-                        <h1 class="h3 mb-0 text-gray-800">Update Customer</h1>
+                    <c:if test="${trademarkRequest.getId() != null && !trademarkRequest.getId().isEmpty()}">
+                        <h1 class="h3 mb-0 text-gray-800">Update Trademark</h1>
                     </c:if>
                 </div>
 
@@ -75,8 +75,8 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Information</h6>
                             </div>
                             <div class="card-body">
-                                <form:form role="form" action="${pageContext.request.contextPath}/customers/save"
-                                           method="POST" modelAttribute="customerRequest" cssClass="needs-validation"
+                                <form:form role="form" action="${pageContext.request.contextPath}/trademarks/save"
+                                           method="POST" modelAttribute="trademarkRequest" cssClass="needs-validation"
                                            enctype="multipart/form-data">
                                     <div class="form-group">
                                         <form:input path="id" type="hidden"/>
@@ -87,57 +87,9 @@
                                                     placeholder="Name" required="required"/>
                                     </div>
 
-                                    <div class="form-group">
-                                        <form:label path="account.email" for="email">Email</form:label>
-                                        <form:input path="account.email" type="email" cssClass="form-control" id="email"
-                                                    placeholder="E-mail" required="required"/>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <form:label path="dateOfBirth" for="birthDate">Birthday</form:label>
-                                        <form:input path="dateOfBirth" type="date" cssClass="form-control"
-                                                    id="birthDate" value="${dateOfBirth}"/>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <form:label path="gender" for="gender">Gender</form:label>
-                                        <form:select path="gender" cssClass="form-control" id="gender">
-                                            <form:option value="">Choose gender</form:option>
-                                            <form:option value="MALE">Male</form:option>
-                                            <form:option value="FEMALE">Female</form:option>
-                                            <form:option value="OTHER">Other</form:option>
-                                        </form:select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <form:label path="phone" for="phoneNumber">Phone number</form:label>
-                                        <form:input path="phone" type="tel" cssClass="form-control" id="phoneNumber"
-                                                    placeholder="Type the phone number"/>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <form:label path="userStatus" for="status">Status</form:label>
-                                        <form:select path="userStatus" cssClass="form-control" id="status"
-                                                     required="required">
-                                            <form:option value="">Choose status</form:option>
-                                            <form:option value="ACTIVE">Active</form:option>
-                                            <form:option value="INACTIVE">Inactive</form:option>
-                                            <form:option value="SUSPENDED">Suspended</form:option>
-                                        </form:select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <form:label path="avatar" for="avatar">Avatar</form:label>
-                                        <form:input path="avatar" type="file" cssClass="form-control" id="avatar"
-                                                    accept="image/png, image/jpeg"/>
-                                    </div>
-
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-primary align-self-center">Save</button>
                                     </div>
-                                    <form:input path="account.id" type="hidden" value="${customerRequest.account.id}"/>
-                                    <form:input path="account.password" type="hidden"
-                                                value="${customerRequest.account.password}"/>
                                 </form:form>
                             </div>
                         </div>
