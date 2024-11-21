@@ -31,4 +31,9 @@ public interface ProductService {
     public DataResponse<Object> deleteVariant(String variantId);
     public DataResponse<Object> deleteVariantDetail(String detailId);
 
+    public DataResponse<ProductVariantResponse> getAllProductVariantsByProductId(String productId);
+    public DataResponse<ProductVariantDetailResponse> getAllVariantDetailsByVariantId(String variantId);
+
+    public DataResponse<ProductVariantResponse> getAllVariants();
+
 }

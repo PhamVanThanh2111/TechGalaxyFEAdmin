@@ -10,10 +10,12 @@ import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.services.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -56,7 +58,7 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public ModelAndView saveFullProduct(@Validated @ModelAttribute("productFullRequest") ProductFullRequest productFullRequest) {
+    public String saveFullProduct(@Validated @ModelAttribute("productFullRequest") ProductFullRequest productFullRequest) {
         // In toàn bộ dữ liệu nhận được từ form
         System.out.println("Dữ liệu sản phẩm:");
         System.out.println(productFullRequest);
@@ -201,13 +203,7 @@ public class ProductController {
             }
         }
 
-        ModelAndView modelAndView = new ModelAndView("html/formPhone");
-        modelAndView.addObject("productFullRequest", new ProductFullRequest());
-        modelAndView.addObject("trademarks", trademarkService.getAllTrademarks().getData());
-        modelAndView.addObject("colors", colorService.getAllColors().getData());
-        modelAndView.addObject("memories", memoryService.getAllMemories().getData());
-        modelAndView.addObject("usageCategories", usageCategoryService.getAllUsageCategories().getData());
-        return modelAndView;
+        return "redirect:/products";
     }
 
     @GetMapping("/edit/{id}")
@@ -229,6 +225,34 @@ public class ProductController {
         return modelAndView;
     }
 
+    @PostMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable String id, RedirectAttributes redirectAttributes) {
+        try {
+            System.out.println("Deleting product: " + id);
+            List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getAllProductVariantsByProductId(id).getData();
+            variants.forEach(
+                    variant -> {
+                        System.out.println("Deleting variant: " + variant.getId());
+                    }
+            );
+            if (variants == null || variants.isEmpty()|| variants.size() == 0){
+                DataResponse<Object> productResponseDataResponse = productService.deleteProduct(id);
+                if (productResponseDataResponse == null || productResponseDataResponse.getStatus() != 200) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Error deleting product: " + id);
+                    return "redirect:/products";
+                }
+                redirectAttributes.addFlashAttribute("successMessage", "Product deleted successfully: " + id);
+                return "redirect:/products";
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Product has variants. Delete variants first.");
+                return "redirect:/products";
+            }
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error deleting product: " + e.getMessage());
+            return "redirect:/products";
+        }
+    }
 
 
     @PostMapping("/update/{id}")
@@ -266,6 +290,46 @@ public class ProductController {
         modelAndView.addObject("products", productResponses);
 
         return modelAndView;
+    }
+    @GetMapping("/{productId}/variants")
+    public ModelAndView viewVariants(@PathVariable String productId, RedirectAttributes redirectAttributes) {
+        ModelAndView modelAndView = new ModelAndView("html/view-variants");
+
+        // Lấy thông tin sản phẩm
+        List<ProductResponse> products = (List<ProductResponse>) productService.getProductById(productId).getData();
+        if (products == null || products.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Product not found.");
+            return new ModelAndView("redirect:/products");
+        }
+
+        ProductResponse product = products.get(0);
+
+        // Lấy danh sách biến thể của sản phẩm
+        List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getAllProductVariantsByProductId(productId).getData();
+        if (variants == null || variants.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "No variants found for the product.");
+            return new ModelAndView("redirect:/products");
+        }
+
+        // Thêm dữ liệu vào ModelAndView
+        modelAndView.addObject("productName", product.getName());
+        modelAndView.addObject("variants", variants);
+
+        return modelAndView;
+    }
+
+
+
+    @GetMapping("/products/variants/{variantId}/edit")
+    public String editVariant(@PathVariable String variantId, Model model) {
+        List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getAllVariants().getData();
+        ProductVariantResponse variant = variants.stream().filter(v -> v.getId().equals(variantId)).findFirst().orElse(null);
+        if (variant == null) {
+            return "redirect:/products";
+        }
+
+        model.addAttribute("variant", variant);
+        return "html/edit-variant";
     }
 
 
