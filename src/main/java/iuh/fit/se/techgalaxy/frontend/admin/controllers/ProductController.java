@@ -7,6 +7,7 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductVariantRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Color;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Memory;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.ProductVariantDetail;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.services.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -228,7 +229,7 @@ public class ProductController {
     public String deleteProduct(@PathVariable String id, RedirectAttributes redirectAttributes) {
         try {
             System.out.println("Deleting product: " + id);
-            List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getAllProductVariantsByProductId(id).getData();
+            List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getAllProductVariantsByProductId(id);
             variants.forEach(
                     variant -> {
                         System.out.println("Deleting variant: " + variant.getId());
@@ -273,6 +274,7 @@ public class ProductController {
             return "redirect:/products/edit/" + id;
         }
     }
+
     @GetMapping
     public ModelAndView showProductList() {
         ModelAndView modelAndView = new ModelAndView("html/showPhone");
@@ -290,6 +292,7 @@ public class ProductController {
 
         return modelAndView;
     }
+
     @GetMapping("/{productId}/variants")
     public ModelAndView viewVariants(@PathVariable String productId, RedirectAttributes redirectAttributes) {
         ModelAndView modelAndView = new ModelAndView("html/showVariants");
@@ -318,20 +321,8 @@ public class ProductController {
     }
 
 
-
-    @GetMapping("/products/variants/{variantId}/edit")
-    public String editVariant(@PathVariable String variantId, Model model) {
-        List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getAllVariants().getData();
-        ProductVariantResponse variant = variants.stream().filter(v -> v.getId().equals(variantId)).findFirst().orElse(null);
-        if (variant == null) {
-            return "redirect:/products";
-        }
-
-        model.addAttribute("variant", variant);
-        return "html/edit-variant";
-    }
     @GetMapping("/variants/{variantId}/details")
-    public ModelAndView viewVariantDetails(@PathVariable String variantId) {
+    public ModelAndView viewVariantDetails(@PathVariable String variantId, RedirectAttributes redirectAttributes) {
         ModelAndView modelAndView = new ModelAndView("html/showVariantDetail");
         List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getVariantById(variantId).getData();
         ProductVariantResponse variant = variants.stream().filter(v -> v.getId().equals(variantId)).findFirst().orElse(null);
@@ -341,8 +332,8 @@ public class ProductController {
                 .getData();
 
         if (details == null || details.isEmpty()) {
-            modelAndView.addObject("errorMessage", "No details found for this variant.");
-            return modelAndView;
+            redirectAttributes.addFlashAttribute("errorMessage", "No variant details found for the variants.");
+            return new ModelAndView("redirect:/products");
         }
 
         // Lấy danh sách colors và memories từ các service
@@ -365,5 +356,37 @@ public class ProductController {
         return modelAndView;
     }
 
+    @GetMapping("/variants/edit/{variantId}")
+    public String editVariant(@PathVariable String variantId, Model model) {
+        List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getAllVariants().getData();
+        ProductVariantResponse variant = variants.stream().filter(v -> v.getId().equals(variantId)).findFirst().orElse(null);
+        if (variant == null) {
+            return "redirect:/products";
+        }
+        model.addAttribute("variant", variant);
+        return "html/edit-variant";
+    }
 
+    @PostMapping("/variants/delete/{variantId}")
+    public String deleteVariant(@PathVariable String variantId, RedirectAttributes redirectAttributes) {
+
+            System.out.println("Deleting product variant: " + variantId);
+            DataResponse<ProductVariantDetailResponse> variantDetailResponses = productService.getAllVariantDetailsByVariantId(variantId);
+
+
+            if (variantDetailResponses==null || variantDetailResponses.getData() == null || variantDetailResponses.getData().isEmpty()){
+                DataResponse<Object> productResponseDataResponse = productService.deleteVariant(variantId);
+                if (productResponseDataResponse == null || productResponseDataResponse.getStatus() != 200) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Error deleting product variant: " + variantId);
+                    return "redirect:/products";
+                }
+                redirectAttributes.addFlashAttribute("successMessage", "Product variant deleted successfully: " + variantId);
+                return "redirect:/products";
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Product variant has variants details. Delete variants first.");
+                return "redirect:/products";
+            }
+
+
+    }
 }

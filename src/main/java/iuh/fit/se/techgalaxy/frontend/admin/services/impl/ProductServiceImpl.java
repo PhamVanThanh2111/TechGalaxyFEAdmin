@@ -162,6 +162,9 @@ public class ProductServiceImpl implements ProductService {
         return restClient.delete()
                 .uri(ENDPOINT + "/products/variants/" + variantId)
                 .exchange((request, response) -> {
+                    System.out.println("deleteVariant");
+                    System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<Object> deleteResponse = null;
                     if (response.getBody().available() > 0) {
                         deleteResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
