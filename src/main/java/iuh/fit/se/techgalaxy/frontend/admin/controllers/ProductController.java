@@ -386,7 +386,23 @@ public class ProductController {
                 redirectAttributes.addFlashAttribute("errorMessage", "Product variant has variants details. Delete variants first.");
                 return "redirect:/products";
             }
+    }
 
 
+    @PostMapping("variants/details/delete/{variantDetailId}")
+    public String deleteVariantDetail(@PathVariable String variantDetailId, RedirectAttributes redirectAttributes) {
+        try {
+            System.out.println("Deleting product variant detail: " + variantDetailId);
+            DataResponse<Object> productResponseDataResponse = productService.deleteVariantDetail(variantDetailId);
+            if (productResponseDataResponse == null || productResponseDataResponse.getStatus() != 200) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Error deleting product variant detail: " + variantDetailId);
+                return "redirect:/products";
+            }
+            redirectAttributes.addFlashAttribute("successMessage", "Product variant detail deleted successfully: " + variantDetailId);
+            return "redirect:/products";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error deleting product variant detail: " + e.getMessage());
+            return "redirect:/products";
+        }
     }
 }

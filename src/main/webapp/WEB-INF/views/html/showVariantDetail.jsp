@@ -94,13 +94,13 @@
                                                 <td>${color.sale}%</td>
                                                 <td>${color.quantity}</td>
                                                 <td>
-                                                    <form action="/variants/details/update/${detailItem.id}" method="get" style="display:inline;">
+                                                    <form action="/products/variants/details/update/${detailItem.id}" method="get" style="display:inline;">
                                                         <button type="submit" class="btn btn-primary btn-sm">Update</button>
                                                     </form>
-                                                    <form action="/variants/details/${detailItem.id}" method="get" style="display:inline;">
+                                                    <form action="/products/variants/details/${detailItem.id}" method="get" style="display:inline;">
                                                         <button type="submit" class="btn btn-info btn-sm">Detail</button>
                                                     </form>
-                                                    <form action="/variants/details/delete/${detailItem.id}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this detail?');">
+                                                    <form action="/products/variants/details/delete/${detailItem.id}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this detail?');">
                                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                                     </form>
                                                 </td>
