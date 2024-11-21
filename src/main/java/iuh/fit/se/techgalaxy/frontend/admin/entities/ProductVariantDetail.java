@@ -19,7 +19,6 @@ public class ProductVariantDetail {
     private ProductVariant productVariant;
     private Color color;
     private Memory memory;
-    private String name;
     private Integer viewsCount;
     private Integer quantity;
     private Double price;
