@@ -72,7 +72,7 @@ public class SystemUserServiceImpl implements SystemUserService {
         userRegisterRequest.setFullName(systemUserRequestDTO.getName());
 
         DataResponse<UserRegisterResponse> accountResponse = restClient.post()
-                .uri(ENDPOINT + "/api/accounts/auth/create-account")
+                .uri(ENDPOINT + "/api/accounts/auth/create-system-user-account")
                 .accept(MediaType.APPLICATION_JSON)
                 .body(userRegisterRequest)
                 .exchange((request, response) -> {
