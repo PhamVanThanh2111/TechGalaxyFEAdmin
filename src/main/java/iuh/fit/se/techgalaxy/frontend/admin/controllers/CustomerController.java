@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @Controller
@@ -57,19 +59,19 @@ public class CustomerController {
     }
 
     @PostMapping("/save")
-    public ModelAndView save(@ModelAttribute("customerRequest") CustomerRequest customerRequest, @RequestParam("avatar") MultipartFile avatar, BindingResult bindingResult, ModelAndView model) {
+    public ModelAndView save(@ModelAttribute("customerRequest") CustomerRequest customerRequest, @RequestParam("avatar") MultipartFile avatar, BindingResult bindingResult, ModelAndView model) throws IOException, URISyntaxException {
         if (bindingResult.hasErrors()) {
             model.setViewName("html/Customer/formCustomer");
             return model;
         }
         if (!avatar.isEmpty()) {
-            DataResponse<UploadFileResponse> response = fileService.uploadFile(avatar);
+            DataResponse<UploadFileResponse> response = fileService.uploadFile(avatar, "customer/avatar");
             UploadFileResponse uploadFileResponse = ((List<UploadFileResponse>)response.getData()).get(0);
             System.out.println(uploadFileResponse.getFileName());
             customerRequest.setAvatar(uploadFileResponse.getFileName());
         }
         if (customerRequest.getId() == null || customerRequest.getId().isEmpty()) { // add new customer
-//            customerService.save(customerRequest);
+            customerService.save(customerRequest);
         } else { // update customer
             customerService.update(customerRequest);
         }
