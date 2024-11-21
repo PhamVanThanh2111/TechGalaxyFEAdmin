@@ -53,7 +53,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public DataResponse<UploadFileResponse> uploadFiles(MultipartFile[] files,String folder) throws IOException, URISyntaxException {
+    public DataResponse<UploadFileResponse> uploadFiles(MultipartFile[] files,String folder) throws IOException {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         for (MultipartFile file : files) {
             body.add("files", new ByteArrayResource(file.getBytes()) {
