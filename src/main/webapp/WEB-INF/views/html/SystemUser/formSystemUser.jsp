@@ -140,8 +140,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <form:label path="avatar" for="avatar">Avatar</form:label>
-                                        <form:input path="avatar" type="file" cssClass="form-control" id="avatar"
+                                        <label for="avatar">Avatar</label>
+                                        <input name="avatar" type="file" class="form-control" id="avatar"
                                                     accept="image/png, image/jpeg"/>
                                     </div>
 

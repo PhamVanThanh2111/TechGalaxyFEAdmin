@@ -3,23 +3,36 @@ package iuh.fit.se.techgalaxy.frontend.admin.controllers;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.SystemUserRequestDTO;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponseDTO;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UploadFileResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.services.FileService;
 import iuh.fit.se.techgalaxy.frontend.admin.services.SystemUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @Controller
 @RequestMapping("/systemUsers")
 public class SystemUserController {
     private final SystemUserService systemUserService;
+    private final FileService fileService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setDisallowedFields("avatar"); // Bỏ qua field avatar
+    }
 
     @Autowired
-    public SystemUserController(SystemUserService systemUserService) {
+    public SystemUserController(SystemUserService systemUserService, FileService fileService) {
         this.systemUserService = systemUserService;
+        this.fileService = fileService;
     }
 
     @GetMapping
@@ -43,10 +56,16 @@ public class SystemUserController {
     }
 
     @PostMapping("/save")
-    public ModelAndView save(@ModelAttribute("systemUserRequestDTO") SystemUserRequestDTO request, BindingResult bindingResult, ModelAndView model) {
+    public ModelAndView save(@ModelAttribute("systemUserRequestDTO") SystemUserRequestDTO request, @RequestParam MultipartFile avatar, BindingResult bindingResult, ModelAndView model) throws IOException, URISyntaxException {
         if (bindingResult.hasErrors()) {
             model.setViewName("html/SystemUser/formSystemUser");
             return model;
+        }
+        if (!avatar.isEmpty()) {
+            DataResponse<UploadFileResponse> response = fileService.uploadFile(avatar, "systemUser/avatar");
+            UploadFileResponse uploadFileResponse = ((List<UploadFileResponse>)response.getData()).get(0);
+            System.out.println(uploadFileResponse.getFileName());
+            request.setAvatar(uploadFileResponse.getFileName());
         }
         if (request.getId() == null || request.getId().isEmpty()) {
             systemUserService.create(request);
