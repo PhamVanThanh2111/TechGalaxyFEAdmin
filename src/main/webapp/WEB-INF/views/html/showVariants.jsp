@@ -34,9 +34,16 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Variants for Product: <span class="text-primary">${product.name}</span></h1>
+                <div class="d-flex align-items-center mb-4 ">
+                    <a href="/products" class="btn btn-outline-primary btn-lg me-3 mr-5">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                    <h1 class="h3 mb-0 text-gray-800">
+                        Variants for Product: <span class="text-primary fw-bold">${productName}</span>
+                    </h1>
                 </div>
+
+
 
                 <!-- Variants Table -->
                 <div class="card shadow mb-4">
@@ -72,7 +79,7 @@
                                             </c:choose>
                                         </td>
                                         <td>
-                                            <form action="/products/variants/details/${variant.id}" method="get" style="display:inline;">
+                                            <form action="/products/variants/${variant.id}/details" method="get" style="display:inline;">
                                                 <button type="submit" class="btn btn-info btn-sm">View Details</button>
                                             </form>
 

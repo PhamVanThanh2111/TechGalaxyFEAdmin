@@ -5,7 +5,8 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductVariantDetailRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductVariantRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
-import iuh.fit.se.techgalaxy.frontend.admin.entities.ProductVariantDetail;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.Color;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.Memory;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.services.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/products")
@@ -293,7 +292,7 @@ public class ProductController {
     }
     @GetMapping("/{productId}/variants")
     public ModelAndView viewVariants(@PathVariable String productId, RedirectAttributes redirectAttributes) {
-        ModelAndView modelAndView = new ModelAndView("html/view-variants");
+        ModelAndView modelAndView = new ModelAndView("html/showVariants");
 
         // Lấy thông tin sản phẩm
         List<ProductResponse> products = (List<ProductResponse>) productService.getProductById(productId).getData();
@@ -330,6 +329,40 @@ public class ProductController {
 
         model.addAttribute("variant", variant);
         return "html/edit-variant";
+    }
+    @GetMapping("/variants/{variantId}/details")
+    public ModelAndView viewVariantDetails(@PathVariable String variantId) {
+        ModelAndView modelAndView = new ModelAndView("html/showVariantDetail");
+        List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getVariantById(variantId).getData();
+        ProductVariantResponse variant = variants.stream().filter(v -> v.getId().equals(variantId)).findFirst().orElse(null);
+        // Lấy danh sách chi tiết variant
+        List<ProductVariantDetailResponse> details = (List<ProductVariantDetailResponse>) productService
+                .getAllVariantDetailsByVariantId(variantId)
+                .getData();
+
+        if (details == null || details.isEmpty()) {
+            modelAndView.addObject("errorMessage", "No details found for this variant.");
+            return modelAndView;
+        }
+
+        // Lấy danh sách colors và memories từ các service
+        List<Color> colors = (List<Color>) colorService.getAllColors().getData();
+        List<Memory> memories = (List<Memory>) memoryService.getAllMemories().getData();
+
+        // Chuyển đổi colors và memories thành Map
+        Map<String, String> colorMap = colors.stream()
+                .collect(Collectors.toMap(Color::getId, Color::getName));
+        Map<String, String> memoryMap = memories.stream()
+                .collect(Collectors.toMap(Memory::getId, Memory::getName));
+
+        // Truyền dữ liệu sang ModelAndView
+        modelAndView.addObject("detail", details);
+        modelAndView.addObject("variantId", variantId);
+        modelAndView.addObject("colorMap", colorMap);
+        modelAndView.addObject("memoryMap", memoryMap);
+        modelAndView.addObject("variant", variant);
+
+        return modelAndView;
     }
 
 
