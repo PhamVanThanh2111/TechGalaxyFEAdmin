@@ -1,9 +1,6 @@
 package iuh.fit.se.techgalaxy.frontend.admin.controllers;
 
-import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductFullRequest;
-import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductRequest;
-import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductVariantDetailRequest;
-import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductVariantRequest;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.request.*;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Color;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Memory;
@@ -104,7 +101,7 @@ public class ProductController {
                                 System.out.println("Avatar nhận được: " + avatar.getOriginalFilename());
                             }
                             try {
-                                DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(avatar, variantRequest.getName().replace(" ", "_"));
+                                DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(avatar, "products/"+variantRequest.getName().replace(" ", "_"));
                                 System.out.println("Dữ liệu avatar sau khi lưu:");
 
                                 if (uploadFileResponseDataResponse.getStatus() == 200 && uploadFileResponseDataResponse.getData() == null) {
@@ -112,7 +109,7 @@ public class ProductController {
                                 } else {
                                     List<UploadFileResponse> uploadFileResponses = (List<UploadFileResponse>) uploadFileResponseDataResponse.getData();
                                     String avatarUrl = uploadFileResponses.get(0).getFileName();
-                                    productVariantRequest.setAvatar(variantRequest.getName() + "/" + avatarUrl);
+                                    productVariantRequest.setAvatar("products/"+variantRequest.getName().replace(" ", "_")+"/" + avatarUrl);
                                 }
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
@@ -357,15 +354,49 @@ public class ProductController {
     }
 
     @GetMapping("/variants/edit/{variantId}")
-    public String editVariant(@PathVariable String variantId, Model model) {
-        List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getAllVariants().getData();
-        ProductVariantResponse variant = variants.stream().filter(v -> v.getId().equals(variantId)).findFirst().orElse(null);
+    public ModelAndView editVariant(@PathVariable String variantId, Model model) {
+        ModelAndView modelAndView = new ModelAndView("html/editVariant");
+
+        List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getVariantById(variantId).getData();
+        ProductVariantResponse variant = variants.get(0);
         if (variant == null) {
-            return "redirect:/products";
+            return new ModelAndView("redirect:/products");
         }
+        modelAndView.addObject("usageCategories", usageCategoryService.getAllUsageCategories().getData());
         model.addAttribute("variant", variant);
-        return "html/edit-variant";
+        return modelAndView;
     }
+
+    @PostMapping("/variants/update/{variantId}")
+    public String updateVariant(@PathVariable String variantId, @ModelAttribute ProductVariantRequest_FE request, RedirectAttributes redirectAttributes) {
+        ProductVariantRequest variantRequest = new ProductVariantRequest();
+        variantRequest.setName(request.getName());
+        variantRequest.setDescription(request.getDescription());
+        variantRequest.setContent(request.getContent());
+        variantRequest.setAvatar(null);
+        variantRequest.setFeatured(request.getFeatured());
+        variantRequest.setStatus(request.getStatus());
+        variantRequest.setUsageCategoryId(request.getUsageCategoryId());
+
+        try {
+            DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(request.getAvatar(), "products/"+request.getName().replace(" ", "_"));
+            System.out.println("Dữ liệu avatar sau khi lưu:");
+
+            if (uploadFileResponseDataResponse.getStatus() == 200 && uploadFileResponseDataResponse.getData() == null) {
+                System.out.println("Dữ liệu avatar bị null.");
+            } else {
+                List<UploadFileResponse> uploadFileResponses = (List<UploadFileResponse>) uploadFileResponseDataResponse.getData();
+                String avatarUrl = uploadFileResponses.get(0).getFileName();
+                variantRequest.setAvatar("products/"+variantRequest.getName().replace(" ", "_")+"/" + avatarUrl);
+            }
+            productService.updateVariant(variantId, variantRequest);
+            redirectAttributes.addFlashAttribute("successMessage", "Variant updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error updating variant: " + e.getMessage());
+        }
+        return "redirect:/products";
+    }
+
 
     @PostMapping("/variants/delete/{variantId}")
     public String deleteVariant(@PathVariable String variantId, RedirectAttributes redirectAttributes) {

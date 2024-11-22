@@ -115,6 +115,9 @@ public class ProductServiceImpl implements ProductService {
                 .uri(ENDPOINT + "/products/variants/" + variantId)
                 .body(variantRequest)
                 .exchange((request, response) -> {
+                    System.out.println("updateVariant");
+                    System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<ProductVariantResponse> variantResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
                         variantResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
