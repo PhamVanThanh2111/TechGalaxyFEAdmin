@@ -88,7 +88,7 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<jsp:include page="./layout/LogoutModal.jsp" />
+<jsp:include page="../layout/LogoutModal.jsp" />
 
 <!-- JavaScript -->
 <script src="<c:url value='/jquery/jquery.min.js' />"></script>

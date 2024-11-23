@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Variant</title>
+    <title>Edit Variant</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="<c:url value='/css/sb-admin-2.min.css' />" rel="stylesheet">
     <style>
@@ -44,37 +44,37 @@
 
                 <!-- Page Heading -->
                 <div class="d-flex align-items-center mb-4">
-                    <a href="/products/${productId}/variants" class="btn btn-outline-primary btn-lg me-3">
+                    <a href="/products" class="btn btn-outline-primary btn-lg me-3">
                         <i class="fas fa-arrow-left"></i> Back
                     </a>
                     <h1 class="h3 mb-0 text-gray-800">
-                        Add New Variant
+                        Edit Variant: <span class="text-primary">${variant.name}</span>
                     </h1>
                 </div>
 
-                <!-- Add Variant Form -->
+                <!-- Edit Variant Form -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Add Variant</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Edit Variant</h6>
                     </div>
                     <div class="card-body">
-                        <form action="/products/${productId}/variants/add" method="post" enctype="multipart/form-data">
+                        <form action="/products/variants/update/${variant.id}" method="post" enctype="multipart/form-data">
                             <!-- Name -->
                             <div class="form-group">
                                 <label for="variantName">Name</label>
-                                <input type="text" class="form-control" id="variantName" name="name" placeholder="Enter variant name" required>
+                                <input type="text" class="form-control" id="variantName" name="name" value="${variant.name}" required>
                             </div>
 
                             <!-- Description -->
                             <div class="form-group">
                                 <label for="variantDescription">Description</label>
-                                <textarea class="form-control" id="variantDescription" name="description" rows="3" placeholder="Enter variant description"></textarea>
+                                <textarea class="form-control" id="variantDescription" name="description" rows="3">${variant.description}</textarea>
                             </div>
 
                             <!-- Content -->
                             <div class="form-group">
                                 <label for="variantContent">Content</label>
-                                <textarea class="form-control" id="variantContent" name="content" rows="5" placeholder="Enter variant content"></textarea>
+                                <textarea class="form-control" id="variantContent" name="content" rows="5">${variant.content}</textarea>
                             </div>
 
                             <!-- Avatar -->
@@ -88,8 +88,8 @@
                             <div class="form-group">
                                 <label for="variantFeatured">Featured</label>
                                 <select class="form-control" id="variantFeatured" name="featured">
-                                    <option value="true">Yes</option>
-                                    <option value="false" selected>No</option>
+                                    <option value="true" <c:if test="${variant.featured}">selected</c:if>>Yes</option>
+                                    <option value="false" <c:if test="${!variant.featured}">selected</c:if>>No</option>
                                 </select>
                             </div>
 
@@ -97,24 +97,22 @@
                             <div class="form-group">
                                 <label for="variantStatus">Status</label>
                                 <select class="form-control" id="variantStatus" name="status">
-                                    <option value="AVAILABLE">Available</option>
-                                    <option value="OUT_OF_STOCK">Out of Stock</option>
-                                    <option value="DISCONTINUED">Discontinued</option>
+                                    <option value="AVAILABLE" <c:if test="${variant.status eq 'AVAILABLE'}">selected</c:if>>Available</option>
+                                    <option value="OUT_OF_STOCK" <c:if test="${variant.status eq 'OUT_OF_STOCK'}">selected</c:if>>Out of Stock</option>
+                                    <option value="DISCONTINUED" <c:if test="${variant.status eq 'DISCONTINUED'}">selected</c:if>>Discontinued</option>
                                 </select>
                             </div>
 
-                            <!-- Usage Category -->
+<%--                            usageCategoryId--%>
                             <div class="form-group">
                                 <label for="usageCategoryId">Usage Category</label>
                                 <select class="form-control" id="usageCategoryId" name="usageCategoryId">
                                     <c:forEach items="${usageCategories}" var="usageCategory">
-                                        <option value="${usageCategory.id}">${usageCategory.name}</option>
+                                        <option value="${usageCategory.id}" <c:if test="${variant.usageCategory.id eq usageCategory.id}">selected</c:if>>${usageCategory.name}</option>
                                     </c:forEach>
                                 </select>
-                            </div>
-
                             <!-- Submit Button -->
-                            <button type="submit" class="btn btn-success btn-block">Add Variant</button>
+                            <button type="submit" class="btn btn-primary btn-block">Update Variant</button>
                         </form>
                     </div>
                 </div>
@@ -131,7 +129,7 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<jsp:include page="./layout/LogoutModal.jsp" />
+<jsp:include page="../layout/LogoutModal.jsp" />
 
 <!-- JavaScript -->
 <script src="<c:url value='/jquery/jquery.min.js' />"></script>
@@ -140,6 +138,13 @@
 <script>
     $(document).ready(() => {
         const avatarFile = $("#variantAvatar");
+        const orgImage = "${variant.avatar}";
+
+        // Check if the avatar already exists and display it
+        if (orgImage) {
+            const urlImage = "http://localhost:8081/storage/"+orgImage;
+            $("#avatarPreview").attr("src", urlImage).css("display", "block");
+        }
 
         // Handle file selection for new image upload
         avatarFile.change((e) => {
