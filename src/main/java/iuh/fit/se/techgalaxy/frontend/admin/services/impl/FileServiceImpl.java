@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UploadFileResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.services.FileService;
-
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -23,10 +20,12 @@ public class FileServiceImpl implements FileService {
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
     private static final String ENDPOINT = "http://localhost:8081";
-    public FileServiceImpl(RestClient restClient, ObjectMapper objectMapper) {
+
+    public FileServiceImpl(RestClient restClient, ObjectMapper objectMapper, ObjectMapper objectMapper1) {
         this.restClient = restClient;
-        this.objectMapper = objectMapper;
+        this.objectMapper = objectMapper1;
     }
+
     @Override
     public DataResponse<UploadFileResponse> uploadFile(MultipartFile file,String folder) throws IOException, URISyntaxException {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
@@ -54,7 +53,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public DataResponse<UploadFileResponse> uploadFiles(MultipartFile[] files,String folder) throws IOException, URISyntaxException {
+    public DataResponse<UploadFileResponse> uploadFiles(MultipartFile[] files,String folder) throws IOException {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         for (MultipartFile file : files) {
             body.add("files", new ByteArrayResource(file.getBytes()) {

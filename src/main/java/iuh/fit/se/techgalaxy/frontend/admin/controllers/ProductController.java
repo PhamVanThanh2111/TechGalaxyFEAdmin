@@ -43,7 +43,7 @@ public class ProductController {
 
     @GetMapping("/add")
     public ModelAndView showAddProductForm() {
-        ModelAndView modelAndView = new ModelAndView("html/formPhone");
+        ModelAndView modelAndView = new ModelAndView("html/Phone/formPhone");
         modelAndView.addObject("productFullRequest", new ProductFullRequest());
         modelAndView.addObject("trademarks", trademarkService.getAllTrademarks().getData());
         modelAndView.addObject("colors", colorService.getAllColors().getData());
@@ -202,7 +202,7 @@ public class ProductController {
 
     @GetMapping("/edit/{id}")
     public ModelAndView showUpdateProductForm(@PathVariable String id) {
-        ModelAndView modelAndView = new ModelAndView("html/updateProduct");
+        ModelAndView modelAndView = new ModelAndView("html/Phone/updateProduct");
         DataResponse<ProductResponse> productResponse = productService.getProductById(id);
         if (productResponse == null || productResponse.getStatus() != 200 || productResponse.getData() == null) {
             System.out.println("Error fetching product details.");
@@ -272,7 +272,7 @@ public class ProductController {
 
     @GetMapping
     public ModelAndView showProductList() {
-        ModelAndView modelAndView = new ModelAndView("html/showPhone");
+        ModelAndView modelAndView = new ModelAndView("html/Phone/showPhone");
         System.out.println("Fetching product list...");
         DataResponse<ProductResponse> productResponseDataResponse = productService.getAllProducts();
 
@@ -290,7 +290,7 @@ public class ProductController {
 
     @GetMapping("/{productId}/variants")
     public ModelAndView viewVariants(@PathVariable String productId, RedirectAttributes redirectAttributes) {
-        ModelAndView modelAndView = new ModelAndView("html/showVariants");
+        ModelAndView modelAndView = new ModelAndView("html/Phone/showVariants");
 
         // Lấy thông tin sản phẩm
         List<ProductResponse> products = (List<ProductResponse>) productService.getProductById(productId).getData();
@@ -373,6 +373,7 @@ public class ProductController {
         modelAndView.addObject("usageCategories", usageCategoryService.getAllUsageCategories().getData());
         model.addAttribute("variant", variant);
         return modelAndView;
+		
     }
 
     @PostMapping("/variants/update/{variantId}")

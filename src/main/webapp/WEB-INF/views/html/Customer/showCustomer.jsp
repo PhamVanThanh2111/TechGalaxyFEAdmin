@@ -1,7 +1,7 @@
 <%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.time.LocalDate" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="dataTable">
                                 <thead>
                                 <tr>
                                     <th>Name</th>
@@ -107,7 +107,7 @@
                                                     }
                                                 %>
                                             </td>
-                                            <td><img src="<c:url value="/img/${customer.avatar}"/>" alt="avatar"
+                                            <td><img src="<c:url value="http://localhost:8081/storage/customer/avatar/${customer.avatar}"/>" alt="avatar"
                                                      width="55" height="55"></td>
                                             <td style="width: 18%">
                                                 <a

@@ -1,5 +1,6 @@
 package iuh.fit.se.techgalaxy.frontend.admin.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.CustomerRequest;
@@ -75,14 +76,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     // save account and customer information
     @Override
-    public DataResponse<CustomerResponse> save(CustomerRequest customerRequest) {
+    public DataResponse<CustomerResponse> save(CustomerRequest customerRequest) throws JsonProcessingException {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setEmail(customerRequest.getAccount().getEmail());
         userRegisterRequest.setPassword("123456");
         userRegisterRequest.setFullName(customerRequest.getName());
 
         DataResponse<UserRegisterResponse> accountResponse = restClient.post()
-                .uri(ENDPOINT + "/api/accounts/auth/create-account")
+                .uri(ENDPOINT + "/api/accounts/auth/create-customer-account")
+                .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(userRegisterRequest)
                 .exchange((request, response) -> {

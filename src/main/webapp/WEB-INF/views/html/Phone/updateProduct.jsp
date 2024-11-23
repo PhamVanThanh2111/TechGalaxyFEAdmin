@@ -24,10 +24,10 @@
 
 <body id="page-top">
 <div id="wrapper">
-    <jsp:include page="./layout/sidebar.jsp" />
+    <jsp:include page="../General/Sidebar.jsp" />
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
-            <jsp:include page="./layout/topbar.jsp" />
+            <jsp:include page="../General/Topbar.jsp" />
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Update Product</h1>

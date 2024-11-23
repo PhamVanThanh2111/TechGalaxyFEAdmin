@@ -90,7 +90,7 @@
                                                 <a
                                                     href="${pageContext.request.contextPath}/accounts/update/${account.id}"
                                                     class="btn btn-warning btn-sm">Update</a>
-                                                <a href="${pageContext.request.contextPath}/accounts/delete/${account.id}" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                <a href="${pageContext.request.contextPath}/accounts/delete/${account.email}" class="btn btn-danger btn-sm" data-toggle="modal"
                                                    data-target="#deleteUserModal_${account.id}">Delete</a>
                                                 <a href="${pageContext.request.contextPath}/accounts/detail/${account.id}"
                                                    class="btn btn-info btn-sm">Detail</a>
@@ -107,6 +107,7 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">Select "Yes" below if you are ready to delete this account.</div>
+                                                            <div class="modal-body text-danger">(*) If you delete this account, it means deleting the system user.</div>
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                                                                 <a class="btn btn-primary" href="${pageContext.request.contextPath}/accounts/delete/${account.id}">Yes</a>

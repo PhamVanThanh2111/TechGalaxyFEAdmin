@@ -40,7 +40,7 @@
         </c:if>
     </div>
     <!-- Sidebar -->
-    <jsp:include page="./layout/sidebar.jsp" />
+    <jsp:include page="../General/Sidebar.jsp" />
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -50,7 +50,7 @@
         <div id="content">
 
             <!-- Topbar -->
-            <jsp:include page="./layout/topbar.jsp" />
+            <jsp:include page="../General/Topbar.jsp" />
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
@@ -151,13 +151,6 @@
             successToast.show();
         }
 
-        // Initialize and show error toast
-        const errorToastElement = document.getElementById('errorToast');
-        if (errorToastElement) {
-            const errorToast = new bootstrap.Toast(errorToastElement, { delay: 5000 }); // 5s delay
-            errorToast.show();
-        }
-    });
 </script>
 <!-- JavaScript -->
 <script src="<c:url value='/jquery/jquery.min.js' />"></script>

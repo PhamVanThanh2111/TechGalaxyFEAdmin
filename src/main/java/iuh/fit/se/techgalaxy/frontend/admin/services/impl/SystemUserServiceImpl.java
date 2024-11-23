@@ -7,6 +7,7 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.request.UserRegisterRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponseDTO;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UserRegisterResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.SystemUser;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.Gender;
 import iuh.fit.se.techgalaxy.frontend.admin.services.SystemUserService;
 import org.springframework.core.ParameterizedTypeReference;
@@ -65,6 +66,15 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
+    public DataResponse<SystemUserResponseDTO> findByEmail(String email) {
+        return restClient.get()
+                .uri(ENDPOINT + "/system-users/email/" + email)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    @Override
     public DataResponse<SystemUserResponseDTO> create(SystemUserRequestDTO systemUserRequestDTO) {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setEmail(systemUserRequestDTO.getAccount().getEmail());
@@ -72,7 +82,7 @@ public class SystemUserServiceImpl implements SystemUserService {
         userRegisterRequest.setFullName(systemUserRequestDTO.getName());
 
         DataResponse<UserRegisterResponse> accountResponse = restClient.post()
-                .uri(ENDPOINT + "/api/accounts/auth/create-account")
+                .uri(ENDPOINT + "/api/accounts/auth/create-system-user-account")
                 .accept(MediaType.APPLICATION_JSON)
                 .body(userRegisterRequest)
                 .exchange((request, response) -> {
