@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
@@ -145,7 +145,6 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Account Manage</h6>
                 <a class="collapse-item" href="${pageContext.request.contextPath}/accounts">Show</a>
-                <a class="collapse-item" href="${pageContext.request.contextPath}/accounts/add">Add</a>
             </div>
         </div>
     </li>
