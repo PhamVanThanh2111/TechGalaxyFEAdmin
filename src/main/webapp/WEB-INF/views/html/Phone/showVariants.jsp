@@ -140,7 +140,7 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<jsp:include page="./layout/LogoutModal.jsp" />
+<jsp:include page="../layout/LogoutModal.jsp" />
 <script>
     // Wait until DOM is fully loaded
     document.addEventListener("DOMContentLoaded", function () {
@@ -151,6 +151,13 @@
             successToast.show();
         }
 
+        // Initialize and show error toast
+        const errorToastElement = document.getElementById('errorToast');
+        if (errorToastElement) {
+            const errorToast = new bootstrap.Toast(errorToastElement, { delay: 5000 }); // 5s delay
+            errorToast.show();
+        }
+    });
 </script>
 <!-- JavaScript -->
 <script src="<c:url value='/jquery/jquery.min.js' />"></script>
