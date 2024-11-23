@@ -320,7 +320,7 @@ public class ProductController {
 
     @GetMapping("{producctID}/variants/{variantId}/details")
     public ModelAndView viewVariantDetails(@PathVariable String producctID, @PathVariable String variantId, RedirectAttributes redirectAttributes) {
-        ModelAndView modelAndView = new ModelAndView("html/showVariantDetail");
+        ModelAndView modelAndView = new ModelAndView("html/Phone/showVariantDetail");
         System.out.println("Fetching variant details for variant: " + variantId);
         List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getVariantById(variantId).getData();
         ProductVariantResponse variant = variants.stream().filter(v -> v.getId().equals(variantId)).findFirst().orElse(null);
@@ -363,7 +363,7 @@ public class ProductController {
 
     @GetMapping("/variants/edit/{variantId}")
     public ModelAndView editVariant(@PathVariable String variantId, Model model) {
-        ModelAndView modelAndView = new ModelAndView("html/editVariant");
+        ModelAndView modelAndView = new ModelAndView("html/Phone/editVariant");
 
         List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productService.getVariantById(variantId).getData();
         ProductVariantResponse variant = variants.get(0);
@@ -452,7 +452,7 @@ public class ProductController {
 
     @GetMapping("/{productId}/variants/add")
     public ModelAndView addVariant(@PathVariable String productId) {
-        ModelAndView modelAndView = new ModelAndView("html/formVariants");
+        ModelAndView modelAndView = new ModelAndView("html/Phone/formVariants");
 
         modelAndView.addObject("productId", productId);
 
@@ -507,7 +507,7 @@ public class ProductController {
     public ModelAndView showAddVariantDetailForm(@PathVariable String productId,
                                                  @PathVariable String variantId,
                                                  Model model) {
-        ModelAndView modelAndView = new ModelAndView("html/formVariantDetails");
+        ModelAndView modelAndView = new ModelAndView("html/Phone/formVariantDetails");
         ProductVariantDetailRequest_FE request = new ProductVariantDetailRequest_FE();
         request.setColors(new ArrayList<>()); // Khởi tạo danh sách rỗng để tránh lỗi null
 

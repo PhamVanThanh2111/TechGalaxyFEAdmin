@@ -26,7 +26,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <jsp:include page="./layout/sidebar.jsp" />
+    <jsp:include page="../layout/Sidebar.jsp" />
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -36,7 +36,7 @@
         <div id="content">
 
             <!-- Topbar -->
-            <jsp:include page="./layout/topbar.jsp" />
+            <jsp:include page="../layout/Topbar.jsp" />
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
