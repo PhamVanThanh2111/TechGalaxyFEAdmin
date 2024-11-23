@@ -16,6 +16,29 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <!-- Success Toast -->
+        <c:if test="${not empty successMessage}">
+            <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                            ${successMessage}
+                    </div>
+                </div>
+            </div>
+        </c:if>
+
+        <!-- Error Toast -->
+        <c:if test="${not empty errorMessage}">
+            <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                            ${errorMessage}
+                    </div>
+                </div>
+            </div>
+        </c:if>
+    </div>
     <!-- Sidebar -->
     <jsp:include page="../General/Sidebar.jsp" />
     <!-- End of Sidebar -->
@@ -33,17 +56,20 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <div class="d-flex align-items-center mb-4 ">
-                    <a href="/products" class="btn btn-outline-primary btn-lg me-3 mr-5">
-                        <i class="fas fa-arrow-left"></i> Back
+                <!-- Page Heading with Add Button -->
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <a href="/products" class="btn btn-outline-primary btn-lg me-3 mr-5">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+                        <h1 class="h3 mb-0 text-gray-800">
+                            Variants for Product: <span class="text-primary fw-bold">${productName}</span>
+                        </h1>
+                    </div>
+                    <a href="/products/${productId}/variants/add" class="btn btn-success btn-lg">
+                        <i class="fas fa-plus"></i> Add Variant
                     </a>
-                    <h1 class="h3 mb-0 text-gray-800">
-                        Variants for Product: <span class="text-primary fw-bold">${productName}</span>
-                    </h1>
                 </div>
-
-
 
                 <!-- Variants Table -->
                 <div class="card shadow mb-4">
@@ -79,8 +105,11 @@
                                             </c:choose>
                                         </td>
                                         <td>
-                                            <form action="/products/variants/${variant.id}/details" method="get" style="display:inline;">
-                                                <button type="submit" class="btn btn-info btn-sm">View Details</button>
+                                            <form action="/products/${productId}/variants/${variant.id}" method="get" style="display:inline;">
+                                                <button type="submit" class="btn btn-warning btn-sm">Details</button>
+                                            </form>
+                                            <form action="/products/${productId}/variants/${variant.id}/details" method="get" style="display:inline;">
+                                                <button type="submit" class="btn btn-info btn-sm">Variants Details</button>
                                             </form>
 
                                             <form action="/products/variants/edit/${variant.id}" method="get" style="display:inline;">
@@ -112,7 +141,24 @@
 <!-- End of Page Wrapper -->
 
 <jsp:include page="../layout/LogoutModal.jsp" />
+<script>
+    // Wait until DOM is fully loaded
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize and show success toast
+        const successToastElement = document.getElementById('successToast');
+        if (successToastElement) {
+            const successToast = new bootstrap.Toast(successToastElement, { delay: 5000 }); // 5s delay
+            successToast.show();
+        }
 
+        // Initialize and show error toast
+        const errorToastElement = document.getElementById('errorToast');
+        if (errorToastElement) {
+            const errorToast = new bootstrap.Toast(errorToastElement, { delay: 5000 }); // 5s delay
+            errorToast.show();
+        }
+    });
+</script>
 <!-- JavaScript -->
 <script src="<c:url value='/jquery/jquery.min.js' />"></script>
 <script src="<c:url value='/bootstrap/js/bootstrap.bundle.min.js' />"></script>
