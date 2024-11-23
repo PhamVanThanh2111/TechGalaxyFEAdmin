@@ -30,7 +30,7 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <jsp:include page="html/layout/Sidebar.jsp" />
+        <jsp:include page="./html/General/Sidebar.jsp" />
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -195,7 +195,7 @@
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
+                                        <div class="text-truncate">Am I a good boy? The reason I ask is that someone
                                             told me that people say this to all dogs, even if they aren't good...</div>
                                         <div class="small text-gray-500">Chicken the Dog · 2w</div>
                                     </div>

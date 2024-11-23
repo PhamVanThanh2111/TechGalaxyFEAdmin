@@ -55,7 +55,7 @@
     </div>
 
     <!-- Sidebar -->
-    <jsp:include page="layout/Sidebar.jsp" />
+    <jsp:include page="../General/Sidebar.jsp" />
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -65,7 +65,7 @@
         <div id="content">
 
             <!-- Topbar -->
-            <jsp:include page="layout/Topbar.jsp" />
+            <jsp:include page="../General/Topbar.jsp" />
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
@@ -128,7 +128,7 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<jsp:include page="./layout/LogoutModal.jsp" />
+<jsp:include page="../layout/LogoutModal.jsp" />
 <script>
     // Wait until DOM is fully loaded
     document.addEventListener("DOMContentLoaded", function () {

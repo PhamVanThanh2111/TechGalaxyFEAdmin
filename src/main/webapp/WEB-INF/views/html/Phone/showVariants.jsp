@@ -17,7 +17,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <jsp:include page="./layout/sidebar.jsp" />
+    <jsp:include page="../General/Sidebar.jsp" />
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -27,7 +27,7 @@
         <div id="content">
 
             <!-- Topbar -->
-            <jsp:include page="./layout/topbar.jsp" />
+            <jsp:include page="../General/Topbar.jsp" />
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
@@ -111,7 +111,7 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<jsp:include page="./layout/LogoutModal.jsp" />
+<jsp:include page="../layout/LogoutModal.jsp" />
 
 <!-- JavaScript -->
 <script src="<c:url value='/jquery/jquery.min.js' />"></script>

@@ -47,7 +47,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="../../index.jsp">
+        <a class="nav-link" href="${pageContext.request.contextPath}/">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Statistics</span></a>
     </li>
