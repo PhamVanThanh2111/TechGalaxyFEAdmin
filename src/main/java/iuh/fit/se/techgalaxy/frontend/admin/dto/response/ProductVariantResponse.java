@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductVariantResponse {
     String id;
@@ -21,4 +22,5 @@ public class ProductVariantResponse {
     ProductStatus status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+    UsageCategoryResponse usageCategory;
 }
