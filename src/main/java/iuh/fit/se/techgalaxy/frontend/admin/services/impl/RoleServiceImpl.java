@@ -25,4 +25,14 @@ public class RoleServiceImpl implements RoleService {
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
+
+    @Override
+    public DataResponse<RoleResponse> findById(String id) {
+        return restClient.get()
+                .uri(ENDPOINT + "/roles/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
 }

@@ -47,4 +47,15 @@ public class AccountServiceImpl implements AccountService {
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
+
+    @Override
+    public DataResponse<AccountUpdateResponse> updateWithoutPassword(AccountUpdateRequest accountUpdateRequest) {
+        return restClient.put()
+                .uri(ENDPOINT + "/api/accounts/update-account-without-password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(accountUpdateRequest)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
 }

@@ -11,4 +11,6 @@ public interface AccountService {
     DataResponse<AccountResponse> findById(String id);
 
     DataResponse<AccountUpdateResponse> update(AccountUpdateRequest accountUpdateRequest);
+
+    DataResponse<AccountUpdateResponse> updateWithoutPassword(AccountUpdateRequest accountUpdateRequest);
 }
