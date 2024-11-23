@@ -47,7 +47,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">Add Details</h6>
                     </div>
                     <div class="card-body">
-                        <form action="/products/${productId}/variants/${variantId}/details/add" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                        <form action="/products/${productId}/variants/${variantId}/details/add" method="post" enctype="multipart/form-data">
                             <!-- Memory -->
                             <div class="form-group">
                                 <label for="memid">Memory</label>
