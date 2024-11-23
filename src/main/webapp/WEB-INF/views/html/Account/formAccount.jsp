@@ -108,7 +108,7 @@
                                     <div class="form-group">
                                         <label for="password">Password</label>
                                         <form:password path="password" cssClass="form-control"
-                                                       id="password" placeholder="New password"></form:password>
+                                                       id="password" placeholder="New password" />
                                     </div>
 
                                     <%-- Hidden --%>
