@@ -4,7 +4,9 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.request.AccountUpdateRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.AccountResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.AccountUpdateResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponseDTO;
 import iuh.fit.se.techgalaxy.frontend.admin.services.AccountService;
+import iuh.fit.se.techgalaxy.frontend.admin.services.SystemUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +18,12 @@ import java.util.List;
 @RequestMapping("/accounts")
 public class AccountController {
     private final AccountService accountService;
+    private final SystemUserService systemUserService;
 
     @Autowired
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, SystemUserService systemUserService) {
         this.accountService = accountService;
+        this.systemUserService = systemUserService;
     }
 
     @GetMapping
@@ -53,6 +57,14 @@ public class AccountController {
             model.setViewName("html/Account/formAccount");
             return model;
         }
+        model.setViewName("redirect:/accounts");
+        return model;
+    }
+
+    @GetMapping("/delete/{email}")
+    public ModelAndView delete(@PathVariable String email, ModelAndView model) {
+        SystemUserResponseDTO user = ((List<SystemUserResponseDTO>) systemUserService.findByEmail(email).getData()).get(0);
+        systemUserService.delete(user.getId());
         model.setViewName("redirect:/accounts");
         return model;
     }

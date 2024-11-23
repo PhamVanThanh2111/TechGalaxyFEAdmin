@@ -7,6 +7,7 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.request.UserRegisterRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponseDTO;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UserRegisterResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.SystemUser;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.Gender;
 import iuh.fit.se.techgalaxy.frontend.admin.services.SystemUserService;
 import org.springframework.core.ParameterizedTypeReference;
@@ -59,6 +60,15 @@ public class SystemUserServiceImpl implements SystemUserService {
     public DataResponse<SystemUserResponseDTO> findById(String id) {
         return restClient.get()
                 .uri(ENDPOINT + "/system-users/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    @Override
+    public DataResponse<SystemUserResponseDTO> findByEmail(String email) {
+        return restClient.get()
+                .uri(ENDPOINT + "/system-users/email/" + email)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
