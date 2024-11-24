@@ -13,6 +13,7 @@ import java.util.List;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductRequest {
+     String id;
      @Size(min = 5, max = 24, message = "PRODUCT_NAME_INVALID")
      String name;
      String trademarkId;
