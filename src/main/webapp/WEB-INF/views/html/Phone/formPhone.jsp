@@ -36,6 +36,30 @@
 
 <body id="page-top">
 <div id="wrapper">
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <!-- Success Toast -->
+        <c:if test="${not empty successMessage}">
+            <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                            ${successMessage}
+                    </div>
+                </div>
+            </div>
+        </c:if>
+
+        <!-- Error Toast -->
+        <c:if test="${not empty errorMessage}">
+            <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                            ${errorMessage}
+                    </div>
+                </div>
+            </div>
+        </c:if>
+    </div>
+
     <jsp:include page="../General/Sidebar.jsp"/>
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
@@ -111,6 +135,24 @@
     <c:forEach items="${colors}" var="color">
         <option value="${color.id}">${color.name}</option>
     </c:forEach>
+</script>
+<script>
+    // Wait until DOM is fully loaded
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize and show success toast
+        const successToastElement = document.getElementById('successToast');
+        if (successToastElement) {
+            const successToast = new bootstrap.Toast(successToastElement, { delay: 5000 }); // 5s delay
+            successToast.show();
+        }
+
+        // Initialize and show error toast
+        const errorToastElement = document.getElementById('errorToast');
+        if (errorToastElement) {
+            const errorToast = new bootstrap.Toast(errorToastElement, { delay: 5000 }); // 5s delay
+            errorToast.show();
+        }
+    });
 </script>
 
 <!-- Bootstrap core JavaScript-->

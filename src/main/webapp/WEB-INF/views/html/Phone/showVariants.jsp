@@ -115,6 +115,9 @@
                                             <form action="/products/variants/edit/${variant.id}" method="get" style="display:inline;">
                                                 <button type="submit" class="btn btn-primary btn-sm">Edit</button>
                                             </form>
+                                            <form action="/products/${productId}/variants/${variant.id}/attributes" method="get" style="display:inline;">
+                                                <button type="submit" class="btn btn-primary btn-sm">Attribute</button>
+                                            </form>
 
                                             <form action="/products/variants/delete/${variant.id}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this variant?');">
                                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
