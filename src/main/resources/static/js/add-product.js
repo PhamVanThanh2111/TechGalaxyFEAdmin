@@ -17,14 +17,14 @@ function addVariant() {
         <!-- Mô Tả -->
         <div class="form-group">
             <label for="variants${variantIndex}.description" class="form-label font-weight-bold text-dark">Mô Tả</label>
-            <textarea class="form-control" name="variants[${variantIndex}].description" placeholder="Nhập mô tả"></textarea>
+            <textarea class="form-control" name="variants[${variantIndex}].description" placeholder="Nhập mô tả" required></textarea>
             <small class="text-danger"></small>
         </div>
 
         <!-- Nội Dung -->
         <div class="form-group">
             <label for="variants${variantIndex}.content" class="form-label font-weight-bold text-dark">Nội Dung</label>
-            <textarea class="form-control" name="variants[${variantIndex}].content" placeholder="Nhập nội dung"></textarea>
+            <textarea class="form-control" name="variants[${variantIndex}].content" placeholder="Nhập nội dung" required></textarea>
             <small class="text-danger"></small>
         </div>
 
@@ -78,7 +78,7 @@ function addVariantDetail(variantIndex) {
         <!-- Sale -->
         <div class="form-group">
             <label class="form-label font-weight-bold text-dark">Giảm Giá</label>
-            <input type="number" class="form-control" name="variants[${variantIndex}].details[${detailIndex}].sale" placeholder="Nhập giảm giá">
+            <input type="number" class="form-control" name="variants[${variantIndex}].details[${detailIndex}].sale" placeholder="Nhập giảm giá" required>
             <small class="text-danger"></small>
         </div>
 
@@ -116,46 +116,44 @@ function addColor(variantIndex, detailIndex) {
     document.getElementById(`colorContainer${variantIndex}_${detailIndex}`).appendChild(colorContainer);
 }
 
-// Validation function
+// Form Validation
 document.getElementById('addProductForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent form submission
+    console.log('submit');
+    e.preventDefault(); // Prevent default submission
     let isValid = true;
 
     // Kiểm tra tên sản phẩm
     const productName = document.getElementById('name');
-    if (productName.value.trim().length < 5 || productName.value.trim().length > 24) {
-        showError(productName, 'Tên sản phẩm phải từ 5 đến 24 ký tự.');
+    if (!validateField(productName, 'Tên sản phẩm không được để trống và phải từ 5 đến 24 ký tự.', 5, 24)) {
         isValid = false;
-    } else {
-        clearError(productName);
     }
 
-    // Kiểm tra các trường bên trong Variants
+    // Kiểm tra Variants
     document.querySelectorAll('.variant-container').forEach((variant, index) => {
         const variantName = variant.querySelector(`input[name="variants[${index}].name"]`);
-        const variantDescription = variant.querySelector(`textarea[name="variants[${index}].description"]`);
-        const variantContent = variant.querySelector(`textarea[name="variants[${index}].content"]`);
-
-        if (!variantName.value.trim()) {
-            showError(variantName, `Tên Variant ${index + 1} không được để trống.`);
+        if (!validateField(variantName, `Tên Variant ${index + 1} không được để trống.`)) {
             isValid = false;
-        } else {
-            clearError(variantName);
         }
 
-        if (!variantDescription.value.trim()) {
-            showError(variantDescription, `Mô tả Variant ${index + 1} không được để trống.`);
+        // Kiểm tra select "Usage Category"
+        const usageCategory = variant.querySelector(`select[name="variants[${index}].usageCategoryId"]`);
+        if (!validateSelect(usageCategory, `Usage Category cho Variant ${index + 1} cần được chọn.`)) {
             isValid = false;
-        } else {
-            clearError(variantDescription);
         }
 
-        if (!variantContent.value.trim()) {
-            showError(variantContent, `Nội dung Variant ${index + 1} không được để trống.`);
-            isValid = false;
-        } else {
-            clearError(variantContent);
-        }
+        // Kiểm tra Details
+        const details = variant.querySelectorAll('.detail-container');
+        details.forEach((detail, detailIndex) => {
+            const sale = detail.querySelector(`input[name="variants[${index}].details[${detailIndex}].sale"]`);
+            if (!validateSale(sale, `Giảm giá cho Detail ${detailIndex + 1} của Variant ${index + 1} phải từ 0.00 đến 1.00.`)) {
+                isValid = false;
+            }
+
+            const memory = detail.querySelector(`select[name="variants[${index}].details[${detailIndex}].memid"]`);
+            if (!validateSelect(memory, `Memory cho Detail ${detailIndex + 1} của Variant ${index + 1} cần được chọn.`)) {
+                isValid = false;
+            }
+        });
     });
 
     if (isValid) {
@@ -163,14 +161,42 @@ document.getElementById('addProductForm').addEventListener('submit', function (e
     }
 });
 
+function validateField(input, errorMessage, minLength = 1, maxLength = Infinity) {
+    if (!input || input.value.trim().length < minLength || input.value.trim().length > maxLength) {
+        showError(input, errorMessage);
+        return false;
+    }
+    clearError(input);
+    return true;
+}
+
+function validateSelect(select, errorMessage) {
+    if (!select || select.value.trim() === "") {
+        showError(select, errorMessage);
+        return false;
+    }
+    clearError(select); // Xóa lỗi nếu hợp lệ
+    return true;
+}
+
+
+function validateSale(input, errorMessage) {
+    const value = parseFloat(input.value);
+    if (isNaN(value) || value < 0.00 || value > 1.00) {
+        showError(input, errorMessage);
+        return false;
+    }
+    clearError(input);
+    return true;
+}
+
 function showError(input, message) {
     const error = input.nextElementSibling;
-    error.textContent = message;
+    if (error) error.textContent = message;
+    console.log(message);
 }
 
 function clearError(input) {
     const error = input.nextElementSibling;
-    if (error) {
-        error.textContent = '';
-    }
+    if (error) error.textContent = '';
 }

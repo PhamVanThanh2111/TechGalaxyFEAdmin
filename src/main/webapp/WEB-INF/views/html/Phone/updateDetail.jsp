@@ -7,29 +7,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Products</title>
+    <title>Update Variant Detail</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="<c:url value='/css/sb-admin-2.min.css'/>" rel="stylesheet">
-    <style>
-        .toast-container {
-            z-index: 1055;
-        }
-
-        .toast {
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            border-radius: 0.375rem;
-            overflow: hidden;
-        }
-
-    </style>
+    <link href="<c:url value='/css/sb-admin-2.min.css' />" rel="stylesheet">
 </head>
 
 <body id="page-top">
 
 <!-- Page Wrapper -->
 <div id="wrapper">
-    <!-- Toast container -->
-
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
         <!-- Success Toast -->
         <c:if test="${not empty successMessage}">
@@ -53,7 +39,6 @@
             </div>
         </c:if>
     </div>
-
     <!-- Sidebar -->
     <jsp:include page="../General/Sidebar.jsp" />
     <!-- End of Sidebar -->
@@ -73,47 +58,52 @@
 
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Product List</h1>
+                    <a href="/products/${productId}/variants/${variantId}/details" class="btn btn-outline-primary btn-lg me-3">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                    <h1 class="h3 mb-0 text-gray-800">Update Product Detail</h1>
                 </div>
 
-                <!-- Product Table -->
+                <!-- Update Detail Form -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Products</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Edit Detail</h6>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" >
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach var="product" items="${products}">
-                                    <tr>
-                                        <td>${product.id}</td>
-                                        <td>${product.name}</td>
-                                        <td>
-                                            <form action="/products/edit/${product.id}" method="get" style="display:inline;">
-                                                <button type="submit" class="btn btn-primary">Edit</button>
-                                            </form>
+                        <form action="/products/${productId}/variants/${variantId}/details/update/${detail.id}" method="post">
+                            <!-- Price -->
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input type="number" class="form-control" id="price" name="price" step="0.01" value="${detail.price}" required>
+                            </div>
 
-                                            <form action="/products/${product.id}/variants" method="get" style="display:inline;">
-                                                <button type="submit" class="btn btn-info">View Variants</button>
-                                            </form>
+                            <!-- Sale -->
+                            <div class="form-group">
+                                <label for="sale">Sale (%)</label>
+                                <input type="number" class="form-control" id="sale" name="sale" step="0.01" value="${detail.sale}" required>
+                            </div>
 
-                                            <form action="/products/delete/${product.id}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this product?');">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
+                            <!-- Status -->
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="form-control" id="status" name="status" required>
+                                    <c:forEach items="${ProductStatus}" var="statusOption">
+                                        <option value="${statusOption}" <c:if test="${detail.status == statusOption}">selected</c:if>>
+                                                ${statusOption.displayName}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+
+                            <!-- Quantity -->
+                            <div class="form-group">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" value="${detail.quantity}" required>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-success btn-block mt-4">Save Changes</button>
+                        </form>
                     </div>
                 </div>
 
@@ -122,13 +112,14 @@
 
         </div>
         <!-- End of Main Content -->
+
     </div>
     <!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->
 
-<jsp:include page="../General/LogoutModal.jsp" />
+<jsp:include page="../layout/LogoutModal.jsp" />
 <script>
     // Wait until DOM is fully loaded
     document.addEventListener("DOMContentLoaded", function () {
@@ -147,7 +138,6 @@
         }
     });
 </script>
-
 <!-- JavaScript -->
 <script src="<c:url value='/jquery/jquery.min.js' />"></script>
 <script src="<c:url value='/bootstrap/js/bootstrap.bundle.min.js' />"></script>

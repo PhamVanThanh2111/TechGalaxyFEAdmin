@@ -2,13 +2,11 @@ package iuh.fit.se.techgalaxy.frontend.admin.services.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductDetailUpdateRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductVariantDetailRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductVariantRequest;
-import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
-import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductResponse;
-import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductVariantDetailResponse;
-import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductVariantResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.services.ProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -125,12 +123,15 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public DataResponse<ProductVariantDetailResponse> updateVariantDetail(String detailId, ProductVariantDetailRequest detailRequest) {
+    public DataResponse<Boolean> updateVariantDetail(String detailId, ProductDetailUpdateRequest detailRequest) {
         return restClient.put()
                 .uri(ENDPOINT + "/products/variants/details/" + detailId)
                 .body(detailRequest)
                 .exchange((request, response) -> {
-                    DataResponse<ProductVariantDetailResponse> detailResponseDataResponse = null;
+                    System.out.println("updateVariantDetail");
+                    System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
+                    DataResponse<Boolean> detailResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
                         detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
                     }
@@ -247,14 +248,14 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public DataResponse<ProductVariantDetailResponse> getVariantDetailById(String detailId) {
+    public DataResponse<ProductDetailResponse> getVariantDetailById(String detailId) {
         return restClient.get()
                 .uri(ENDPOINT + "/products/variants/details/" + detailId)
                 .exchange((request, response) -> {
                     System.out.println("getVariantDetailById");
                     System.out.println(response.getStatusCode());
                     System.out.println(response.getBody());
-                    DataResponse<ProductVariantDetailResponse> detailResponseDataResponse = null;
+                    DataResponse<ProductDetailResponse> detailResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
                         detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
                     }
