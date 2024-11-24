@@ -1,26 +1,21 @@
-package iuh.fit.se.techgalaxy.frontend.admin.dto.response;
+package iuh.fit.se.techgalaxy.frontend.admin.dto.request;
 
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductVariantResponse {
-    String id;
+public class ProductVariantRequest_FE {
     String name;
     String description;
     String content;
-    String avatar;
+    MultipartFile avatar;
     Boolean featured;
     ProductStatus status;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
-    UsageCategoryResponse usageCategory;
+    String usageCategoryId;
 }
