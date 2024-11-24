@@ -101,10 +101,10 @@
                                         <td>${attribute.attributeName}</td>
                                         <td>${attribute.value}</td>
                                         <td>
-                                            <form action="/attributes/edit/${attribute.id}" method="get" style="display:inline;">
+                                            <form action="/products/${productId}/variants/${variantId}/attributes/update/${attribute.id}" method="get" style="display:inline;">
                                                 <button type="submit" class="btn btn-primary btn-sm">Edit</button>
                                             </form>
-                                            <form action="/${productId}/variants/${variantId}/attributes/delete/${attribute.id}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this attribute?');">
+                                            <form action="/products/${productId}/variants/${variantId}/attributes/delete/${attribute.id}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this attribute?');">
                                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                             </form>
                                         </td>

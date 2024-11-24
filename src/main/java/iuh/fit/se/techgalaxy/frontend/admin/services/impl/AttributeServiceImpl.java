@@ -3,6 +3,7 @@ package iuh.fit.se.techgalaxy.frontend.admin.services.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.AttributeValueRequest;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.request.AttributeValueUpdateRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.AttributeResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ValueResponse;
@@ -73,6 +74,7 @@ public class AttributeServiceImpl implements AttributeService {
                 );
     }
 
+
     @Override
     public DataResponse<Object> createAttributeValueByVariantId(String variantId, List<AttributeValueRequest> values) {
         values.forEach(System.out::println);
@@ -109,4 +111,61 @@ public class AttributeServiceImpl implements AttributeService {
                         }
                 );
     }
+
+    @Override
+    public DataResponse<ValueResponse> updateValueProductVariant(String variantId, AttributeValueUpdateRequest attributeValueRequest) {
+        return restClient.put()
+                .uri(ENDPOINT + "/attributes/productvariant/" + variantId)
+                .body(attributeValueRequest)
+                .exchange((request, response) -> {
+                            System.out.println("updateValueProductVariant");
+                            System.out.println(response.getStatusCode());
+                            DataResponse<ValueResponse> attributeResponseDataResponse = null;
+                            if (response.getBody().available() > 0) {
+                                attributeResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                                });
+                            }
+                            assert attributeResponseDataResponse != null;
+                            return attributeResponseDataResponse;
+                        }
+                );
+    }
+
+    @Override
+    public DataResponse<ValueResponse> deleteValue(String valueId) {
+        return restClient.delete()
+                .uri(ENDPOINT + "/attributes/value/" + valueId)
+                .exchange((request, response) -> {
+                            System.out.println("deleteValue");
+                            System.out.println(response.getStatusCode());
+                            DataResponse<ValueResponse> attributeResponseDataResponse = null;
+                            if (response.getBody().available() > 0) {
+                                attributeResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                                });
+                            }
+                            assert attributeResponseDataResponse != null;
+                            return attributeResponseDataResponse;
+                        }
+                );
+    }
+
+    @Override
+    public DataResponse<ValueResponse> getValueById(String valueId) {
+        return restClient.get()
+                .uri(ENDPOINT + "/attributes/value/" + valueId)
+                .exchange((request, response) -> {
+                            System.out.println("getValueById");
+                            System.out.println(response.getStatusCode());
+                            DataResponse<ValueResponse> attributeResponseDataResponse = null;
+                            if (response.getBody().available() > 0) {
+                                attributeResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                                });
+                            }
+                            assert attributeResponseDataResponse != null;
+                            return attributeResponseDataResponse;
+                        }
+                );
+    }
+
+
 }

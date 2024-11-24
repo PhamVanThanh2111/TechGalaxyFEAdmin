@@ -732,5 +732,73 @@ public class ProductController {
         return "redirect:/products/" + productId + "/variants/" + variantId + "/attributes";
     }
 
+    @PostMapping("/{productId}/variants/{variantId}/attributes/delete/{valueId}")
+    public String deleteAttributeValue(
+            @PathVariable String productId,
+            @PathVariable String variantId,
+            @PathVariable String valueId,
+            RedirectAttributes redirectAttributes) {
+        DataResponse<ValueResponse> response = attributeService.deleteValue(valueId);
+        if (response == null || response.getStatus() != 200) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to delete attribute value.");
+        } else {
+            redirectAttributes.addFlashAttribute("successMessage", "Attribute value deleted successfully!");
+        }
+
+        // Redirect back to the attributes page
+        return "redirect:/products/" + productId + "/variants/" + variantId + "/attributes";
+    }
+
+    @GetMapping("/{productId}/variants/{variantId}/attributes/update/{valueId}")
+    public String showUpdateAttributeValueForm(
+            @PathVariable String productId,
+            @PathVariable String variantId,
+            @PathVariable String valueId,
+            Model model) {
+
+        // Get attribute value by ID
+        DataResponse<ValueResponse> valueResponse = attributeService.getValueById(valueId);
+        if (valueResponse == null || valueResponse.getStatus() != 200 || valueResponse.getData() == null) {
+            model.addAttribute("errorMessage", "Failed to load attribute value.");
+            return "redirect:/products/" + productId + "/variants/" + variantId + "/attributes";
+        }
+
+
+        List<ValueResponse> values = (List<ValueResponse>) valueResponse.getData();
+        ValueResponse value = values.get(0);
+        System.out.println("Value: " + value);
+
+        // Get Attribute by Name
+        DataResponse<AttributeResponse> attributeResponse = attributeService.getAttributeById(value.getAttributeId());
+        if (attributeResponse == null || attributeResponse.getStatus() != 200 || attributeResponse.getData() == null) {
+            model.addAttribute("errorMessage", "Failed to load attribute.");
+            return "redirect:/products/" + productId + "/variants/" + variantId + "/attributes";
+        }
+        List<AttributeResponse> attributes = (List<AttributeResponse>) attributeResponse.getData();
+        AttributeResponse attribute = attributes.get(0);
+
+        model.addAttribute("attribute", attribute);
+        model.addAttribute("value", value);
+        model.addAttribute("productId", productId);
+        model.addAttribute("variantId", variantId);
+
+        return "html/Phone/updateValue";
+    }
+
+    @PostMapping("/{productId}/variants/{variantId}/attributes/update/{valueId}")
+    public String updateAttributeValue(
+            @PathVariable String productId,
+            @PathVariable String variantId,
+            @ModelAttribute AttributeValueUpdateRequest updateRequest,
+            RedirectAttributes redirectAttributes) {
+        System.out.println("Received Request: " + updateRequest);
+        DataResponse<ValueResponse> response = attributeService.updateValueProductVariant(variantId, updateRequest);
+        if (response == null || response.getStatus() != 200) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to update attribute value.");
+        } else {
+            redirectAttributes.addFlashAttribute("successMessage", "Attribute value updated successfully!");
+        }
+        return "redirect:/products/" + productId + "/variants/" + variantId + "/attributes";
+    }
 
 }
