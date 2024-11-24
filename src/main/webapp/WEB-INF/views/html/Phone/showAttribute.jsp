@@ -9,13 +9,47 @@
     <title>Show Attributes</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="<c:url value='/css/sb-admin-2.min.css' />" rel="stylesheet">
+    <style>
+        .toast-container {
+            z-index: 1055;
+        }
+
+        .toast {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
+
+    </style>
 </head>
 
 <body id="page-top">
 
 <!-- Page Wrapper -->
 <div id="wrapper">
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <!-- Success Toast -->
+        <c:if test="${not empty successMessage}">
+            <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                            ${successMessage}
+                    </div>
+                </div>
+            </div>
+        </c:if>
 
+        <!-- Error Toast -->
+        <c:if test="${not empty errorMessage}">
+            <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                            ${errorMessage}
+                    </div>
+                </div>
+            </div>
+        </c:if>
+    </div>
     <!-- Sidebar -->
     <jsp:include page="../General/Sidebar.jsp" />
     <!-- End of Sidebar -->
@@ -39,7 +73,7 @@
                         <i class="fas fa-arrow-left"></i> Back
                     </a>
                     <h1 class="h3 mb-0 text-gray-800">Attributes</h1>
-                    <a href="/attributes/create" class="btn btn-success btn-lg">
+                    <a href="/products/${productId}/variants/${variantId}/attributes/create" class="btn btn-success btn-lg">
                         <i class="fas fa-plus"></i> Add Attribute
                     </a>
                 </div>
@@ -95,7 +129,24 @@
 <!-- End of Page Wrapper -->
 
 <jsp:include page="../General/LogoutModal.jsp" />
+<script>
+    // Wait until DOM is fully loaded
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize and show success toast
+        const successToastElement = document.getElementById('successToast');
+        if (successToastElement) {
+            const successToast = new bootstrap.Toast(successToastElement, { delay: 5000 }); // 5s delay
+            successToast.show();
+        }
 
+        // Initialize and show error toast
+        const errorToastElement = document.getElementById('errorToast');
+        if (errorToastElement) {
+            const errorToast = new bootstrap.Toast(errorToastElement, { delay: 5000 }); // 5s delay
+            errorToast.show();
+        }
+    });
+</script>
 <!-- JavaScript -->
 <script src="<c:url value='/jquery/jquery.min.js' />"></script>
 <script src="<c:url value='/bootstrap/js/bootstrap.bundle.min.js' />"></script>

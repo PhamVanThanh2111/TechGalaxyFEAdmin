@@ -20,6 +20,18 @@
 
     <!-- Custom styles for this template-->
     <link href="<c:url value='/css/sb-admin-2.min.css' />" rel="stylesheet">
+    <style>
+        .toast-container {
+            z-index: 1055;
+        }
+
+        .toast {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
+
+    </style>
 </head>
 
 <body id="page-top">

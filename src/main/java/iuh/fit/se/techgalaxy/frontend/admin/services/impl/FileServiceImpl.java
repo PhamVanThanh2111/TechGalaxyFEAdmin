@@ -42,7 +42,6 @@ public class FileServiceImpl implements FileService {
                 .exchange((request, response) -> {
                     System.out.println("Upload 1 file");
                     System.out.println(response.getStatusCode());
-                    System.out.println(response.getBody());
                     DataResponse<UploadFileResponse> uploadFileResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
                         uploadFileResponseDataResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
@@ -70,7 +69,6 @@ public class FileServiceImpl implements FileService {
                 .exchange((request, response) -> {
                     System.out.println("Upload many file");
                     System.out.println(response.getStatusCode());
-                    System.out.println(response.getBody());
                     DataResponse<UploadFileResponse> uploadFileResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
                         uploadFileResponseDataResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});

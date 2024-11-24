@@ -418,8 +418,15 @@ public class ProductController {
                 }
             }
 
-            productService.updateVariant(variantId, variantRequest);
-            redirectAttributes.addFlashAttribute("successMessage", "Variant updated successfully!");
+            DataResponse<ProductVariantResponse> productVariantResponseDataResponse = productService.updateVariant(variantId, variantRequest);
+            if (productVariantResponseDataResponse == null || productVariantResponseDataResponse.getStatus() != 200) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Error updating variant.");
+                return "redirect:/products";
+            }else {
+                System.out.println("Variant updated successfully: " + variantId);
+                redirectAttributes.addFlashAttribute("successMessage", "Variant updated successfully!");
+
+            }
         }
         catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error updating variant: " + e.getMessage());
@@ -529,9 +536,9 @@ public class ProductController {
 
         model.addAttribute("productId", productId);
         model.addAttribute("variantId", variantId);
-        colorService.getAllColors().getData().forEach(color -> {
-            System.out.println("Color: " + color);
-        });
+        colorService.getAllColors().getData().forEach(color ->
+            System.out.println("Color: " + color)
+        );
         model.addAttribute("availableColors", colorService.getAllColors().getData());
         model.addAttribute("memories", memoryService.getAllMemories().getData());
         model.addAttribute("variantDetailRequest", request);
@@ -657,7 +664,20 @@ public class ProductController {
         return "redirect:/products/" + productId + "/variants/" + variantId + "/details";
     }
 
+    @GetMapping("/{productId}/variants/{variantId}")
+    public String showDetailVariant(@PathVariable String productId, @PathVariable String variantId, Model model) {
+        DataResponse<ProductVariantResponse> variantResponse = productService.getVariantById(variantId);
+        if (variantResponse == null || variantResponse.getStatus() != 200 || variantResponse.getData() == null) {
+            return "redirect:/products/" + productId + "/variants";
+        }
+        List<ProductVariantResponse> variants = (List<ProductVariantResponse>) variantResponse.getData();
+        ProductVariantResponse variant = variants.get(0);
+        model.addAttribute("variant", variant);
+        model.addAttribute("productId", productId);
+        model.addAttribute("variantId", variantId);
 
+        return "html/Phone/detailVariants";
+    }
     @GetMapping("/{productId}/variants/{variantId}/attributes")
     public String showAttributesByVariant(@PathVariable String productId, @PathVariable String variantId, Model model) {
         DataResponse<ValueResponse> attributeResponse = attributeService.getAttributesByVariantId(variantId);
@@ -672,4 +692,45 @@ public class ProductController {
 
         return "html/Phone/showAttribute";
     }
+
+    @GetMapping("/{productId}/variants/{variantId}/attributes/create")
+    public String showCreateAttributeValueForm(@PathVariable String productId,
+                                               @PathVariable String variantId,
+                                               Model model) {
+        // Get all attributes
+        DataResponse<AttributeResponse> attributesResponse = attributeService.getAllAttribute();
+        if (attributesResponse == null || attributesResponse.getStatus() != 200 || attributesResponse.getData() == null) {
+            model.addAttribute("errorMessage", "Failed to load attributes.");
+            return "redirect:/products/" + productId + "/variants/" + variantId + "/attributes";
+        }
+
+        List<AttributeResponse> attributes = (List<AttributeResponse>) attributesResponse.getData();
+        model.addAttribute("attributes", attributes);
+        model.addAttribute("productId", productId);
+        model.addAttribute("variantId", variantId);
+        return "html/Phone/createAttributeValue";
+    }
+
+    @PostMapping("/{productId}/variants/{variantId}/attributes/create")
+    public String createAttributeValueByVariantId(
+            @PathVariable String productId,
+            @PathVariable String variantId,
+            @ModelAttribute AttributeValueRequest attributeValueRequest,
+            RedirectAttributes redirectAttributes) {
+        System.out.println("Received Request: " + attributeValueRequest);
+
+        List<AttributeValueRequest> attributeValues = List.of(attributeValueRequest);
+        DataResponse<Object> response = attributeService.createAttributeValueByVariantId(variantId, attributeValues);
+
+        if (response == null || response.getStatus() != 200) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to create attribute values.");
+        } else {
+            redirectAttributes.addFlashAttribute("successMessage", "Attribute values created successfully!");
+        }
+
+        // Redirect back to the attributes page
+        return "redirect:/products/" + productId + "/variants/" + variantId + "/attributes";
+    }
+
+
 }

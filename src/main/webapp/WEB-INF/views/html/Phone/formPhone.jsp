@@ -31,6 +31,15 @@
             margin-top: 0.25rem;
             display: block;
         }
+        .toast-container {
+            z-index: 1055;
+        }
+
+        .toast {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
     </style>
 </head>
 
