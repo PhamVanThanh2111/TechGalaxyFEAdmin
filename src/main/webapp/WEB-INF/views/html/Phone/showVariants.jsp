@@ -140,7 +140,7 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<jsp:include page="../layout/LogoutModal.jsp" />
+<jsp:include page="../General/LogoutModal.jsp" />
 <script>
     // Wait until DOM is fully loaded
     document.addEventListener("DOMContentLoaded", function () {

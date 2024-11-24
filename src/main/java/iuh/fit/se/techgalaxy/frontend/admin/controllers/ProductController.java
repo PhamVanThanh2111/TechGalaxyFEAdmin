@@ -5,9 +5,11 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.services.impl.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,7 +73,7 @@ public class ProductController {
             return "redirect:/products";
         }
 
-        if ( productResponseDataResponse.getData() == null) {
+        if (productResponseDataResponse.getData() == null) {
             System.out.println("Dữ liệu sản phẩm bị null.");
         } else {
             System.out.println("Dữ liệu sản phẩm sau khi lưu:");
@@ -97,24 +99,22 @@ public class ProductController {
                     if (avatar == null || avatar.isEmpty()) {
                         System.out.println("Avatar bị null hoặc rỗng.");
                     } else {
-                        System.out.println("Avatar nhận được: " + avatar.getOriginalFilename());
-                    }
-                    try {
-                        assert avatar != null;
-                        DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(avatar, "products/" + variantRequest.getName().replace(" ", "_"));
-                        System.out.println("Dữ liệu avatar sau khi lưu:");
+                        try {
+                            assert avatar != null;
+                            DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(avatar, "products/" + variantRequest.getName().replace(" ", "_"));
+                            System.out.println("Dữ liệu avatar sau khi lưu:");
 
-                        if (uploadFileResponseDataResponse.getStatus() == 200 && uploadFileResponseDataResponse.getData() == null) {
-                            System.out.println("Dữ liệu avatar bị null.");
-                        } else {
-                            List<UploadFileResponse> uploadFileResponses = (List<UploadFileResponse>) uploadFileResponseDataResponse.getData();
-                            String avatarUrl = uploadFileResponses.get(0).getFileName();
-                            productVariantRequest.setAvatar("products/" + variantRequest.getName().replace(" ", "_") + "/" + avatarUrl);
+                            if (uploadFileResponseDataResponse.getStatus() == 200 && uploadFileResponseDataResponse.getData() == null) {
+                                System.out.println("Dữ liệu avatar bị null.");
+                            } else {
+                                List<UploadFileResponse> uploadFileResponses = (List<UploadFileResponse>) uploadFileResponseDataResponse.getData();
+                                String avatarUrl = uploadFileResponses.get(0).getFileName();
+                                productVariantRequest.setAvatar("products/" + variantRequest.getName().replace(" ", "_") + "/" + avatarUrl);
+                            }
+                        } catch (IOException | URISyntaxException e) {
+                            throw new RuntimeException(e);
                         }
-                    } catch (IOException | URISyntaxException e) {
-                        throw new RuntimeException(e);
                     }
-
                     System.out.println("Dữ liệu variant:");
                     System.out.println(productVariantRequest);
 
@@ -373,7 +373,7 @@ public class ProductController {
         modelAndView.addObject("usageCategories", usageCategoryService.getAllUsageCategories().getData());
         model.addAttribute("variant", variant);
         return modelAndView;
-		
+
     }
 
     @PostMapping("/variants/update/{variantId}")
@@ -559,6 +559,85 @@ public class ProductController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error adding variant detail: " + e.getMessage());
         }
+        return "redirect:/products/" + productId + "/variants/" + variantId + "/details";
+    }
+
+
+    @GetMapping("/{productId}/variants/{variantId}/details/{detailId}")
+    public String viewDetail(
+            @PathVariable String productId,
+            @PathVariable String variantId,
+            @PathVariable String detailId,
+            Model model) {
+        DataResponse<ProductDetailResponse> detailResponseDataResponse = productService.getVariantDetailById(detailId);
+        if (detailResponseDataResponse == null || detailResponseDataResponse.getStatus() != 200 || detailResponseDataResponse.getData() == null) {
+            return "redirect:/products/" + productId + "/variants/" + variantId + "/details";
+        }
+        List<ProductDetailResponse> details = (List<ProductDetailResponse>) detailResponseDataResponse.getData();
+        ProductDetailResponse detail = details.get(0);
+        model.addAttribute("detail", detail);
+        model.addAttribute("productId", productId);
+        model.addAttribute("variantId", variantId);
+        return "html/Phone/detailVariantsDetails";
+    }
+
+
+    @GetMapping("/{productId}/variants/{variantId}/details/update/{detailId}")
+    public String showUpdateDetailForm(
+            @PathVariable String productId,
+            @PathVariable String variantId,
+            @PathVariable String detailId,
+            Model model) {
+        DataResponse<ProductDetailResponse> detailResponseDataResponse = productService.getVariantDetailById(detailId);
+
+        if (detailResponseDataResponse == null || detailResponseDataResponse.getStatus() != 200 || detailResponseDataResponse.getData() == null) {
+            return "redirect:/products/" + productId + "/variants/" + variantId + "/details";
+        }
+
+        List<ProductDetailResponse> details = (List<ProductDetailResponse>) detailResponseDataResponse.getData();
+        ProductDetailResponse detail = details.get(0);
+
+        model.addAttribute("detail", detail);
+        model.addAttribute("productId", productId);
+        model.addAttribute("variantId", variantId);
+        model.addAttribute("ProductStatus", ProductStatus.values());
+        return "html/Phone/updateDetail";
+    }
+
+    @PostMapping("/{productId}/variants/{variantId}/details/update/{detailId}")
+    public String updateDetail(
+            @PathVariable String productId,
+            @PathVariable String variantId,
+            @PathVariable String detailId,
+            @Valid @ModelAttribute ProductDetailUpdateRequest updateRequest,
+            BindingResult result,
+            RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Validation failed: Sale is invalid or out of range (0.00-1.00).");
+            return "redirect:/products/" + productId + "/variants/" + variantId + "/details/update/" + detailId;
+        }
+        try {
+            ProductStatus status = ProductStatus.fromString(updateRequest.getStatus().toString());
+            updateRequest.setStatus(status);
+//            updateRequest.setSale(updateRequest.getSale() / 100);
+
+            // Gửi yêu cầu cập nhật đến service
+            DataResponse<Boolean> response = productService.updateVariantDetail(detailId, updateRequest);
+
+            // Kiểm tra kết quả và xử lý phản hồi
+            if (response == null || response.getStatus() != 200 || Boolean.FALSE.equals(response.getData())) {
+                String message = response == null ? "Error updating product detail." : response.getMessage();
+                redirectAttributes.addFlashAttribute("errorMessage", "Error updating product detail." + message);
+            } else {
+                redirectAttributes.addFlashAttribute("successMessage", "Product detail updated successfully!");
+            }
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Invalid product status: " + e.getMessage());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Unexpected error occurred: " + e.getMessage());
+        }
+
+        // Điều hướng về trang chi tiết
         return "redirect:/products/" + productId + "/variants/" + variantId + "/details";
     }
 

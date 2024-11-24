@@ -80,6 +80,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
+                                    <th>Id</th>
                                     <th>Status</th>
                                     <th>Memory</th>
                                     <th>Color</th>
@@ -95,6 +96,7 @@
                                     <c:forEach var="memoryEntry" items="${detailItem.memories}">
                                         <c:forEach var="color" items="${memoryEntry.value}">
                                             <tr>
+                                                <td>${detailItem.id}</td>
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${detailItem.status eq 'AVAILABLE'}">
@@ -115,16 +117,15 @@
                                                 <td>
                                                     <fmt:formatNumber value="${color.price}" pattern="#,##0.00" />
                                                 </td>
-                                                <td>${color.sale}%</td>
-                                                <td>${color.quantity}</td>
+                                                <td><fmt:formatNumber value="${color.sale}" pattern="#,##0.00" /></td>
                                                 <td>
-                                                    <form action="/products/variants/details/update/${detailItem.id}" method="get" style="display:inline;">
+                                                    <form action="/products/${productId}/variants/${variantId}/details/update/${detailItem.id}" method="get" style="display:inline;">
                                                         <button type="submit" class="btn btn-primary btn-sm">Update</button>
                                                     </form>
-                                                    <form action="/products/variants/details/${detailItem.id}" method="get" style="display:inline;">
+                                                    <form action="/products/${productId}/variants/${variantId}/details/${detailItem.id}" method="get" style="display:inline;">
                                                         <button type="submit" class="btn btn-info btn-sm">Detail</button>
                                                     </form>
-                                                    <form action="/products/variants/details/delete/${detailItem.id}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this detail?');">
+                                                    <form action="/products/${productId}/variants/${variantId}/details/delete/${detailItem.id}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this detail?');">
                                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                                     </form>
                                                 </td>
@@ -151,7 +152,7 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<jsp:include page="../layout/LogoutModal.jsp" />
+<jsp:include page="../General/LogoutModal.jsp" />
 <script>
     // Wait until DOM is fully loaded
     document.addEventListener("DOMContentLoaded", function () {
