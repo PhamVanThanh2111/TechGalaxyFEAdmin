@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +24,5 @@ public class ProductVariantResponse {
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     UsageCategoryResponse usageCategory;
+    List<ProductVariantDetailResponse> productVariantDetails;
 }

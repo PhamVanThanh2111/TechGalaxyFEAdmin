@@ -303,18 +303,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public DataResponse<ProductVariantResponse> getAllVariants() {
         return restClient.get()
-                .uri(ENDPOINT + "/products/variants")
-                .exchange((request, response) -> {
-                    System.out.println("getAllVariants");
-                    System.out.println(response.getStatusCode());
-                    System.out.println(response.getBody());
-                    DataResponse<ProductVariantResponse> allVariantsResponse = null;
-                    if (response.getBody().available() > 0) {
-                        allVariantsResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
-                    }
-                    assert allVariantsResponse != null;
-                    return allVariantsResponse;
-                });
+                .uri(ENDPOINT + "/products/variants/all")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
