@@ -17,7 +17,6 @@ public interface ProductService {
 
     DataResponse<ProductDetailResponse> getVariantDetailById(String detailId);
 
-
     DataResponse<ProductResponse> createProduct(ProductRequest productRequest);
 
     DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest);
@@ -42,4 +41,5 @@ public interface ProductService {
 
     DataResponse<ProductVariantResponse> getAllVariants();
 
+    DataResponse<ProductVariantResponse> findProductVariantByProductVariantDetailId(String detailId);
 }
