@@ -15,26 +15,31 @@ public interface ProductService {
 
     DataResponse<ProductVariantResponse> getVariantById(String variantId);
 
-    DataResponse<ProductVariantDetailResponse> getVariantDetailById(String detailId);
+    DataResponse<ProductDetailResponse> getVariantDetailById(String detailId);
 
 
-    public DataResponse<ProductResponse> createProduct(ProductRequest productRequest);
-    public DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest);
-    public DataResponse<ProductVariantDetailResponse> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest);
+    DataResponse<ProductResponse> createProduct(ProductRequest productRequest);
 
-    public DataResponse<ProductResponse> updateProduct(String productId, ProductRequest productRequest);
+    DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest);
 
-    public DataResponse<ProductVariantResponse> updateVariant(String variantId, ProductVariantRequest variantRequest);
+    DataResponse<ProductVariantDetailResponse> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest);
 
-    public DataResponse<Boolean> updateVariantDetail(String detailId, ProductDetailUpdateRequest detailRequest);
+    DataResponse<ProductResponse> updateProduct(String productId, ProductRequest productRequest);
 
-    public DataResponse<Object> deleteProduct(String productId);
-    public DataResponse<Object> deleteVariant(String variantId);
-    public DataResponse<Object> deleteVariantDetail(String detailId);
+    DataResponse<ProductVariantResponse> updateVariant(String variantId, ProductVariantRequest variantRequest);
 
-    public DataResponse<ProductVariantResponse> getAllProductVariantsByProductId(String productId);
-    public DataResponse<ProductVariantDetailResponse> getAllVariantDetailsByVariantId(String variantId);
+    DataResponse<Boolean> updateVariantDetail(String detailId, ProductDetailUpdateRequest detailRequest);
 
-    public DataResponse<ProductVariantResponse> getAllVariants();
+    DataResponse<Object> deleteProduct(String productId);
+
+    DataResponse<Object> deleteVariant(String variantId);
+
+    DataResponse<Object> deleteVariantDetail(String detailId);
+
+    DataResponse<ProductVariantResponse> getAllProductVariantsByProductId(String productId);
+
+    DataResponse<ProductVariantDetailResponse> getAllVariantDetailsByVariantId(String variantId);
+
+    DataResponse<ProductVariantResponse> getAllVariants();
 
 }
