@@ -5,6 +5,7 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.services.impl.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -287,10 +288,14 @@ public class ProductController {
 
 
     @GetMapping
-    public ModelAndView showProductList() {
+    public ModelAndView showProductList(HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            return new ModelAndView("redirect:/login");
+        }
         ModelAndView modelAndView = new ModelAndView("html/Phone/showPhone");
         System.out.println("Fetching product list...");
-        DataResponse<ProductResponse> productResponseDataResponse = productService.getAllProducts();
+        DataResponse<ProductResponse> productResponseDataResponse = productService.getAllProducts(accessToken);
 
         if (productResponseDataResponse == null || productResponseDataResponse.getStatus() != 200 || productResponseDataResponse.getData() == null) {
             System.out.println("Error fetching product list.");

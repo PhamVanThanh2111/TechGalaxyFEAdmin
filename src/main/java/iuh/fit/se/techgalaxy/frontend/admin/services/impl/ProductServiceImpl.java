@@ -32,6 +32,8 @@ public class ProductServiceImpl implements ProductService {
     public DataResponse<ProductResponse> createProduct(ProductRequest productRequest) {
         return restClient.post()
                 .uri(ENDPOINT + "/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .body(productRequest)
                 .exchange((request, response) -> {
                             System.out.println(response.getStatusCode());
@@ -187,9 +189,10 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public DataResponse<ProductResponse> getAllProducts() {
+    public DataResponse<ProductResponse> getAllProducts(String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/products")
+                .header("Authorization", "Bearer " + accessToken)
                 .exchange((request, response) -> {
                            System.out.println(response.getStatusCode());
                             DataResponse<ProductResponse> productResponseDataResponse = null;

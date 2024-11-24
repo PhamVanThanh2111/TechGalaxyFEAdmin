@@ -11,7 +11,7 @@ import java.util.List;
 public interface ProductService {
     DataResponse<ProductResponse> getProductById(String productId);
 
-    DataResponse<ProductResponse> getAllProducts();
+    DataResponse<ProductResponse> getAllProducts(String accessToken);
 
     DataResponse<ProductVariantResponse> getVariantById(String variantId);
 
