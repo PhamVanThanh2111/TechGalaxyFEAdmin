@@ -1,8 +1,13 @@
 package iuh.fit.se.techgalaxy.frontend.admin.controllers;
 
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.OrderDetailResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.OrderResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductVariantResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.ProductVariant;
+import iuh.fit.se.techgalaxy.frontend.admin.services.OrderDetailService;
 import iuh.fit.se.techgalaxy.frontend.admin.services.OrderService;
+import iuh.fit.se.techgalaxy.frontend.admin.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +20,14 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderController {
     private final OrderService orderService;
+    private final OrderDetailService orderDetailService;
+    private final ProductService productService;
 
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, OrderDetailService orderDetailService, ProductService productService) {
         this.orderService = orderService;
+        this.orderDetailService = orderDetailService;
+        this.productService = productService;
     }
 
     @GetMapping
@@ -27,16 +36,23 @@ public class OrderController {
         List<OrderResponse> orders = null;
         if (response != null) {
             orders = (List<OrderResponse>) response.getData();
+            orders.forEach(order -> {
+                List<OrderDetailResponse> orderDetails = (List<OrderDetailResponse>) orderDetailService.getOrderDetail(order.getId()).getData();
+                orderDetails.forEach(orderDetail -> {
+                    String productVariantName = ((List<ProductVariantResponse>) productService.findProductVariantByProductVariantDetailId(orderDetail.getProductVariantDetail().getId()).getData()).get(0).getName();
+                    orderDetail.setName(productVariantName);
+                });
+                order.setOrderDetails(orderDetails);
+            });
         }
-        System.out.println(orders);
-        model.setViewName("html/showOrder");
+        model.setViewName("html/Order/showOrder");
         model.addObject("orders", orders);
         return model;
     }
 
     @GetMapping("/add")
     public ModelAndView showForm(ModelAndView model) {
-        model.setViewName("html/formOrder");
+        model.setViewName("html/Order/formOrder");
         return model;
     }
 }

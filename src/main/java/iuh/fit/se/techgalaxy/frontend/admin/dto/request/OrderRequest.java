@@ -1,5 +1,6 @@
 package iuh.fit.se.techgalaxy.frontend.admin.dto.request;
 
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.OrderStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.PaymentStatus;
@@ -13,8 +14,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderRequest {
     String id;
-    String customerId;
-    SystemUserResponse systemUserId;
+    CustomerResponse customer;
+    SystemUserResponse systemUser;
     String address;
     PaymentStatus paymentStatus;
     OrderStatus orderStatus;

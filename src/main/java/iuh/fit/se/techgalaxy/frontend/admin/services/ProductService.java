@@ -11,29 +11,37 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductVariantResponse;
 import java.util.List;
 
 public interface ProductService {
-    public DataResponse<ProductResponse> getAllProducts();
-    public DataResponse<ProductResponse> getProductById(String productId);
-    public DataResponse<ProductVariantResponse> getVariantById(String variantId);
-    public DataResponse<ProductVariantDetailResponse> getVariantDetailById(String detailId);
+    DataResponse<ProductResponse> getProductById(String productId);
 
+    DataResponse<ProductResponse> getAllProducts();
 
-    public DataResponse<ProductResponse> createProduct(ProductRequest productRequest);
-    public DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest);
-    public DataResponse<ProductVariantDetailResponse> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest);
+    DataResponse<ProductVariantResponse> getVariantById(String variantId);
 
-    public DataResponse<ProductResponse> updateProduct(String productId, ProductRequest productRequest);
+    DataResponse<ProductVariantDetailResponse> getVariantDetailById(String detailId);
 
-    public DataResponse<ProductVariantResponse> updateVariant(String variantId, ProductVariantRequest variantRequest);
+    DataResponse<ProductResponse> createProduct(ProductRequest productRequest);
 
-    public DataResponse<ProductVariantDetailResponse> updateVariantDetail(String detailId, ProductVariantDetailRequest detailRequest);
+    DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest);
 
-    public DataResponse<Object> deleteProduct(String productId);
-    public DataResponse<Object> deleteVariant(String variantId);
-    public DataResponse<Object> deleteVariantDetail(String detailId);
+    DataResponse<ProductVariantDetailResponse> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest);
 
-    public DataResponse<ProductVariantResponse> getAllProductVariantsByProductId(String productId);
-    public DataResponse<ProductVariantDetailResponse> getAllVariantDetailsByVariantId(String variantId);
+    DataResponse<ProductResponse> updateProduct(String productId, ProductRequest productRequest);
 
-    public DataResponse<ProductVariantResponse> getAllVariants();
+    DataResponse<ProductVariantResponse> updateVariant(String variantId, ProductVariantRequest variantRequest);
 
+    DataResponse<ProductVariantDetailResponse> updateVariantDetail(String detailId, ProductVariantDetailRequest detailRequest);
+
+    DataResponse<Object> deleteProduct(String productId);
+
+    DataResponse<Object> deleteVariant(String variantId);
+
+    DataResponse<Object> deleteVariantDetail(String detailId);
+
+    DataResponse<ProductVariantResponse> getAllProductVariantsByProductId(String productId);
+
+    DataResponse<ProductVariantDetailResponse> getAllVariantDetailsByVariantId(String variantId);
+
+    DataResponse<ProductVariantResponse> getAllVariants();
+
+    DataResponse<ProductVariantResponse> findProductVariantByProductVariantDetailId(String detailId);
 }

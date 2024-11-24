@@ -10,6 +10,8 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductVariantDetailResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.ProductVariantResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.services.ProductService;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -315,4 +317,12 @@ public class ProductServiceImpl implements ProductService {
                 });
     }
 
+    @Override
+    public DataResponse<ProductVariantResponse> findProductVariantByProductVariantDetailId(String detailId) {
+        return restClient.get()
+                .uri(ENDPOINT + "/products/variants/productVariantDetail/" + detailId)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
 }
