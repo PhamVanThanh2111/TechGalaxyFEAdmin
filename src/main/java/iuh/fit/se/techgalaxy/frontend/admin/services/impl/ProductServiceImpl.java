@@ -35,7 +35,6 @@ public class ProductServiceImpl implements ProductService {
                 .body(productRequest)
                 .exchange((request, response) -> {
                             System.out.println(response.getStatusCode());
-                            System.out.println(response.getBody());
                             DataResponse<ProductResponse> productResponseDataResponse = null;
                             if (response.getBody().available() > 0) {
                                 productResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {

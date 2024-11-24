@@ -5,6 +5,7 @@ function addVariant() {
     const variantContainer = document.createElement('div');
     variantContainer.className = 'variant-container p-3 mb-3 shadow-sm';
     variantContainer.innerHTML = `
+        <hr class="my-4">
         <h5 class="text-info font-weight-bold font-styles-italic">Variant ${variantIndex + 1}</h5>
 
         <!-- Tên Variant -->
@@ -48,6 +49,7 @@ function addVariant() {
             <h6 class="font-weight-bold text-dark">Variant Details</h6>
         </div>
         <button type="button" class="btn btn-outline-secondary btn-sm mb-3" onclick="addVariantDetail(${variantIndex})">+ Thêm Detail</button>
+        <button type="button" class="btn btn-danger btn-sm mb-3" onclick="removeVariant(${variantIndex})">Xoá Variant</button>
     `;
     document.getElementById('variantsContainer').appendChild(variantContainer);
 }
@@ -57,6 +59,7 @@ function addVariantDetail(variantIndex) {
     const detailIndex = document.querySelectorAll(`#detailsContainer${variantIndex} .detail-container`).length;
     detailContainer.className = 'detail-container p-2 mb-2 shadow-sm';
     detailContainer.innerHTML = `
+        <hr class="my-3">
         <h6 class="text-warning font-weight-bold font-styles-italic">Detail ${detailIndex + 1}</h6>
 
         <!-- Memory Combobox -->
@@ -86,7 +89,8 @@ function addVariantDetail(variantIndex) {
         <div id="colorContainer${variantIndex}_${detailIndex}" class="mt-3">
             <h6 class="font-weight-bold text-dark">Colors</h6>
         </div>
-        <button type="button" class="btn btn-outline-info btn-sm" onclick="addColor(${variantIndex}, ${detailIndex})">+ Thêm Color</button>
+        <button type="button" class="btn btn-outline-info btn-sm mb-2" onclick="addColor(${variantIndex}, ${detailIndex})">+ Thêm Color</button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="removeDetail(${variantIndex}, ${detailIndex})">Xoá Detail</button>
     `;
     document.getElementById(`detailsContainer${variantIndex}`).appendChild(detailContainer);
 }
@@ -96,6 +100,7 @@ function addColor(variantIndex, detailIndex) {
     const colorIndex = document.querySelectorAll(`#colorContainer${variantIndex}_${detailIndex} .color-container`).length;
     colorContainer.className = 'color-container row mb-2';
     colorContainer.innerHTML = `
+        <hr class="my-2">
         <div class="col-md-6">
             <label class="form-label font-weight-bold text-dark">Color</label>
             <select class="form-control" name="variants[${variantIndex}].details[${detailIndex}].colors[${colorIndex}].colorId">
@@ -112,46 +117,63 @@ function addColor(variantIndex, detailIndex) {
             <label class="form-label font-weight-bold text-dark">Ảnh</label>
             <input type="file" class="form-control" name="variants[${variantIndex}].details[${detailIndex}].colors[${colorIndex}].images" required accept=".jpg, .jpeg, .png, .svg" multiple>
         </div>
+        <button type="button" class="btn btn-danger btn-sm" onclick="removeColor(${variantIndex}, ${detailIndex}, ${colorIndex})">Xoá Color</button>
     `;
     document.getElementById(`colorContainer${variantIndex}_${detailIndex}`).appendChild(colorContainer);
 }
 
-// Form Validation
+function removeVariant(variantIndex) {
+    const variantElement = document.querySelector(`.variant-container:nth-child(${variantIndex + 1})`);
+    if (variantElement) {
+        variantElement.remove();
+        updateVariantIndices();
+    }
+}
+
+function removeDetail(variantIndex, detailIndex) {
+    const detailElement = document.querySelector(`#detailsContainer${variantIndex} .detail-container:nth-child(${detailIndex + 1})`);
+    if (detailElement) {
+        detailElement.remove();
+        updateDetailIndices(variantIndex);
+    }
+}
+
+function removeColor(variantIndex, detailIndex, colorIndex) {
+    const colorElement = document.querySelector(`#colorContainer${variantIndex}_${detailIndex} .color-container:nth-child(${colorIndex + 1})`);
+    if (colorElement) {
+        colorElement.remove();
+    }
+}
+
+function updateVariantIndices() {
+    const variants = document.querySelectorAll('.variant-container');
+    variants.forEach((variant, index) => {
+        const title = variant.querySelector('h5');
+        if (title) title.textContent = `Variant ${index + 1}`;
+    });
+}
+
+function updateDetailIndices(variantIndex) {
+    const details = document.querySelectorAll(`#detailsContainer${variantIndex} .detail-container`);
+    details.forEach((detail, index) => {
+        const title = detail.querySelector('h6');
+        if (title) title.textContent = `Detail ${index + 1}`;
+    });
+}
+
 document.getElementById('addProductForm').addEventListener('submit', function (e) {
-    console.log('submit');
-    e.preventDefault(); // Prevent default submission
+    e.preventDefault();
     let isValid = true;
 
-    // Kiểm tra tên sản phẩm
-    const productName = document.getElementById('name');
-    if (!validateField(productName, 'Tên sản phẩm không được để trống và phải từ 5 đến 24 ký tự.', 5, 24)) {
-        isValid = false;
-    }
-
-    // Kiểm tra Variants
-    document.querySelectorAll('.variant-container').forEach((variant, index) => {
-        const variantName = variant.querySelector(`input[name="variants[${index}].name"]`);
-        if (!validateField(variantName, `Tên Variant ${index + 1} không được để trống.`)) {
-            isValid = false;
-        }
-
-        // Kiểm tra select "Usage Category"
-        const usageCategory = variant.querySelector(`select[name="variants[${index}].usageCategoryId"]`);
-        if (!validateSelect(usageCategory, `Usage Category cho Variant ${index + 1} cần được chọn.`)) {
-            isValid = false;
-        }
-
-        // Kiểm tra Details
-        const details = variant.querySelectorAll('.detail-container');
-        details.forEach((detail, detailIndex) => {
-            const sale = detail.querySelector(`input[name="variants[${index}].details[${detailIndex}].sale"]`);
-            if (!validateSale(sale, `Giảm giá cho Detail ${detailIndex + 1} của Variant ${index + 1} phải từ 0.00 đến 1.00.`)) {
+    // Kiểm tra từng variant
+    document.querySelectorAll('.variant-container').forEach((variant, variantIndex) => {
+        variant.querySelectorAll('.detail-container').forEach((detail, detailIndex) => {
+            const colors = detail.querySelectorAll(`#colorContainer${variantIndex}_${detailIndex} .color-container`);
+            if (colors.length === 0) {
+                showError(detail, `Detail ${detailIndex + 1} của Variant ${variantIndex + 1} cần ít nhất một Color.`);
                 isValid = false;
-            }
-
-            const memory = detail.querySelector(`select[name="variants[${index}].details[${detailIndex}].memid"]`);
-            if (!validateSelect(memory, `Memory cho Detail ${detailIndex + 1} của Variant ${index + 1} cần được chọn.`)) {
-                isValid = false;
+            } else {
+                clearError(detail);
             }
         });
     });
@@ -161,42 +183,21 @@ document.getElementById('addProductForm').addEventListener('submit', function (e
     }
 });
 
-function validateField(input, errorMessage, minLength = 1, maxLength = Infinity) {
-    if (!input || input.value.trim().length < minLength || input.value.trim().length > maxLength) {
-        showError(input, errorMessage);
-        return false;
+function showError(element, message) {
+    const error = element.querySelector('.text-danger');
+    if (error) {
+        error.textContent = message;
+    } else {
+        const errorElement = document.createElement('small');
+        errorElement.className = 'text-danger';
+        errorElement.textContent = message;
+        element.appendChild(errorElement);
     }
-    clearError(input);
-    return true;
 }
 
-function validateSelect(select, errorMessage) {
-    if (!select || select.value.trim() === "") {
-        showError(select, errorMessage);
-        return false;
+function clearError(element) {
+    const error = element.querySelector('.text-danger');
+    if (error) {
+        error.textContent = '';
     }
-    clearError(select); // Xóa lỗi nếu hợp lệ
-    return true;
-}
-
-
-function validateSale(input, errorMessage) {
-    const value = parseFloat(input.value);
-    if (isNaN(value) || value < 0.00 || value > 1.00) {
-        showError(input, errorMessage);
-        return false;
-    }
-    clearError(input);
-    return true;
-}
-
-function showError(input, message) {
-    const error = input.nextElementSibling;
-    if (error) error.textContent = message;
-    console.log(message);
-}
-
-function clearError(input) {
-    const error = input.nextElementSibling;
-    if (error) error.textContent = '';
 }

@@ -6,9 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Variants</title>
+    <title>Show Attributes</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="<c:url value='/css/sb-admin-2.min.css'/>" rel="stylesheet">
+    <link href="<c:url value='/css/sb-admin-2.min.css' />" rel="stylesheet">
     <style>
         .toast-container {
             z-index: 1055;
@@ -27,7 +27,6 @@
 
 <!-- Page Wrapper -->
 <div id="wrapper">
-
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
         <!-- Success Toast -->
         <c:if test="${not empty successMessage}">
@@ -68,25 +67,21 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <!-- Page Heading with Add Button -->
-                <div class="d-flex align-items-center justify-content-between mb-4">
-                    <div>
-                        <a href="/products" class="btn btn-outline-primary btn-lg me-3 mr-5">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </a>
-                        <h1 class="h3 mb-0 text-gray-800">
-                            Variants for Product: <span class="text-primary fw-bold">${productName}</span>
-                        </h1>
-                    </div>
-                    <a href="/products/${productId}/variants/add" class="btn btn-success btn-lg">
-                        <i class="fas fa-plus"></i> Add Variant
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <a href="/products/${productId}/variants" class="btn btn-outline-primary btn-lg me-3 mr-5">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                    <h1 class="h3 mb-0 text-gray-800">Attributes</h1>
+                    <a href="/products/${productId}/variants/${variantId}/attributes/create" class="btn btn-success btn-lg">
+                        <i class="fas fa-plus"></i> Add Attribute
                     </a>
                 </div>
 
-                <!-- Variants Table -->
+                <!-- Attributes Table -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Variants</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Attributes List</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -95,43 +90,21 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Featured</th>
+                                    <th>Value</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="variant" items="${variants}">
+                                <c:forEach var="attribute" items="${attributes_values}">
                                     <tr>
-                                        <td>${variant.id}</td>
-                                        <td>${variant.name}</td>
-                                        <td>${variant.description}</td>
+                                        <td>${attribute.id}</td>
+                                        <td>${attribute.attributeName}</td>
+                                        <td>${attribute.value}</td>
                                         <td>
-                                            <c:choose>
-                                                <c:when test="${variant.featured}">
-                                                    <span class="badge badge-success">Yes</span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span class="badge badge-secondary">No</span>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td>
-                                            <form action="/products/${productId}/variants/${variant.id}" method="get" style="display:inline;">
-                                                <button type="submit" class="btn btn-warning btn-sm">Details</button>
-                                            </form>
-                                            <form action="/products/${productId}/variants/${variant.id}/details" method="get" style="display:inline;">
-                                                <button type="submit" class="btn btn-info btn-sm">Variants Details</button>
-                                            </form>
-
-                                            <form action="/products/variants/edit/${variant.id}" method="get" style="display:inline;">
+                                            <form action="/products/${productId}/variants/${variantId}/attributes/update/${attribute.id}" method="get" style="display:inline;">
                                                 <button type="submit" class="btn btn-primary btn-sm">Edit</button>
                                             </form>
-                                            <form action="/products/${productId}/variants/${variant.id}/attributes" method="get" style="display:inline;">
-                                                <button type="submit" class="btn btn-primary btn-sm">Attribute</button>
-                                            </form>
-
-                                            <form action="/products/variants/delete/${variant.id}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this variant?');">
+                                            <form action="/products/${productId}/variants/${variantId}/attributes/delete/${attribute.id}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this attribute?');">
                                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                             </form>
                                         </td>

@@ -9,8 +9,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class AttributeValueRequest {
-	
+public class AttributeValueUpdateRequest {
+    String id;
     String value;
     String attributeId;
     
