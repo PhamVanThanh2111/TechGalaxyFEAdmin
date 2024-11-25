@@ -35,8 +35,6 @@ public class ProductServiceImpl implements ProductService {
         try {
             return restClient.post()
                     .uri(ENDPOINT + "/products")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
                     .header("Authorization", "Bearer " + accessToken)
                     .body(productRequest)
                     .exchange((request, response) -> {

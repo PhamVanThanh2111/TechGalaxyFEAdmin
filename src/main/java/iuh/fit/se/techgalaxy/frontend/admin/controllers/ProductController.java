@@ -190,8 +190,10 @@ public class ProductController {
                                                         System.out.println("Hình ảnh bị null hoặc rỗng.");
                                                     } else {
                                                         System.out.println("Hình ảnh nhận được: " + image.getOriginalFilename());
+                                                        fileService.uploadFile(image, "products/" + variantRequest.getName().replace(" ", "_") + "/" + detailRequest.getMemid() + "/" + colorRequest.getColorId());
                                                     }
                                                 }
+
                                             }
                                         }
                                         productVariantDetailRequest.setColors(colorRequests);
