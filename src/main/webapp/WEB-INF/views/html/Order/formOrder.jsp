@@ -96,7 +96,7 @@
                                             <div class="card-body">
                                                 <a href="#" class="btn btn-primary btn-icon-split" id="addProduct">
                                                     <span class="icon text-white-50">
-                                                        <i class="fas fa-flag"></i>
+                                                        <i class="fa-solid fa-plus"></i>
                                                     </span>
                                                     <span class="text">Add product</span>
                                                 </a>

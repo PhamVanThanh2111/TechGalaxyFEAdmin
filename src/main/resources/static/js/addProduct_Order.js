@@ -70,7 +70,12 @@ const createProductCard = (count) => {
                         <label for="price-${count}" class="form-label">Price</label>
                         <input type="text" class="form-control" id="price-${count}" disabled>
                     </div>
-                    <button type="button" class="btn btn-danger remove-card" data-id="${count}">Remove</button>
+                    <button type="button" class="btn btn-danger btn-icon-split remove-card text-center" data-id="${count}">
+                        <span class="icon text-white-50">
+                            <i class="fa-solid fa-minus"></i>
+                        </span>
+                        <span class="text">Remove</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -119,11 +124,13 @@ const updateProductOrder = () => {
 
 // Xử lý sự kiện xóa sản phẩm
 productCardsContainer.addEventListener('click', (event) => {
-    if (event.target.classList.contains('remove-card')) {
-        const cardId = event.target.getAttribute('data-id');
+    // Tìm phần tử nút cha có class "remove-card" gần nhất
+    const button = event.target.closest('.remove-card');
+    if (button) {
+        const cardId = button.getAttribute('data-id'); // Lấy ID của thẻ
         const cardElement = document.getElementById(`product-${cardId}`);
         if (cardElement) {
-            cardElement.remove();
+            cardElement.remove(); // Xóa thẻ sản phẩm
             console.log(`Product ${cardId} removed`);
             activeProductIds = activeProductIds.filter(id => id !== parseInt(cardId)); // Cập nhật lại mảng activeProductIds
             updateProductOrder(); // Cập nhật lại thứ tự sau khi xóa
