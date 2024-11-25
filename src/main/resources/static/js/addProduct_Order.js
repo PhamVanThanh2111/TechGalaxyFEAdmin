@@ -4,6 +4,13 @@ const productCardsContainer = document.getElementById('productCards');
 let productCount = 0; // Biến đếm số lượng sản phẩm đã được thêm
 let activeProductIds = []; // Mảng lưu trữ các ID của sản phẩm đang có
 
+// Hàm cập nhật số lượng sản phẩm
+const updateProductCount = () => {
+    const productCountInput = document.getElementById('productCount');
+    const totalProducts = productCardsContainer.querySelectorAll('.card').length;
+    productCountInput.value = totalProducts;
+};
+
 // Hàm ánh xạ id sang name
 const getNameById = (id, list) => {
     const item = list.find(el => el.id === id);
@@ -45,30 +52,31 @@ const createProductCard = (count) => {
                     <h5 class="card-title">Product ${count}</h5>
                     <div class="mb-3">
                         <label for="productName-${count}" class="form-label">Product</label>
-                        <select class="form-control product-select" id="productName-${count}" data-id="${count}">
+                        <select class="form-control product-select" id="productName-${count}" data-id="${count}" name="productName[${count}]">
                             <option value="">Choose product</option>
                             ${options}
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="quantity-${count}" class="form-label">Quantity</label>
-                        <input type="number" class="form-control quantity-input" id="quantity-${count}" min="1" placeholder="Quantity">
+                        <input type="number" class="form-control quantity-input" id="quantity-${count}" min="1" placeholder="Quantity" name="quantity[${count}]" value="1" required>
                     </div>
                     <div class="mb-3">
                         <label for="memory-${count}" class="form-label">Memory</label>
-                        <select class="form-control memory-select" id="memory-${count}" data-id="${count}">
+                        <select class="form-control memory-select" id="memory-${count}" data-id="${count}" name="memory[${count}]">
                             <option value="">Choose memory</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="color-${count}" class="form-label">Color</label>
-                        <select class="form-control color-select" id="color-${count}" data-id="${count}">
+                        <select class="form-control color-select" id="color-${count}" data-id="${count}" name="color[${count}]">
                             <option value="">Choose color</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="price-${count}" class="form-label">Price</label>
-                        <input type="text" class="form-control" id="price-${count}" disabled>
+                        <input type="text" class="form-control" id="price-${count}" name="price[${count}]" disabled>
+                        <input type="hidden" class="form-control" id="price-${count}-hidden" name="price[${count}]">
                     </div>
                     <button type="button" class="btn btn-danger btn-icon-split remove-card text-center" data-id="${count}">
                         <span class="icon text-white-50">
@@ -134,6 +142,7 @@ productCardsContainer.addEventListener('click', (event) => {
             console.log(`Product ${cardId} removed`);
             activeProductIds = activeProductIds.filter(id => id !== parseInt(cardId)); // Cập nhật lại mảng activeProductIds
             updateProductOrder(); // Cập nhật lại thứ tự sau khi xóa
+            updateProductCount(); // Cập nhật số lượng
         }
     }
 });
@@ -153,6 +162,7 @@ const updatePrice = (count) => {
             if (colorData) {
                 const price = colorData.price * quantity;
                 document.getElementById(`price-${count}`).value = price.toLocaleString();
+                document.getElementById(`price-${count}-hidden`).value = price.toLocaleString();
             }
         }
     }
@@ -161,12 +171,14 @@ const updatePrice = (count) => {
 // Xử lý khi thay đổi sản phẩm
 const handleProductChange = (productId, count) => {
     const product = productVariants.find(p => p.id === productId);
-    if (product) {
+    if (product && product.productVariantDetails.length > 0) {
+        const productDetail = product.productVariantDetails[0]; // Lấy phần tử đầu tiên
         const memorySelect = document.getElementById(`memory-${count}`);
         const colorSelect = document.getElementById(`color-${count}`);
 
         // Cập nhật các tùy chọn bộ nhớ (memory)
-        memorySelect.innerHTML = createMemoryOptions(product.productVariantDetails[0].memories);
+        const memories = productDetail.memories || {};
+        memorySelect.innerHTML = createMemoryOptions(memories);
 
         // Gắn sự kiện khi thay đổi bộ nhớ (memory)
         memorySelect.addEventListener('change', () => {
@@ -174,7 +186,7 @@ const handleProductChange = (productId, count) => {
 
             // Cập nhật danh sách color theo memory mới
             if (selectedMemoryId) {
-                colorSelect.innerHTML = createColorOptions(product.productVariantDetails[0].memories[selectedMemoryId]);
+                colorSelect.innerHTML = createColorOptions(memories[selectedMemoryId] || []);
             } else {
                 colorSelect.innerHTML = '<option value="">Choose color</option>';
             }
@@ -184,10 +196,35 @@ const handleProductChange = (productId, count) => {
         });
 
         // Cập nhật danh sách màu sắc (color) mặc định theo bộ nhớ đầu tiên
-        const firstMemoryId = Object.keys(product.productVariantDetails[0].memories)[0];
+        const firstMemoryId = Object.keys(memories)[0];
         if (firstMemoryId) {
-            colorSelect.innerHTML = createColorOptions(product.productVariantDetails[0].memories[firstMemoryId]);
+            colorSelect.innerHTML = createColorOptions(memories[firstMemoryId] || []);
         }
+
+        // Cập nhật giá ngay sau khi thay đổi product
+        updatePrice(count);
+    } else {
+        console.warn(`Product ${productId} does not have variant details or memories.`);
+    }
+};
+
+// Gắn sự kiện thay đổi color
+const handleColorChange = (count) => {
+    const colorSelect = document.getElementById(`color-${count}`);
+    if (colorSelect) {
+        colorSelect.addEventListener('change', () => {
+            updatePrice(count); // Gọi hàm cập nhật giá khi thay đổi màu
+        });
+    }
+};
+
+// Gắn sự kiện thay đổi quantity
+const handleQuantityChange = (count) => {
+    const quantityInput = document.getElementById(`quantity-${count}`);
+    if (quantityInput) {
+        quantityInput.addEventListener('input', () => {
+            updatePrice(count); // Gọi hàm cập nhật giá khi thay đổi số lượng
+        });
     }
 };
 
@@ -197,4 +234,17 @@ addProductButton.addEventListener('click', () => {
     productCardsContainer.insertAdjacentHTML('beforeend', newProductCard);
     productCount++;
     updateProductOrder(); // Cập nhật lại thứ tự của tất cả sản phẩm
+    updateProductCount(); // Cập nhật lại số lượng sản phẩm
+
+    // Gắn sự kiện cho productName mới
+    const productSelect = document.getElementById(`productName-${productCount}`);
+    productSelect.addEventListener('change', () => {
+        handleProductChange(productSelect.value, productCount);
+        updatePrice(productCount); // Cập nhật giá khi thay đổi product
+    });
+
+    // Gắn sự kiện cho memory, color và quantity
+    handleColorChange(productCount);
+    handleQuantityChange(productCount);
 });
+
