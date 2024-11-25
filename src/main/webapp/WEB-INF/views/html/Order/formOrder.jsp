@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,7 +65,9 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Order Information</h6>
                             </div>
                             <div class="card-body">
-                                <form>
+                                <form:form role="form" action="${pageContext.request.contextPath}/orders/save"
+                                           method="POST" modelAttribute="order" cssClass="needs-validation">
+                                    <input type="hidden" id="productCount" name="productCount" value="0">
                                     <!-- Collapsable Card Customer -->
                                     <div class="card shadow mb-4">
                                         <a href="#collapseCardCustomer" class="d-block card-header py-3"
@@ -76,9 +79,9 @@
                                         <div class="collapse show" id="collapseCardCustomer">
                                             <div class="card-body">
                                                 <div class="form-group">
-                                                    <label for="email">Email</label>
-                                                    <input type="email" placeholder="E-mail" id="email" name="email"
-                                                           class="form-control">
+                                                    <form:label path="customer.account.email" for="email">Email</form:label>
+                                                    <form:input path="customer.account.email" type="email" placeholder="E-mail" id="email" name="email"
+                                                           class="form-control" required="required" />
                                                 </div>
                                             </div>
                                         </div>
@@ -104,9 +107,9 @@
                                                 <div id="productCards" class="row"></div>
 
                                                 <div class="form-group mt-2">
-                                                    <label for="address">Delivery address</label>
-                                                    <input name="address" class="form-control" id="address"
-                                                           placeholder="Delivery address"/>
+                                                    <form:label path="address" for="address">Delivery address</form:label>
+                                                    <form:input path="address" name="address" class="form-control" id="address"
+                                                           placeholder="Delivery address" required="required" />
                                                 </div>
                                             </div>
                                         </div>
@@ -115,7 +118,7 @@
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-primary align-self-center">Save</button>
                                     </div>
-                                </form>
+                                </form:form>
                             </div>
                         </div>
 
