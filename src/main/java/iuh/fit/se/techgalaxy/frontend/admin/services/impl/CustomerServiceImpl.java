@@ -52,7 +52,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public DataResponse<CustomerResponse> findByEmail(String email) {
-        return null;
+        return restClient.get()
+                .uri(ENDPOINT + "/customers/email/" + email)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
