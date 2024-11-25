@@ -13,4 +13,6 @@ public interface AccountService {
     DataResponse<AccountUpdateResponse> update(AccountUpdateRequest accountUpdateRequest);
 
     DataResponse<AccountUpdateResponse> updateWithoutPassword(AccountUpdateRequest accountUpdateRequest);
+
+    boolean existsByEmail(String email);
 }

@@ -58,4 +58,13 @@ public class AccountServiceImpl implements AccountService {
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return Boolean.TRUE.equals(restClient.get()
+                .uri(ENDPOINT + "/api/accounts/exists-by-email/" + email)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(Boolean.class));
+    }
 }
