@@ -8,4 +8,8 @@ public interface OrderService {
     DataResponse<OrderResponse> getAll();
 
     DataResponse<OrderResponse> create(OrderRequest orderRequest);
+
+    DataResponse<OrderResponse> getById(String id);
+
+    DataResponse<OrderResponse> update(OrderRequest orderRequest);
 }

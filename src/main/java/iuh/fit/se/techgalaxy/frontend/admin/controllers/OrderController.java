@@ -7,10 +7,12 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.request.OrderRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Color;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Memory;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.Order;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.DetailStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.OrderStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.PaymentStatus;
+import iuh.fit.se.techgalaxy.frontend.admin.mapper.OrderMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -63,7 +65,16 @@ public class OrderController {
 
         model.setViewName("html/Order/showOrder");
         model.addObject("orders", orders);
+        return model;
+    }
 
+    @GetMapping("/confirm/{id}")
+    public ModelAndView confirm(@PathVariable String id, ModelAndView model) {
+        OrderResponse order = ((List<OrderResponse>) orderService.getById(id).getData()).get(0);
+        order.setOrderStatus(OrderStatus.PROCESSING);
+        Order orderUpdate = OrderMapper.INSTANCE.toOrderFromResponse(order);
+        orderService.update(OrderMapper.INSTANCE.toOrderRequest(orderUpdate));
+        model.setViewName("redirect:/orders");
         return model;
     }
 

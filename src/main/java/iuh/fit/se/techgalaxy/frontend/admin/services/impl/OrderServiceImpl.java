@@ -48,4 +48,31 @@ public class OrderServiceImpl implements OrderService {
                     return dataResponse;
                 });
     }
+
+    @Override
+    public DataResponse<OrderResponse> getById(String id) {
+        return restClient.get()
+                .uri(ENDPOINT + "/orders/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    @Override
+    public DataResponse<OrderResponse> update(OrderRequest orderRequest) {
+        return restClient.put()
+                .uri(ENDPOINT + "/orders/" + orderRequest.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(orderRequest)
+                .exchange((request, response)->{
+                    DataResponse<OrderResponse> dataResponse = null;
+                    if (response.getBody().available() > 0) {
+                        dataResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {
+                        });
+                    }
+                    assert dataResponse != null;
+                    return dataResponse;
+                });
+    }
 }
