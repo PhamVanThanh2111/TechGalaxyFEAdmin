@@ -68,16 +68,6 @@ public class OrderController {
         return model;
     }
 
-    @GetMapping("/confirm/{id}")
-    public ModelAndView confirm(@PathVariable String id, ModelAndView model) {
-        OrderResponse order = ((List<OrderResponse>) orderService.getById(id).getData()).get(0);
-        order.setOrderStatus(OrderStatus.PROCESSING);
-        Order orderUpdate = OrderMapper.INSTANCE.toOrderFromResponse(order);
-        orderService.update(OrderMapper.INSTANCE.toOrderRequest(orderUpdate));
-        model.setViewName("redirect:/orders");
-        return model;
-    }
-
     @GetMapping("/add")
     public ModelAndView showForm(ModelAndView model) {
         List<ProductVariantResponse> productVariants = (List<ProductVariantResponse>) productService.getAllVariants().getData();
@@ -166,6 +156,26 @@ public class OrderController {
         }
 
         model.setViewName("redirect:/orders");
+        return model;
+    }
+
+    @GetMapping("/confirm/{id}")
+    public ModelAndView confirm(@PathVariable String id, ModelAndView model) {
+        OrderResponse order = ((List<OrderResponse>) orderService.getById(id).getData()).get(0);
+        order.setOrderStatus(OrderStatus.PROCESSING);
+        Order orderUpdate = OrderMapper.INSTANCE.toOrderFromResponse(order);
+        orderService.update(OrderMapper.INSTANCE.toOrderRequest(orderUpdate));
+        model.setViewName("redirect:/orders");
+        return model;
+    }
+
+    @GetMapping("/update/{id}")
+    public ModelAndView updateOrder(ModelAndView model, @PathVariable String id) {
+        OrderResponse order = ((List<OrderResponse>) orderService.getById(id).getData()).get(0);
+        List<OrderDetailResponse> orderDetails = (List<OrderDetailResponse>) orderDetailService.getOrderDetail(id).getData();
+        model.addObject("order", order);
+        model.addObject("orderDetails", orderDetails);
+        model.setViewName("html/Order/formOrder");
         return model;
     }
 
