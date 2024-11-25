@@ -1,20 +1,27 @@
 package iuh.fit.se.techgalaxy.frontend.admin.controllers;
 
 import com.google.gson.*;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.request.CustomerRequest;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.request.OrderDetailRequest;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.request.OrderRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Color;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Memory;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.CustomerStatus;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.DetailStatus;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.OrderStatus;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.PaymentStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/orders")
@@ -24,14 +31,18 @@ public class OrderController {
     private final ProductService productService;
     private final MemoryService memoryService;
     private final ColorService colorService;
+    private final AccountService accountService;
+    private final CustomerService customerService;
 
     @Autowired
-    public OrderController(OrderService orderService, OrderDetailService orderDetailService, ProductService productService, MemoryService memoryService, ColorService colorService) {
+    public OrderController(OrderService orderService, OrderDetailService orderDetailService, ProductService productService, MemoryService memoryService, ColorService colorService, AccountService accountService, CustomerService customerService) {
         this.orderService = orderService;
         this.orderDetailService = orderDetailService;
         this.productService = productService;
         this.memoryService = memoryService;
         this.colorService = colorService;
+        this.accountService = accountService;
+        this.customerService = customerService;
     }
 
     @GetMapping
@@ -70,13 +81,80 @@ public class OrderController {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .create();
+
         System.out.println(gson.toJson(productVariants));
         System.out.println(gson.toJson(memories));
         System.out.println(gson.toJson(colors));
         model.addObject("productVariants", gson.toJson(productVariants));
         model.addObject("memories", gson.toJson(memories));
         model.addObject("colors", gson.toJson(colors));
+        model.addObject("order", new OrderRequest());
         model.setViewName("html/Order/formOrder");
+        return model;
+    }
+
+    @PostMapping("/save")
+    public ModelAndView saveOrder(@ModelAttribute("order") OrderRequest orderRequest,
+                                  @RequestParam("productCount") int productCount,
+                                  @RequestParam Map<String, String> params,
+                                  ModelAndView model) {
+        // Customer
+        CustomerResponse customer = orderRequest.getCustomer();
+        if (accountService.existsByEmail(orderRequest.getCustomer().getAccount().getEmail())) { // co customer trong dbs
+            CustomerResponse customerFindByEmail = ((List<CustomerResponse>) customerService.findByEmail(orderRequest.getCustomer().getAccount().getEmail()).getData()).get(0);
+            orderRequest.setCustomer(customerFindByEmail);
+        } else {
+            CustomerRequest customerRequest = new CustomerRequest();
+            customerRequest.setUserStatus(CustomerStatus.ACTIVE);
+            customerRequest.setAccount(orderRequest.getCustomer().getAccount());
+            orderRequest.setCustomer(customer);
+        }
+
+        // SystemUser
+        SystemUserResponse systemUser = new SystemUserResponse();
+        systemUser.setId("b9fb6795-edb9-4ed1-9804-615b9e381f2a");
+        orderRequest.setSystemUser(systemUser);
+
+        // Address
+        String address = orderRequest.getAddress();
+        orderRequest.setAddress(address);
+
+        // Payment status
+        orderRequest.setPaymentStatus(PaymentStatus.PENDING);
+
+        // Order status
+        orderRequest.setOrderStatus(OrderStatus.NEW);
+
+        // Save order
+        OrderResponse orderResponse = ((List<OrderResponse>) orderService.create(orderRequest).getData()).get(0);
+
+        // Save order detail
+        OrderDetailRequest orderDetailRequest = new OrderDetailRequest();
+        for (int i = 1; i <= productCount; i++) {
+            String productVariantId = params.get("productName[" + i + "]");
+            int quantity = Integer.parseInt(params.get("quantity[" + i + "]"));
+            String memoryId = params.get("memory[" + i + "]");
+            String colorId = params.get("color[" + i + "]");
+            double price = Double.parseDouble(params.get("price[" + i + "]").replaceAll(",", ""));
+//            System.out.println(productVariantId + " " + quantity + " " + memoryId + " " + colorId + " " + price);
+
+            ProductVariantResponse productVariant = new ProductVariantResponse();
+            productVariant.setId(productVariantId);
+
+            ProductVariantDetailResponse productVariantDetail = new ProductVariantDetailResponse();
+            ProductDetailResponse response = ((List<ProductDetailResponse>) productService.findProductVariantDetailByProductVariantAndColorAndMemory(productVariantId, colorId, memoryId).getData()).get(0);
+            productVariantDetail.setId(response.getId());
+
+            orderDetailRequest.setDetailStatus(DetailStatus.PENDING);
+            orderDetailRequest.setOrder(orderResponse);
+            orderDetailRequest.setProductVariantDetail(productVariantDetail);
+            orderDetailRequest.setQuantity(quantity);
+            orderDetailRequest.setPrice(price / quantity);
+
+            orderDetailService.createOrderDetail(orderDetailRequest);
+        }
+
+        model.setViewName("redirect:/orders");
         return model;
     }
 
