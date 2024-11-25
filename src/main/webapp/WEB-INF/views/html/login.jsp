@@ -36,26 +36,26 @@
 <div class="container">
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
         <!-- Success Toast -->
-        <c:if test="${not empty successMessage}">
+        <c:if test="${not empty flash.successMessage}">
             <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                            ${successMessage}
+                            ${flash.successMessage}
                     </div>
                 </div>
             </div>
         </c:if>
 
-        <!-- Error Toast -->
-        <c:if test="${not empty errorMessage}">
+        <c:if test="${not empty flash.errorMessage}">
             <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                            ${errorMessage}
+                            ${flash.errorMessage}
                     </div>
                 </div>
             </div>
         </c:if>
+
     </div>
     <!-- Outer Row -->
     <div class="row justify-content-center">

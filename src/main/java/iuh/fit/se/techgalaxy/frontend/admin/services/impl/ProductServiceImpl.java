@@ -8,9 +8,11 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductVariantDetailRequ
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.ProductVariantRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.services.ProductService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.nio.charset.StandardCharsets;
@@ -29,23 +31,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public DataResponse<ProductResponse> createProduct(ProductRequest productRequest) {
-        return restClient.post()
-                .uri(ENDPOINT + "/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .body(productRequest)
-                .exchange((request, response) -> {
-                            System.out.println(response.getStatusCode());
-                            DataResponse<ProductResponse> productResponseDataResponse = null;
-                            if (response.getBody().available() > 0) {
-                                productResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
-                                });
+    public DataResponse<ProductResponse> createProduct(ProductRequest productRequest, String accessToken) {
+        try {
+            return restClient.post()
+                    .uri(ENDPOINT + "/products")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .body(productRequest)
+                    .exchange((request, response) -> {
+                                System.out.println(response.getStatusCode());
+                                DataResponse<ProductResponse> productResponseDataResponse = null;
+                                if (response.getBody().available() > 0) {
+                                    productResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                                    });
+                                }
+                                assert productResponseDataResponse != null;
+                                return productResponseDataResponse;
                             }
-                            assert productResponseDataResponse != null;
-                            return productResponseDataResponse;
-                        }
-                );
+                    );
+        } catch (HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            throw new RuntimeException("Session expired. Please log in again.");
+        } catch (HttpClientErrorException.Forbidden e){
+            System.out.println("Forbidden request: " + e.getMessage());
+            throw new RuntimeException("You do not have permission to perform this action.");
+        }
+        catch (Exception e) {
+            System.out.println("Unexpected error: " + e.getMessage());
+            throw new RuntimeException("Unable to fetch customer data.");
+        }
     }
 
     @Override
@@ -95,7 +110,8 @@ public class ProductServiceImpl implements ProductService {
                     System.out.println(response.getStatusCode());
                     DataResponse<ProductResponse> productResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
-                        productResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        productResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert productResponseDataResponse != null;
                     return productResponseDataResponse;
@@ -113,7 +129,8 @@ public class ProductServiceImpl implements ProductService {
                     System.out.println(response.getStatusCode());
                     DataResponse<ProductVariantResponse> variantResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
-                        variantResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        variantResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert variantResponseDataResponse != null;
                     return variantResponseDataResponse;
@@ -131,7 +148,8 @@ public class ProductServiceImpl implements ProductService {
                     System.out.println(response.getStatusCode());
                     DataResponse<Boolean> detailResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
-                        detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert detailResponseDataResponse != null;
                     return detailResponseDataResponse;
@@ -146,7 +164,8 @@ public class ProductServiceImpl implements ProductService {
                     System.out.println(response.getStatusCode());
                     DataResponse<Object> deleteResponse = null;
                     if (response.getBody().available() > 0) {
-                        deleteResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        deleteResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert deleteResponse != null;
                     return deleteResponse;
@@ -163,7 +182,8 @@ public class ProductServiceImpl implements ProductService {
                     System.out.println(response.getStatusCode());
                     DataResponse<Object> deleteResponse = null;
                     if (response.getBody().available() > 0) {
-                        deleteResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        deleteResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert deleteResponse != null;
                     return deleteResponse;
@@ -180,7 +200,8 @@ public class ProductServiceImpl implements ProductService {
                     System.out.println(response.getStatusCode());
                     DataResponse<Object> deleteResponse = null;
                     if (response.getBody().available() > 0) {
-                        deleteResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        deleteResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert deleteResponse != null;
                     return deleteResponse;
@@ -194,7 +215,7 @@ public class ProductServiceImpl implements ProductService {
                 .uri(ENDPOINT + "/products")
                 .header("Authorization", "Bearer " + accessToken)
                 .exchange((request, response) -> {
-                           System.out.println(response.getStatusCode());
+                            System.out.println(response.getStatusCode());
                             DataResponse<ProductResponse> productResponseDataResponse = null;
                             if (response.getBody().available() > 0) {
                                 productResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -215,7 +236,8 @@ public class ProductServiceImpl implements ProductService {
 
                     DataResponse<ProductResponse> productResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
-                        productResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        productResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert productResponseDataResponse != null;
                     return productResponseDataResponse;
@@ -232,7 +254,8 @@ public class ProductServiceImpl implements ProductService {
                     System.out.println(response.getStatusCode());
                     DataResponse<ProductVariantResponse> variantResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
-                        variantResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        variantResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert variantResponseDataResponse != null;
                     return variantResponseDataResponse;
@@ -249,7 +272,8 @@ public class ProductServiceImpl implements ProductService {
                     System.out.println(response.getStatusCode());
                     DataResponse<ProductDetailResponse> detailResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
-                        detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert detailResponseDataResponse != null;
                     return detailResponseDataResponse;
@@ -265,7 +289,8 @@ public class ProductServiceImpl implements ProductService {
                     System.out.println(response.getStatusCode());
                     DataResponse<ProductVariantResponse> variantResponses = null;
                     if (response.getBody().available() > 0) {
-                        variantResponses = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        variantResponses = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert variantResponses != null;
                     return variantResponses;
@@ -281,7 +306,8 @@ public class ProductServiceImpl implements ProductService {
                     System.out.println(response.getStatusCode());
                     DataResponse<ProductVariantDetailResponse> detailResponses = null;
                     if (response.getBody().available() > 0) {
-                        detailResponses = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
+                        detailResponses = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
+                        });
                     }
                     assert detailResponses != null;
                     return detailResponses;
@@ -310,6 +336,7 @@ public class ProductServiceImpl implements ProductService {
                 .uri(ENDPOINT + "/products/variants/productVariantDetail/" + detailId)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .body(new ParameterizedTypeReference<>() {});
+                .body(new ParameterizedTypeReference<>() {
+                });
     }
 }
