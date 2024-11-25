@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -313,6 +312,17 @@ public class ProductServiceImpl implements ProductService {
         return restClient.get()
                 .uri(ENDPOINT + "/products/variants/productVariantDetail/" + detailId)
                 .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    @Override
+    public DataResponse<ProductDetailResponse> findProductVariantDetailByProductVariantAndColorAndMemory(String productVariantId, String color, String memory) {
+        return restClient.get()
+                .uri(ENDPOINT + "/products/variants/details/getProductVariantDetailByProductVariantAndColorAndMemory?" +
+                        "productVariantId=" + productVariantId
+                        + "&color=" + color
+                        + "&memory=" + memory)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
