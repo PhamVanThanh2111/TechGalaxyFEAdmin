@@ -37,10 +37,10 @@ public class ProductController {
 
     private final AttributeServiceImpl attributeService;
 
-    private final AuthServiceImpl authService;
+//    private final AuthServiceImpl authService;
 
     @Autowired
-    public ProductController(TrademarkServiceImpl trademarkService, ColorServiceImpl colorService, MemoryServiceImpl memoryService, UsageCategoryServiceImpl usageCategoryService, ProductServiceImpl productService, FileServiceImpl fileService, AttributeServiceImpl attributeService, AuthServiceImpl authService) {
+    public ProductController(TrademarkServiceImpl trademarkService, ColorServiceImpl colorService, MemoryServiceImpl memoryService, UsageCategoryServiceImpl usageCategoryService, ProductServiceImpl productService, FileServiceImpl fileService, AttributeServiceImpl attributeService) {
         this.trademarkService = trademarkService;
         this.colorService = colorService;
         this.memoryService = memoryService;
@@ -48,7 +48,6 @@ public class ProductController {
         this.productService = productService;
         this.fileService = fileService;
         this.attributeService = attributeService;
-        this.authService = authService;
     }
 
     @GetMapping("/add")
@@ -67,8 +66,7 @@ public class ProductController {
             return modelAndView;
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView("redirect:/home");
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return new ModelAndView("redirect:/home");
@@ -236,8 +234,7 @@ public class ProductController {
             }
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return "redirect:/login";
+            return "redirect:/home";
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return "redirect:/home";
@@ -279,8 +276,7 @@ public class ProductController {
             return modelAndView;
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView("redirect:/home");
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return new ModelAndView("redirect:/home");
@@ -314,8 +310,7 @@ public class ProductController {
             }
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView("redirect:/home");
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return new ModelAndView("redirect:/home");
@@ -356,8 +351,7 @@ public class ProductController {
 
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return "redirect:/login";
+            return "redirect:/home";
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return "redirect:/home";
@@ -392,8 +386,7 @@ public class ProductController {
             return modelAndView;
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView("redirect:/home");
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return new ModelAndView("redirect:/home");
@@ -436,8 +429,7 @@ public class ProductController {
             return modelAndView;
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView("redirect:/home");
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return new ModelAndView("redirect:/home");
@@ -494,8 +486,7 @@ public class ProductController {
             return modelAndView;
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView("redirect:/home");
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return new ModelAndView("redirect:/home");
@@ -524,8 +515,7 @@ public class ProductController {
             return modelAndView;
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView("redirect:/home");
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return new ModelAndView("redirect:/home");
@@ -581,8 +571,7 @@ public class ProductController {
             return "redirect:/products";
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return "redirect:/login";
+            return "redirect:/home";
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return "redirect:/home";
@@ -617,8 +606,7 @@ public class ProductController {
             return "redirect:/products";
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return "redirect:/login";
+            return "redirect:/home";
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return "redirect:/home";
@@ -646,8 +634,7 @@ public class ProductController {
             return "redirect:/products";
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return "redirect:/login";
+            return "redirect:/home";
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return "redirect:/home";
@@ -676,8 +663,7 @@ public class ProductController {
             return modelAndView;
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView("redirect:/home");
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return new ModelAndView("redirect:/home");
@@ -732,8 +718,7 @@ public class ProductController {
             }
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return "redirect:/login";
+            return "redirect:/home";
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return "redirect:/home";
@@ -768,8 +753,7 @@ public class ProductController {
             return modelAndView;
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            authService.logout(session, accessToken, response);
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView("redirect:/home");
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             return new ModelAndView("redirect:/home");
