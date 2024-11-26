@@ -21,7 +21,7 @@ public interface ProductService {
 
     DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest);
 
-    DataResponse<ProductVariantDetailResponse> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest);
+    DataResponse<String> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest);
 
     DataResponse<ProductResponse> updateProduct(String productId, ProductRequest productRequest);
 

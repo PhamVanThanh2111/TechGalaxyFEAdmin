@@ -82,13 +82,14 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public DataResponse<ProductVariantDetailResponse> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest) {
+    public DataResponse<String> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest) {
         return restClient.post()
                 .uri(ENDPOINT + "/products/variants/" + variantId + "/details")
                 .body(detailRequest)
                 .exchange((request, response) -> {
+                            System.out.println("createVariantDetail");
                             System.out.println(response.getStatusCode());
-                            DataResponse<ProductVariantDetailResponse> detailResponseDataResponse = null;
+                            DataResponse<String> detailResponseDataResponse = null;
                             if (response.getBody().available() > 0) {
                                 detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
                                 });

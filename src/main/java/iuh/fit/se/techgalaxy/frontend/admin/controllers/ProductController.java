@@ -4,6 +4,7 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.request.*;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
+import iuh.fit.se.techgalaxy.frontend.admin.services.ProductImgService;
 import iuh.fit.se.techgalaxy.frontend.admin.services.impl.*;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -37,10 +38,10 @@ public class ProductController {
 
     private final AttributeServiceImpl attributeService;
 
-//    private final AuthServiceImpl authService;
+    private final ProductImageServiceImpl productImgService;
 
     @Autowired
-    public ProductController(TrademarkServiceImpl trademarkService, ColorServiceImpl colorService, MemoryServiceImpl memoryService, UsageCategoryServiceImpl usageCategoryService, ProductServiceImpl productService, FileServiceImpl fileService, AttributeServiceImpl attributeService) {
+    public ProductController(TrademarkServiceImpl trademarkService, ColorServiceImpl colorService, MemoryServiceImpl memoryService, UsageCategoryServiceImpl usageCategoryService, ProductServiceImpl productService, FileServiceImpl fileService, AttributeServiceImpl attributeService, ProductImageServiceImpl productImgService) {
         this.trademarkService = trademarkService;
         this.colorService = colorService;
         this.memoryService = memoryService;
@@ -48,6 +49,7 @@ public class ProductController {
         this.productService = productService;
         this.fileService = fileService;
         this.attributeService = attributeService;
+        this.productImgService = productImgService;
     }
 
     @GetMapping("/add")
@@ -76,23 +78,23 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public String saveFullProduct(@Valid @ModelAttribute("productFullRequest") ProductFullRequest productFullRequest, RedirectAttributes redirectAttributes, BindingResult result, HttpSession session, HttpServletResponse response) {
+    public String saveFullProduct(@ModelAttribute("productFullRequest") @Valid ProductFullRequest productFullRequest, RedirectAttributes redirectAttributes, BindingResult result, HttpSession session, HttpServletResponse response) {
 
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             return "redirect:/login";
         }
+        // In toàn bộ dữ liệu nhận được từ form
+        System.out.println("Dữ liệu sản phẩm:");
+        System.out.println(productFullRequest);
+        if (result.hasErrors()) {
+            System.out.println("Validation failed: " + result.getAllErrors());
+            result.getAllErrors().forEach(error -> System.out.println(error.toString()));
+            redirectAttributes.addFlashAttribute("productFullRequest", productFullRequest);
+            redirectAttributes.addFlashAttribute("errorMessage", "Validation failed: " + result.getAllErrors());
+            return "redirect:/products/add";
+        }
         try {
-
-            // In toàn bộ dữ liệu nhận được từ form
-            System.out.println("Dữ liệu sản phẩm:");
-            System.out.println(productFullRequest);
-            if (result.hasErrors()) {
-                System.out.println("Validation failed: " + result.getAllErrors());
-                redirectAttributes.addFlashAttribute("errorMessage", "Validation failed: " + result.getAllErrors());
-                return "redirect:/products/add";
-            }
-
             ProductRequest productRequest = new ProductRequest();
             productRequest.setName(productFullRequest.getName());
             productRequest.setTrademarkId(productFullRequest.getTrademarkId());
@@ -167,70 +169,85 @@ public class ProductController {
                             if (variantRequest.getDetails() == null || variantRequest.getDetails().isEmpty()) {
                                 System.out.println("Không có chi tiết variant nào được tạo.");
                             } else {
-                                List<ProductVariantDetailRequest> productVariantDetails = new ArrayList<>();
                                 List<ProductFullRequest.ProductVariantRequest.ProductVariantDetailRequest> details = variantRequest.getDetails();
                                 for (ProductFullRequest.ProductVariantRequest.ProductVariantDetailRequest detailRequest : details) {
+                                    List<ProductVariantDetailRequest> productVariantDetails = new ArrayList<>();
                                     ProductVariantDetailRequest productVariantDetailRequest = new ProductVariantDetailRequest();
                                     productVariantDetailRequest.setMemid(detailRequest.getMemid());
                                     productVariantDetailRequest.setPrice(detailRequest.getPrice());
                                     productVariantDetailRequest.setSale(detailRequest.getSale());
-                                    List<ProductVariantDetailRequest.ColorRequest> colorRequests = new ArrayList<>();
                                     if (detailRequest.getColors() == null || detailRequest.getColors().isEmpty()) {
                                         System.out.println("Không có màu nào được tạo.");
                                     } else {
+                                        List<ProductsImageRequest> imagesProductsImageRequests = new ArrayList<>();
                                         for (ProductFullRequest.ProductVariantRequest.ProductVariantDetailRequest.ColorRequest colorRequest : detailRequest.getColors()) {
                                             ProductVariantDetailRequest.ColorRequest colorRequest1 = new ProductVariantDetailRequest.ColorRequest();
                                             colorRequest1.setColorId(colorRequest.getColorId());
                                             colorRequest1.setQuantity(colorRequest.getQuantity());
-                                            colorRequests.add(colorRequest1);
+
                                             if (colorRequest.getImages() == null || colorRequest.getImages().length == 0) {
                                                 System.out.println("Không có hình ảnh nào được tạo.");
                                             } else {
-                                                // Luu hinh anh
-                                                MultipartFile[] images = colorRequest.getImages();
-                                                for (MultipartFile image : images) {
-                                                    if (image == null || image.isEmpty()) {
-                                                        System.out.println("Hình ảnh bị null hoặc rỗng.");
-                                                    } else {
-                                                        System.out.println("Hình ảnh nhận được: " + image.getOriginalFilename());
-                                                        fileService.uploadFile(image, "products/" + variantRequest.getName().replace(" ", "_") + "/" + detailRequest.getMemid() + "/" + colorRequest.getColorId());
+                                                List<ProductVariantDetailRequest.ColorRequest> colorRequests = List.of(colorRequest1);
+                                                productVariantDetailRequest.setColors(colorRequests);
+                                                System.out.println("Dữ liệu chi tiết variant detail:");
+                                                System.out.println(productVariantDetailRequest);
+                                                productVariantDetails.add(productVariantDetailRequest);
+                                                System.out.println("Dữ liệu chi tiết variant trước khi lưu:");
+                                                productVariantDetails.forEach(
+                                                        System.out::println
+                                                );
+                                                DataResponse<String> productVariantDetailResponseDataResponse = productService.createVariantDetail(variantId, productVariantDetails);
+                                                if (productVariantDetailResponseDataResponse.getStatus() != 200) {
+                                                    System.out.println("Lỗi khi lưu chi tiết variant.");
+                                                    redirectAttributes.addFlashAttribute("errorMessage", "Error saving variant detail.");
+                                                } else if (productVariantDetailResponseDataResponse.getData() == null) {
+                                                    System.out.println("Dữ liệu chi tiết variant bị null.");
+                                                } else {
+                                                    System.out.println("Dữ liệu chi tiết variant sau khi lưu:");
+                                                    List<String> productVariantDetailResponses = (List<String>) productVariantDetailResponseDataResponse.getData();
+                                                    String detailId = productVariantDetailResponses.get(0);
+
+                                                    // Luu hinh anh
+                                                    MultipartFile[] images = colorRequest.getImages();
+                                                    for (MultipartFile image : images) {
+                                                        if (image == null || image.isEmpty()) {
+                                                            System.out.println("Hình ảnh bị null hoặc rỗng.");
+                                                        } else {
+                                                            System.out.println("Hình ảnh nhận được: " + image.getOriginalFilename());
+                                                            DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(image, "products/" + variantRequest.getName().replace(" ", "_") + "/" + detailRequest.getMemid() + "/" + colorRequest.getColorId());
+                                                            if (uploadFileResponseDataResponse.getStatus() == 200 && uploadFileResponseDataResponse.getData() == null) {
+                                                                System.out.println("Dữ liệu hình ảnh bị null.");
+                                                            } else {
+                                                                List<UploadFileResponse> uploadFileResponses = (List<UploadFileResponse>) uploadFileResponseDataResponse.getData();
+                                                                String imageUrl = uploadFileResponses.get(0).getFileName();
+                                                                ProductsImageRequest productsImageRequest = new ProductsImageRequest(imageUrl, false);
+                                                                imagesProductsImageRequests.add(productsImageRequest);
+
+                                                                DataResponse<ProductsImageResponse> productImageResponseDataResponse = productImgService.createProductImg(detailId, imagesProductsImageRequests, accessToken);
+                                                                if (productImageResponseDataResponse.getStatus() != 200) {
+                                                                    System.out.println("Lỗi khi lưu hình ảnh.");
+                                                                    redirectAttributes.addFlashAttribute("errorMessage", "Error saving image.");
+                                                                } else if (productImageResponseDataResponse.getData() == null) {
+                                                                    System.out.println("Dữ liệu hình ảnh bị null.");
+                                                                } else {
+                                                                    System.out.println("Dữ liệu hình ảnh sau khi lưu:");
+                                                                    List<ProductsImageResponse> productsImageResponses = (List<ProductsImageResponse>) productImageResponseDataResponse.getData();
+                                                                    System.out.println(productsImageResponses);
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
-
                                             }
                                         }
-                                        productVariantDetailRequest.setColors(colorRequests);
-                                        System.out.println("Dữ liệu chi tiết variant detail:");
-                                        System.out.println(productVariantDetailRequest);
-                                        productVariantDetails.add(productVariantDetailRequest);
                                     }
-
                                 }
-                                System.out.println("Dữ liệu chi tiết variant trước khi lưu:");
-                                productVariantDetails.forEach(
-                                        System.out::println
-                                );
-                                DataResponse<ProductVariantDetailResponse> productVariantDetailResponseDataResponse = productService.createVariantDetail(variantId, productVariantDetails);
-                                if (productVariantDetailResponseDataResponse.getStatus() != 200) {
-                                    System.out.println("Lỗi khi lưu chi tiết variant.");
-                                    redirectAttributes.addFlashAttribute("errorMessage", "Error saving variant detail.");
-                                } else if (productVariantDetailResponseDataResponse.getData() == null) {
-                                    System.out.println("Dữ liệu chi tiết variant bị null.");
-                                } else {
-                                    System.out.println("Dữ liệu chi tiết variant sau khi lưu:");
-                                    List<ProductVariantDetailResponse> productVariantDetailResponses = (List<ProductVariantDetailResponse>) productVariantDetailResponseDataResponse.getData();
-                                    productVariantDetailResponses.forEach(
-                                            System.out::println
-                                    );
-                                }
-
                             }
                         }
                     }
-
                 }
                 return "redirect:/products";
-
             }
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
@@ -804,8 +821,8 @@ public class ProductController {
 //                serviceColor.setQuantity(color.getQuantity());
 //                return serviceColor;
 //            }).collect(Collectors.toList());
-            List<ProductVariantDetailRequest.ColorRequest> serviceColors = new ArrayList<>();
             for (ProductVariantDetailRequest_FE.ColorRequest color : request.getColors()) {
+                List<ProductsImageRequest> imagesProductsImageRequests = new ArrayList<>();
                 ProductVariantDetailRequest.ColorRequest serviceColor = new ProductVariantDetailRequest.ColorRequest();
                 serviceColor.setColorId(color.getColorId());
                 serviceColor.setQuantity(color.getQuantity());
@@ -816,7 +833,6 @@ public class ProductController {
                     } else {
                         System.out.println("Hình ảnh nhận được: " + image.getOriginalFilename());
                         DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(image, "products/" + variant.getName().replace(" ", "_") + "/" + request.getMemid() + "/" + color.getColorId());
-//                        loi khi up file
                         if (uploadFileResponseDataResponse == null) {
                             System.out.println("Error uploading file.");
                             continue;
@@ -826,24 +842,39 @@ public class ProductController {
                             System.out.println("Dữ liệu avatar bị null.");
                         } else {
                             List<UploadFileResponse> uploadFileResponses = (List<UploadFileResponse>) uploadFileResponseDataResponse.getData();
-                            String avatarUrl = uploadFileResponses.get(0).getFileName();
+                            String imageURL = uploadFileResponses.get(0).getFileName();
+                            ProductsImageRequest productsImageRequest = new ProductsImageRequest(imageURL, false);
+                            imagesProductsImageRequests.add(productsImageRequest);
                         }
                     }
                 }
-                serviceColors.add(serviceColor);
+                List<ProductVariantDetailRequest.ColorRequest> serviceColors = List.of(serviceColor);
+                ProductVariantDetailRequest serviceRequest = new ProductVariantDetailRequest();
+                serviceRequest.setMemid(request.getMemid());
+                serviceRequest.setPrice(request.getPrice());
+                serviceRequest.setSale(request.getSale());
+                serviceRequest.setColors(serviceColors);
+                DataResponse<String> productVariantDetailResponseDataResponse = productService.createVariantDetail(variantId, Collections.singletonList(serviceRequest));
+                if (productVariantDetailResponseDataResponse == null || productVariantDetailResponseDataResponse.getStatus() != 200) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Error adding variant detail.");
+                } else {
+                    List<String> productVariantDetailResponses = (List<String>) productVariantDetailResponseDataResponse.getData();
+                    String detailId = productVariantDetailResponses.get(0);
+
+                    DataResponse<ProductsImageResponse> productImageResponseDataResponse = productImgService.createProductImg(detailId, imagesProductsImageRequests, accessToken);
+                    if (productImageResponseDataResponse == null || productImageResponseDataResponse.getStatus() != 200) {
+                        redirectAttributes.addFlashAttribute("errorMessage", "Error saving image.");
+                    } else if (productImageResponseDataResponse.getData() == null) {
+                        redirectAttributes.addFlashAttribute("errorMessage", "Error saving image.");
+                    } else {
+                        List<ProductsImageResponse> productsImageResponses = (List<ProductsImageResponse>) productImageResponseDataResponse.getData();
+                        System.out.println("Dữ liệu hình ảnh sau khi lưu:");
+                        System.out.println(productsImageResponses);
+                    }
+
+                }
             }
 
-            ProductVariantDetailRequest serviceRequest = new ProductVariantDetailRequest();
-            serviceRequest.setMemid(request.getMemid());
-            serviceRequest.setPrice(request.getPrice());
-            serviceRequest.setSale(request.getSale());
-            serviceRequest.setColors(serviceColors);
-
-            DataResponse<ProductVariantDetailResponse> productVariantDetailResponseDataResponse = productService.createVariantDetail(variantId, Collections.singletonList(serviceRequest));
-            if (productVariantDetailResponseDataResponse == null || productVariantDetailResponseDataResponse.getStatus() != 200) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Error adding variant detail.");
-                return "redirect:/products/" + productId + "/variants/" + variantId + "/details";
-            }
             redirectAttributes.addFlashAttribute("successMessage", "Variant detail added successfully!");
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
@@ -1081,7 +1112,7 @@ public class ProductController {
             System.out.println("Received Request: " + attributeValueRequest);
 
             List<AttributeValueRequest> attributeValues = List.of(attributeValueRequest);
-            DataResponse<Object> response = attributeService.createAttributeValueByVariantId(variantId, attributeValues);
+            DataResponse<Object> response = attributeService.createAttributeValueByVariantId(variantId, attributeValues, accessToken);
 
             if (response == null || response.getStatus() != 200) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Failed to create attribute values.");
@@ -1113,7 +1144,7 @@ public class ProductController {
             return "redirect:/login";
         }
         try {
-            DataResponse<ValueResponse> response = attributeService.deleteValue(valueId);
+            DataResponse<ValueResponse> response = attributeService.deleteValue(valueId, accessToken);
             if (response == null || response.getStatus() != 200) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Failed to delete attribute value.");
             } else {
@@ -1196,7 +1227,7 @@ public class ProductController {
         try {
 
             System.out.println("Received Request: " + updateRequest);
-            DataResponse<ValueResponse> response = attributeService.updateValueProductVariant(variantId, updateRequest);
+            DataResponse<ValueResponse> response = attributeService.updateValueProductVariant(variantId, updateRequest, accessToken);
             if (response == null || response.getStatus() != 200) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Failed to update attribute value.");
             } else {

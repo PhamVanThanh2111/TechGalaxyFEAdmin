@@ -18,13 +18,15 @@ public interface AttributeService {
     DataResponse<AttributeResponse> getAttributeById(String id);
 
 
-    DataResponse<Object> createAttributeValueByVariantId(String variantId, List<AttributeValueRequest> values);
+    DataResponse<Object> createAttributeValueByVariantId(String variantId, List<AttributeValueRequest> values, String accessToken);
 
-    DataResponse<ValueResponse> getValueByNameAtribute(String name);
 
-    DataResponse<ValueResponse> updateValueProductVariant(String variantId, AttributeValueUpdateRequest attributeValueRequest);
 
-    DataResponse<ValueResponse> deleteValue(String valueId);
+    DataResponse<ValueResponse> updateValueProductVariant(String variantId, AttributeValueUpdateRequest attributeValueRequest, String accessToken);
+
+    DataResponse<ValueResponse> deleteValue(String valueId, String accessToken);
 
     DataResponse<ValueResponse> getValueById(String valueId);
+
+    DataResponse<ValueResponse> getValueByNameAtribute(String name);
 }

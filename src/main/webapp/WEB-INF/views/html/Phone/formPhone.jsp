@@ -27,8 +27,7 @@
     <style>
         .text-danger {
             color: red;
-            font-size: 0.875rem; /* Hoặc kích thước phù hợp */
-            margin-top: 0.25rem;
+            font-size: 0.875rem;
             display: block;
         }
         .toast-container {

@@ -92,7 +92,7 @@
                             <!-- Sale -->
                             <div class="form-group">
                                 <label for="sale">Sale (%)</label>
-                                <input type="number" class="form-control" id="sale" name="sale" step="0.01" value="${detail.sale}" required>
+                                <input type="number" class="form-control" id="sale" name="sale" step="0.01" value="${detail.sale}" min="0" max="1" required>
                             </div>
 
                             <!-- Status -->
