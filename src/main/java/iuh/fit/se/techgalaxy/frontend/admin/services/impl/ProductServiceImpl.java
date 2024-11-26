@@ -62,9 +62,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest) {
+    public DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest, String accessToken) {
         return restClient.post()
                 .uri(ENDPOINT + "/products/" + productId + "/variants")
+                .header("Authorization", "Bearer " + accessToken)
                 .body(variantRequest)
                 .exchange((request, response) -> {
                             System.out.println(response.getStatusCode());
@@ -82,9 +83,10 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public DataResponse<String> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest) {
+    public DataResponse<String> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest, String accessToken) {
         return restClient.post()
                 .uri(ENDPOINT + "/products/variants/" + variantId + "/details")
+                .header("Authorization", "Bearer " + accessToken)
                 .body(detailRequest)
                 .exchange((request, response) -> {
                             System.out.println("createVariantDetail");
@@ -101,9 +103,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public DataResponse<ProductResponse> updateProduct(String productId, ProductRequest productRequest) {
+    public DataResponse<ProductResponse> updateProduct(String productId, ProductRequest productRequest, String accessToken) {
         return restClient.put()
                 .uri(ENDPOINT + "/products/" + productId)
+                .header("Authorization", "Bearer " + accessToken)
                 .body(productRequest)
                 .exchange((request, response) -> {
                     System.out.println(response.getStatusCode());
@@ -119,9 +122,10 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public DataResponse<ProductVariantResponse> updateVariant(String variantId, ProductVariantRequest variantRequest) {
+    public DataResponse<ProductVariantResponse> updateVariant(String variantId, ProductVariantRequest variantRequest, String accessToken) {
         return restClient.put()
                 .uri(ENDPOINT + "/products/variants/" + variantId)
+                .header("Authorization", "Bearer " + accessToken)
                 .body(variantRequest)
                 .exchange((request, response) -> {
                     System.out.println("updateVariant");
@@ -138,9 +142,10 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public DataResponse<Boolean> updateVariantDetail(String detailId, ProductDetailUpdateRequest detailRequest) {
+    public DataResponse<Boolean> updateVariantDetail(String detailId, ProductDetailUpdateRequest detailRequest, String accessToken) {
         return restClient.put()
                 .uri(ENDPOINT + "/products/variants/details/" + detailId)
+                .header("Authorization", "Bearer " + accessToken)
                 .body(detailRequest)
                 .exchange((request, response) -> {
                     System.out.println("updateVariantDetail");
@@ -156,9 +161,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public DataResponse<Object> deleteProduct(String productId) {
+    public DataResponse<Object> deleteProduct(String productId, String accessToken) {
         return restClient.delete()
                 .uri(ENDPOINT + "/products/" + productId)
+                .header("Authorization", "Bearer " + accessToken)
                 .exchange((request, response) -> {
                     System.out.println(response.getStatusCode());
                     DataResponse<Object> deleteResponse = null;
@@ -173,9 +179,10 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public DataResponse<Object> deleteVariant(String variantId) {
+    public DataResponse<Object> deleteVariant(String variantId, String accessToken) {
         return restClient.delete()
                 .uri(ENDPOINT + "/products/variants/" + variantId)
+                .header("Authorization", "Bearer " + accessToken)
                 .exchange((request, response) -> {
                     System.out.println("deleteVariant");
                     System.out.println(response.getStatusCode());
@@ -191,9 +198,10 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public DataResponse<Object> deleteVariantDetail(String detailId) {
+    public DataResponse<Object> deleteVariantDetail(String detailId, String accessToken) {
         return restClient.delete()
                 .uri(ENDPOINT + "/products/variants/details/" + detailId)
+                .header("Authorization", "Bearer " + accessToken)
                 .exchange((request, response) -> {
                     System.out.println("deleteVariantDetail");
                     System.out.println(response.getStatusCode());

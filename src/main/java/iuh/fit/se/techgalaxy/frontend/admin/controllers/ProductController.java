@@ -4,7 +4,6 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.request.*;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.ProductStatus;
-import iuh.fit.se.techgalaxy.frontend.admin.services.ProductImgService;
 import iuh.fit.se.techgalaxy.frontend.admin.services.impl.*;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -152,7 +151,7 @@ public class ProductController {
                         System.out.println("Dữ liệu variant:");
                         System.out.println(productVariantRequest);
 
-                        DataResponse<ProductVariantResponse> productVariantResponseDataResponse = productService.createVariant(productId, productVariantRequest);
+                        DataResponse<ProductVariantResponse> productVariantResponseDataResponse = productService.createVariant(productId, productVariantRequest, accessToken);
                         if (productVariantResponseDataResponse.getStatus() != 200) {
                             System.out.println("Lỗi khi lưu variant.");
                             redirectAttributes.addFlashAttribute("errorMessage", "Error saving variant.");
@@ -197,7 +196,7 @@ public class ProductController {
                                                 productVariantDetails.forEach(
                                                         System.out::println
                                                 );
-                                                DataResponse<String> productVariantDetailResponseDataResponse = productService.createVariantDetail(variantId, productVariantDetails);
+                                                DataResponse<String> productVariantDetailResponseDataResponse = productService.createVariantDetail(variantId, productVariantDetails, accessToken);
                                                 if (productVariantDetailResponseDataResponse.getStatus() != 200) {
                                                     System.out.println("Lỗi khi lưu chi tiết variant.");
                                                     redirectAttributes.addFlashAttribute("errorMessage", "Error saving variant detail.");
@@ -315,7 +314,7 @@ public class ProductController {
             return modelAndView;
         }
         try {
-            DataResponse<ProductResponse> productVariantDetailResponseDataResponse = productService.updateProduct(id, productRequest);
+            DataResponse<ProductResponse> productVariantDetailResponseDataResponse = productService.updateProduct(id, productRequest, accessToken);
             if (productVariantDetailResponseDataResponse == null || productVariantDetailResponseDataResponse.getStatus() != 200 || productVariantDetailResponseDataResponse.getData() == null) {
                 System.out.println("Error updating product.");
                 return new ModelAndView("redirect:/products/edit/" + id);
@@ -355,7 +354,7 @@ public class ProductController {
             }
             List<ProductVariantResponse> variants = (List<ProductVariantResponse>) productVariantResponseDataResponse.getData();
             if (variants.isEmpty()) {
-                DataResponse<Object> productResponseDataResponse = productService.deleteProduct(id);
+                DataResponse<Object> productResponseDataResponse = productService.deleteProduct(id, accessToken);
                 if (productResponseDataResponse == null || productResponseDataResponse.getStatus() != 200) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Error deleting product: " + id);
                     return "redirect:/products";
@@ -573,7 +572,7 @@ public class ProductController {
                     }
                 }
 
-                DataResponse<ProductVariantResponse> productVariantResponseDataResponse = productService.updateVariant(variantId, variantRequest);
+                DataResponse<ProductVariantResponse> productVariantResponseDataResponse = productService.updateVariant(variantId, variantRequest, accessToken);
                 if (productVariantResponseDataResponse == null || productVariantResponseDataResponse.getStatus() != 200) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Error updating variant.");
                     return "redirect:/products";
@@ -611,7 +610,7 @@ public class ProductController {
 
 
             if (variantDetailResponses == null || variantDetailResponses.getData() == null || variantDetailResponses.getData().isEmpty()) {
-                DataResponse<Object> productResponseDataResponse = productService.deleteVariant(variantId);
+                DataResponse<Object> productResponseDataResponse = productService.deleteVariant(variantId, accessToken);
                 if (productResponseDataResponse == null || productResponseDataResponse.getStatus() != 200) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Error deleting product variant: " + variantId);
                     return "redirect:/products";
@@ -642,7 +641,7 @@ public class ProductController {
         }
         try {
             System.out.println("Deleting product variant detail: " + variantDetailId);
-            DataResponse<Object> productResponseDataResponse = productService.deleteVariantDetail(variantDetailId);
+            DataResponse<Object> productResponseDataResponse = productService.deleteVariantDetail(variantDetailId, accessToken);
             if (productResponseDataResponse == null || productResponseDataResponse.getStatus() != 200) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Error deleting product variant detail: " + variantDetailId);
                 return "redirect:/products";
@@ -726,7 +725,7 @@ public class ProductController {
 
                 variantRequest.setUsageCategoryId(productId);
 
-                productService.createVariant(productId, request);
+                productService.createVariant(productId, request, accessToken);
                 redirectAttributes.addFlashAttribute("successMessage", "Variant saved successfully!");
                 return "redirect:/products/" + productId + "/variants";
             } catch (Exception e) {
@@ -854,7 +853,7 @@ public class ProductController {
                 serviceRequest.setPrice(request.getPrice());
                 serviceRequest.setSale(request.getSale());
                 serviceRequest.setColors(serviceColors);
-                DataResponse<String> productVariantDetailResponseDataResponse = productService.createVariantDetail(variantId, Collections.singletonList(serviceRequest));
+                DataResponse<String> productVariantDetailResponseDataResponse = productService.createVariantDetail(variantId, Collections.singletonList(serviceRequest), accessToken);
                 if (productVariantDetailResponseDataResponse == null || productVariantDetailResponseDataResponse.getStatus() != 200) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Error adding variant detail.");
                 } else {
@@ -982,7 +981,7 @@ public class ProductController {
 //            updateRequest.setSale(updateRequest.getSale() / 100);
 
             // Gửi yêu cầu cập nhật đến service
-            DataResponse<Boolean> response = productService.updateVariantDetail(detailId, updateRequest);
+            DataResponse<Boolean> response = productService.updateVariantDetail(detailId, updateRequest, accessToken);
 
             // Kiểm tra kết quả và xử lý phản hồi
             if (response == null || response.getStatus() != 200) {

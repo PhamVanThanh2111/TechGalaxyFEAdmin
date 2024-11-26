@@ -19,21 +19,21 @@ public interface ProductService {
 
     DataResponse<ProductResponse> createProduct(ProductRequest productRequest, String accessToken);
 
-    DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest);
+    DataResponse<ProductVariantResponse> createVariant(String productId, ProductVariantRequest variantRequest, String accessToken);
 
-    DataResponse<String> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest);
+    DataResponse<String> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest, String accessToken);
 
-    DataResponse<ProductResponse> updateProduct(String productId, ProductRequest productRequest);
+    DataResponse<ProductResponse> updateProduct(String productId, ProductRequest productRequest, String accessToken);
 
-    DataResponse<ProductVariantResponse> updateVariant(String variantId, ProductVariantRequest variantRequest);
+    DataResponse<ProductVariantResponse> updateVariant(String variantId, ProductVariantRequest variantRequest, String accessToken);
 
-    DataResponse<Boolean> updateVariantDetail(String detailId, ProductDetailUpdateRequest detailRequest);
+    DataResponse<Boolean> updateVariantDetail(String detailId, ProductDetailUpdateRequest detailRequest, String accessToken);
 
-    DataResponse<Object> deleteProduct(String productId);
+    DataResponse<Object> deleteProduct(String productId, String accessToken);
 
-    DataResponse<Object> deleteVariant(String variantId);
+    DataResponse<Object> deleteVariant(String variantId, String accessToken);
 
-    DataResponse<Object> deleteVariantDetail(String detailId);
+    DataResponse<Object> deleteVariantDetail(String detailId, String accessToken);
 
     DataResponse<ProductVariantResponse> getAllProductVariantsByProductId(String productId);
 
