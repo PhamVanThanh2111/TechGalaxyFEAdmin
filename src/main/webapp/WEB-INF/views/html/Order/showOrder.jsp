@@ -103,8 +103,6 @@
                                             <td>${order.paymentStatus}</td>
                                             <td>${order.orderStatus}</td>
                                             <td>
-                                                <a href="${pageContext.request.contextPath}/orders/update/${order.id}" class="btn btn-warning btn-sm">Update</a>
-                                                <a href="../orderDetail.html" class="btn btn-info btn-sm">Detail</a>
                                                 <c:if test="${order.orderStatus == 'NEW'}">
                                                     <a href="#" class="btn btn-success btn-sm" data-toggle="modal"
                                                        data-target="#confirmOrderModal_${order.id}">Confirm</a>

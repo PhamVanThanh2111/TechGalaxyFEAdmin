@@ -79,9 +79,11 @@
                                         <div class="collapse show" id="collapseCardCustomer">
                                             <div class="card-body">
                                                 <div class="form-group">
-                                                    <form:label path="customer.account.email" for="email">Email</form:label>
-                                                    <form:input path="customer.account.email" type="email" placeholder="E-mail" id="email" name="email"
-                                                           class="form-control" required="required" />
+                                                    <form:label path="customer.account.email"
+                                                                for="email">Email</form:label>
+                                                    <form:input path="customer.account.email" type="email"
+                                                                placeholder="E-mail" id="email" name="email"
+                                                                class="form-control" required="required"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -107,9 +109,11 @@
                                                 <div id="productCards" class="row"></div>
 
                                                 <div class="form-group mt-2">
-                                                    <form:label path="address" for="address">Delivery address</form:label>
-                                                    <form:input path="address" name="address" class="form-control" id="address"
-                                                           placeholder="Delivery address" required="required" />
+                                                    <form:label path="address"
+                                                                for="address">Delivery address</form:label>
+                                                    <form:input path="address" name="address" class="form-control"
+                                                                id="address"
+                                                                placeholder="Delivery address" required="required"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -175,7 +179,6 @@
     const productVariants = ${productVariants};
     const memories = ${memories};
     const colors = ${colors};
-    const orderDetails = ${orderDetails};
 </script>
 <script src="<c:url value="/js/addProduct_Order.js" />"></script>
 

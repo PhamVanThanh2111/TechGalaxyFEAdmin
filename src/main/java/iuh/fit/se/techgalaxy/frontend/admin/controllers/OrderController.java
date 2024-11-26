@@ -94,7 +94,7 @@ public class OrderController {
         model.addObject("memories", gson.toJson(memories));
         model.addObject("colors", gson.toJson(colors));
         model.addObject("order", new OrderRequest());
-        model.setViewName("html/Order/formOrder");
+        model.setViewName("html/Order/addOrder");
         return model;
     }
 
@@ -206,8 +206,11 @@ public class OrderController {
         model.addObject("order", order);
         model.addObject("orderDetails", gson.toJson(orderDetails));
         System.out.println("Order details");
+        System.out.println(gson.toJson(productVariants));
+        System.out.println(gson.toJson(memories));
+        System.out.println(gson.toJson(colors));
         System.out.println(gson.toJson(orderDetails));
-        model.setViewName("html/Order/formOrder");
+        model.setViewName("html/Order/updateOrder");
         return model;
     }
 
