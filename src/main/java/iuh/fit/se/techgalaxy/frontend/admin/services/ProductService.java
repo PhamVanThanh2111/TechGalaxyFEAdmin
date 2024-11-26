@@ -39,7 +39,9 @@ public interface ProductService {
 
     DataResponse<ProductVariantDetailResponse> getAllVariantDetailsByVariantId(String variantId);
 
-//    DataResponse<ProductVariantResponse> getAllVariants();
+    DataResponse<ProductVariantResponse> getAllVariants();
 
     DataResponse<ProductVariantResponse> findProductVariantByProductVariantDetailId(String detailId);
+
+    DataResponse<ProductDetailResponse> findProductVariantDetailByProductVariantAndColorAndMemory(String productVariantId, String color, String memory);
 }

@@ -70,7 +70,6 @@
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-<%--                                    <th>Id</th>--%>
                                     <th>Customer</th>
                                     <th>Employee</th>
                                     <th>Address</th>
@@ -81,7 +80,6 @@
                                 </thead>
                                 <tfoot>
                                 <tr>
-<%--                                    <th>Id</th>--%>
                                     <th>Customer</th>
                                     <th>Employee</th>
                                     <th>Address</th>
@@ -99,37 +97,57 @@
                                             aria-controls="collapse-${order.id}" style="cursor: pointer;"
                                             class="card-header"
                                             >
-<%--                                            <td>${order.id}</td>--%>
                                             <td>${order.customer.name}</td>
                                             <td>${order.systemUser.name}</td>
                                             <td>${order.address}</td>
                                             <td>${order.paymentStatus}</td>
                                             <td>${order.orderStatus}</td>
                                             <td>
-                                                <a href="../updateOrder.html" class="btn btn-warning btn-sm">Update</a>
-                                                <a href="../orderDetail.html" class="btn btn-info btn-sm">Detail</a>
-                                                <a href="#" class="btn btn-success btn-sm" data-toggle="modal"
-                                                   data-target="#confirmOrderModal">Confirm</a>
+                                                <c:if test="${order.orderStatus == 'NEW'}">
+                                                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal"
+                                                       data-target="#confirmOrderModal_${order.id}">Confirm</a>
+                                                    <!-- Confirm Order Modal-->
+                                                    <div class="modal fade" id="confirmOrderModal_${order.id}" tabindex="-1" role="dialog" aria-labelledby="confirmOrderModalLabel"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="confirmOrderModalLabel">Ready to confirm?</h5>
+                                                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">Select "Yes" below if you are ready to confirm this order.</div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/confirm/${order.id}">Yes</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </c:if>
                                             </td>
                                         </tr>
+
                                         <!-- Dòng collapse hiển thị chi tiết -->
                                         <tr class="collapse" id="collapse-${order.id}">
                                             <td colspan="7">
                                                 <div class="p-3">
                                                     <h6>Order Details:</h6>
                                                     <ul>
-                                                        <c:forEach var="detail" items="${order.orderDetails}">
-<%--                                                            <li>Id: ${detail.productVariantDetail.id}</li>--%>
-                                                            <li>Name: ${detail.name}</li>
-                                                            <li>Quantity: ${detail.quantity}</li>
-                                                            <li class="mb-3">Price: <%
-                                                                double price = ((OrderDetailResponse) pageContext.getAttribute("detail")).getPrice();
-                                                                Locale vietnam = new Locale("vi", "VN");
-                                                                NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(vietnam);
-                                                                String formattedPrice = currencyFormat.format(price);
-                                                                out.print(formattedPrice);
-                                                            %></li>
-                                                        </c:forEach>
+                                                        <c:if test="${order.orderDetails != null}">
+                                                            <c:forEach var="detail" items="${order.orderDetails}">
+                                                                <li>Name: ${detail.name}</li>
+                                                                <li>Quantity: ${detail.quantity}</li>
+                                                                <li class="mb-3">Price: <%
+                                                                    double price = ((OrderDetailResponse) pageContext.getAttribute("detail")).getPrice();
+                                                                    Locale vietnam = new Locale("vi", "VN");
+                                                                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(vietnam);
+                                                                    String formattedPrice = currencyFormat.format(price);
+                                                                    out.print(formattedPrice);
+                                                                %></li>
+                                                            </c:forEach>
+                                                        </c:if>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -173,26 +191,6 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 <a class="btn btn-primary" href="../login.html">Logout</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Confirm Order Modal-->
-<div class="modal fade" id="confirmOrderModal" tabindex="-1" role="dialog" aria-labelledby="confirmOrderModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmOrderModalLabel">Ready to confirm?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Yes" below if you are ready to confirm this order.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="showOrder.html">Yes</a>
             </div>
         </div>
     </div>

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -69,6 +68,7 @@ public class ProductServiceImpl implements ProductService {
                 .body(variantRequest)
                 .exchange((request, response) -> {
                             System.out.println(response.getStatusCode());
+                            System.out.println(response.getBody());
                             DataResponse<ProductVariantResponse> productVariantResponseDataResponse = null;
 
                             if (response.getBody().available() > 0) {
@@ -92,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
                             System.out.println("createVariantDetail");
                             System.out.println(response.getStatusCode());
                             DataResponse<String> detailResponseDataResponse = null;
+
                             if (response.getBody().available() > 0) {
                                 detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
                                 });
@@ -110,6 +111,7 @@ public class ProductServiceImpl implements ProductService {
                 .body(productRequest)
                 .exchange((request, response) -> {
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<ProductResponse> productResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
                         productResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -130,6 +132,7 @@ public class ProductServiceImpl implements ProductService {
                 .exchange((request, response) -> {
                     System.out.println("updateVariant");
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<ProductVariantResponse> variantResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
                         variantResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -150,6 +153,7 @@ public class ProductServiceImpl implements ProductService {
                 .exchange((request, response) -> {
                     System.out.println("updateVariantDetail");
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<Boolean> detailResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
                         detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -167,6 +171,7 @@ public class ProductServiceImpl implements ProductService {
                 .header("Authorization", "Bearer " + accessToken)
                 .exchange((request, response) -> {
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<Object> deleteResponse = null;
                     if (response.getBody().available() > 0) {
                         deleteResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -186,6 +191,7 @@ public class ProductServiceImpl implements ProductService {
                 .exchange((request, response) -> {
                     System.out.println("deleteVariant");
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<Object> deleteResponse = null;
                     if (response.getBody().available() > 0) {
                         deleteResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -205,6 +211,7 @@ public class ProductServiceImpl implements ProductService {
                 .exchange((request, response) -> {
                     System.out.println("deleteVariantDetail");
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<Object> deleteResponse = null;
                     if (response.getBody().available() > 0) {
                         deleteResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -222,7 +229,9 @@ public class ProductServiceImpl implements ProductService {
                 .uri(ENDPOINT + "/products")
                 .header("Authorization", "Bearer " + accessToken)
                 .exchange((request, response) -> {
+
                             System.out.println(response.getStatusCode());
+
                             DataResponse<ProductResponse> productResponseDataResponse = null;
                             if (response.getBody().available() > 0) {
                                 productResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -240,6 +249,7 @@ public class ProductServiceImpl implements ProductService {
                 .uri(ENDPOINT + "/products/" + productId)
                 .exchange((request, response) -> {
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
 
                     DataResponse<ProductResponse> productResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
@@ -259,6 +269,7 @@ public class ProductServiceImpl implements ProductService {
                 .exchange((request, response) -> {
                     System.out.println("getVariantById");
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<ProductVariantResponse> variantResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
                         variantResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -277,6 +288,7 @@ public class ProductServiceImpl implements ProductService {
                 .exchange((request, response) -> {
                     System.out.println("getVariantDetailById");
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<ProductDetailResponse> detailResponseDataResponse = null;
                     if (response.getBody().available() > 0) {
                         detailResponseDataResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -294,6 +306,7 @@ public class ProductServiceImpl implements ProductService {
                 .exchange((request, response) -> {
                     System.out.println("getAllProductVariantsByProductId");
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<ProductVariantResponse> variantResponses = null;
                     if (response.getBody().available() > 0) {
                         variantResponses = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -311,6 +324,7 @@ public class ProductServiceImpl implements ProductService {
                 .exchange((request, response) -> {
                     System.out.println("getAllVariantDetailsByVariantId");
                     System.out.println(response.getStatusCode());
+                    System.out.println(response.getBody());
                     DataResponse<ProductVariantDetailResponse> detailResponses = null;
                     if (response.getBody().available() > 0) {
                         detailResponses = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {
@@ -321,21 +335,14 @@ public class ProductServiceImpl implements ProductService {
                 });
     }
 
-//    @Override
-//    public DataResponse<ProductVariantResponse> getAllVariants() {
-//        return restClient.get()
-//                .uri(ENDPOINT + "/products/variants")
-//                .exchange((request, response) -> {
-//                    System.out.println("getAllVariants");
-//                    System.out.println(response.getStatusCode());
-//                    DataResponse<ProductVariantResponse> allVariantsResponse = null;
-//                    if (response.getBody().available() > 0) {
-//                        allVariantsResponse = objectMapper.readValue(response.getBody().readAllBytes(), new TypeReference<>() {});
-//                    }
-//                    assert allVariantsResponse != null;
-//                    return allVariantsResponse;
-//                });
-//    }
+    @Override
+    public DataResponse<ProductVariantResponse> getAllVariants() {
+        return restClient.get()
+                .uri(ENDPOINT + "/products/variants/all")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
 
     @Override
     public DataResponse<ProductVariantResponse> findProductVariantByProductVariantDetailId(String detailId) {
@@ -345,5 +352,16 @@ public class ProductServiceImpl implements ProductService {
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {
                 });
+    }
+
+    @Override
+    public DataResponse<ProductDetailResponse> findProductVariantDetailByProductVariantAndColorAndMemory(String productVariantId, String color, String memory) {
+        return restClient.get()
+                .uri(ENDPOINT + "/products/variants/details/getProductVariantDetailByProductVariantAndColorAndMemory?" +
+                        "productVariantId=" + productVariantId
+                        + "&color=" + color
+                        + "&memory=" + memory)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
     }
 }
