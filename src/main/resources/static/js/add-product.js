@@ -81,7 +81,7 @@ function addVariantDetail(variantIndex) {
         <!-- Sale -->
         <div class="form-group">
             <label class="form-label font-weight-bold text-dark">Giảm Giá</label>
-            <input type="number" class="form-control" name="variants[${variantIndex}].details[${detailIndex}].sale" placeholder="Nhập giảm giá" required>
+            <input type="number" class="form-control" name="variants[${variantIndex}].details[${detailIndex}].sale" placeholder="Nhập giảm giá" required min="0" step="0.01" max="1">
             <small class="text-danger"></small>
         </div>
 
@@ -164,6 +164,11 @@ function updateDetailIndices(variantIndex) {
 document.getElementById('addProductForm').addEventListener('submit', function (e) {
     e.preventDefault();
     let isValid = true;
+    console.log('submit');
+    const productName = document.getElementById('name');
+    if (!validateField(productName, 'Tên sản phẩm không được để trống và phải từ 5 đến 24 ký tự.', 5, 24)) {
+        isValid = false;
+    }
 
     // Kiểm tra từng variant
     document.querySelectorAll('.variant-container').forEach((variant, variantIndex) => {
@@ -175,6 +180,10 @@ document.getElementById('addProductForm').addEventListener('submit', function (e
             } else {
                 clearError(detail);
             }
+            const sale = detail.querySelector(`input[name="variants[${variantIndex}].details[${detailIndex}].sale"]`);
+            if (!validateSale(sale, `Giảm giá cho Detail ${detailIndex + 1} của Variant ${detailIndex + 1} phải từ 0.00 đến 1.00.`)) {
+                isValid = false;
+            }
         });
     });
 
@@ -184,15 +193,35 @@ document.getElementById('addProductForm').addEventListener('submit', function (e
 });
 
 function showError(element, message) {
-    const error = element.querySelector('.text-danger');
-    if (error) {
-        error.textContent = message;
-    } else {
-        const errorElement = document.createElement('small');
-        errorElement.className = 'text-danger';
-        errorElement.textContent = message;
-        element.appendChild(errorElement);
+    // Lấy parent của input (thường là .form-group)
+    const parent = element.closest('.form-group');
+    if (!parent) {
+        console.error("Không tìm thấy parent chứa lỗi cho phần tử:", element);
+        return;
     }
+
+    // Kiểm tra xem đã có phần tử .text-danger trong parent chưa
+    let errorElement = parent.querySelector('.text-danger');
+    if (!errorElement) {
+        // Nếu chưa có, tạo mới
+        errorElement = document.createElement('small');
+        errorElement.className = 'text-danger';
+        parent.appendChild(errorElement);
+    }
+
+    // Đặt nội dung thông báo lỗi
+    errorElement.textContent = message;
+}
+
+function validateSale(input, errorMessage) {
+    const value = parseFloat(input.value);
+    console.log(value);
+    if (isNaN(value) || value < 0.00 || value > 1.00) {
+        showError(input, errorMessage);
+        return false;
+    }
+    clearError(input);
+    return true;
 }
 
 function clearError(element) {
@@ -200,4 +229,13 @@ function clearError(element) {
     if (error) {
         error.textContent = '';
     }
+}
+function validateField(input, errorMessage, minLength = 1, maxLength = Infinity) {
+    console.log(input);
+    if (!input || input.value.trim().length < minLength || input.value.trim().length > maxLength) {
+        showError(input, errorMessage);
+        return false;
+    }
+    clearError(input);
+    return true;
 }

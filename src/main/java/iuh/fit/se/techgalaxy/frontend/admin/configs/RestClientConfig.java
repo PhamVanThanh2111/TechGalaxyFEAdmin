@@ -9,9 +9,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
-public class RestClientConfig implements WebMvcConfigurer {
+public class RestClientConfig {
+
     @Bean
-    RestClient restClient() {
+    public RestClient restClient() {
         return RestClient.builder().build();
     }
 }

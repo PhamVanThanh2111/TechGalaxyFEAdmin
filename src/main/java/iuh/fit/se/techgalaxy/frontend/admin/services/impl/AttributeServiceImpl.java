@@ -76,10 +76,11 @@ public class AttributeServiceImpl implements AttributeService {
 
 
     @Override
-    public DataResponse<Object> createAttributeValueByVariantId(String variantId, List<AttributeValueRequest> values) {
+    public DataResponse<Object> createAttributeValueByVariantId(String variantId, List<AttributeValueRequest> values, String accessToken) {
         values.forEach(System.out::println);
         return restClient.post()
                 .uri(ENDPOINT + "/attributes/productvariant/" + variantId)
+                .header("Authorization", "Bearer " + accessToken)
                 .body(values)
                 .exchange((request, response) -> {
                     System.out.println("createAttributeValueByVariantId");
@@ -113,9 +114,10 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public DataResponse<ValueResponse> updateValueProductVariant(String variantId, AttributeValueUpdateRequest attributeValueRequest) {
+    public DataResponse<ValueResponse> updateValueProductVariant(String variantId, AttributeValueUpdateRequest attributeValueRequest, String accessToken) {
         return restClient.put()
                 .uri(ENDPOINT + "/attributes/productvariant/" + variantId)
+                .header("Authorization", "Bearer " + accessToken)
                 .body(attributeValueRequest)
                 .exchange((request, response) -> {
                             System.out.println("updateValueProductVariant");
@@ -132,9 +134,10 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public DataResponse<ValueResponse> deleteValue(String valueId) {
+    public DataResponse<ValueResponse> deleteValue(String valueId, String accessToken) {
         return restClient.delete()
                 .uri(ENDPOINT + "/attributes/value/" + valueId)
+                .header("Authorization", "Bearer " + accessToken)
                 .exchange((request, response) -> {
                             System.out.println("deleteValue");
                             System.out.println(response.getStatusCode());
