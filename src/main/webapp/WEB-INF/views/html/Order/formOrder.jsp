@@ -175,6 +175,7 @@
     const productVariants = ${productVariants};
     const memories = ${memories};
     const colors = ${colors};
+    const orderDetails = ${orderDetails};
 </script>
 <script src="<c:url value="/js/addProduct_Order.js" />"></script>
 

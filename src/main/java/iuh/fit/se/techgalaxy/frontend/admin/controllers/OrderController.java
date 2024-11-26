@@ -1,6 +1,8 @@
 package iuh.fit.se.techgalaxy.frontend.admin.controllers;
 
 import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.CustomerRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.OrderDetailRequest;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.request.OrderRequest;
@@ -19,7 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -171,10 +175,38 @@ public class OrderController {
 
     @GetMapping("/update/{id}")
     public ModelAndView updateOrder(ModelAndView model, @PathVariable String id) {
+        List<ProductVariantResponse> productVariants = (List<ProductVariantResponse>) productService.getAllVariants().getData();
+        productVariants.forEach(productVariant -> {
+            List<ProductVariantDetailResponse> productVariantDetails = (List<ProductVariantDetailResponse>) productService.getAllVariantDetailsByVariantId(productVariant.getId()).getData();
+            productVariant.setProductVariantDetails(productVariantDetails);
+        });
+
+        List<Memory> memories = (List<Memory>) memoryService.getAllMemories().getData();
+        List<Color> colors = (List<Color>) colorService.getAllColors().getData();
+
         OrderResponse order = ((List<OrderResponse>) orderService.getById(id).getData()).get(0);
         List<OrderDetailResponse> orderDetails = (List<OrderDetailResponse>) orderDetailService.getOrderDetail(id).getData();
+        orderDetails.forEach(orderDetail -> {
+            ProductDetailResponse productVariantDetail = ((List<ProductDetailResponse>) productService.getVariantDetailById(orderDetail.getProductVariantDetail().getId()).getData()).get(0);
+            String productVariantName = ((List<ProductVariantResponse>) productService.findProductVariantByProductVariantDetailId(orderDetail.getProductVariantDetail().getId()).getData()).get(0).getName();
+            orderDetail.setName(productVariantName);
+            orderDetail.getProductVariantDetail().setColor(productVariantDetail.getColor());
+            orderDetail.getProductVariantDetail().setMemory(productVariantDetail.getMemory());
+        });
+
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .create();
+
+        model.addObject("productVariants", gson.toJson(productVariants));
+        model.addObject("memories", gson.toJson(memories));
+        model.addObject("colors", gson.toJson(colors));
         model.addObject("order", order);
-        model.addObject("orderDetails", orderDetails);
+        model.addObject("orderDetails", gson.toJson(orderDetails));
+        System.out.println("Order details");
+        System.out.println(gson.toJson(orderDetails));
         model.setViewName("html/Order/formOrder");
         return model;
     }
@@ -190,6 +222,24 @@ public class OrderController {
         @Override
         public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             return LocalDateTime.parse(json.getAsString(), formatter);
+        }
+    }
+
+    public static class LocalDateAdapter extends TypeAdapter<LocalDate> {
+        private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+
+        @Override
+        public void write(JsonWriter out, LocalDate value) throws IOException {
+            if (value == null) {
+                out.nullValue();
+            } else {
+                out.value(value.format(formatter));
+            }
+        }
+
+        @Override
+        public LocalDate read(JsonReader in) throws IOException {
+            return LocalDate.parse(in.nextString(), formatter);
         }
     }
 }
