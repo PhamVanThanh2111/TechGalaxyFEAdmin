@@ -14,6 +14,9 @@ public interface SystemUserService {
 
     DataResponse<SystemUserResponseDTO> findByEmail(String email);
 
+    //Sua thanh vay
+    DataResponse<SystemUserResponseDTO> findByEmail(String email,String accessToken);
+
     DataResponse<SystemUserResponseDTO> create(SystemUserRequestDTO systemUserRequestDTO);
 
     DataResponse<SystemUserResponseDTO> update(SystemUserRequestDTO systemUserRequestDTO);

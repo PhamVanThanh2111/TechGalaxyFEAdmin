@@ -35,4 +35,12 @@ public class RoleServiceImpl implements RoleService {
                 .body(new ParameterizedTypeReference<>() {});
     }
 
+    @Override
+    public DataResponse<RoleResponse> getRoleByEmail(String email, String accessToken) {
+        return restClient.get()
+                .uri(ENDPOINT + "/roles/email/" + email)
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
 }

@@ -74,6 +74,17 @@ public class SystemUserServiceImpl implements SystemUserService {
                 .body(new ParameterizedTypeReference<>() {});
     }
 
+    //Sua thanh vay
+    @Override
+    public DataResponse<SystemUserResponseDTO> findByEmail(String email,String accessToken) {
+        return restClient.get()
+                .uri(ENDPOINT + "/system-users/email/" + email)
+                .header("Authorization", "Bearer " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
     @Override
     public DataResponse<SystemUserResponseDTO> create(SystemUserRequestDTO systemUserRequestDTO) {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();

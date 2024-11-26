@@ -7,4 +7,6 @@ public interface RoleService {
     DataResponse<RoleResponse> findAll();
 
     DataResponse<RoleResponse> findById(String id);
+
+    DataResponse<RoleResponse> getRoleByEmail(String email, String accessToken);
 }
