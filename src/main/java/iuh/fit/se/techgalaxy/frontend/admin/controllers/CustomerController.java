@@ -103,6 +103,11 @@ public class CustomerController {
             if (customerRequest.getId() == null || customerRequest.getId().isEmpty()) { // add new customer
                 customerService.save(customerRequest, accessToken);
             } else { // update customer
+                if (customerRequest.getAvatar() == null || customerRequest.getAvatar().isEmpty()) {
+                    CustomerResponse customerResponse = ((List<CustomerResponse>) customerService.findById(customerRequest.getId(), accessToken).getData()).get(0);
+                    System.out.println(customerResponse.getAvatar());
+                    customerRequest.setAvatar(customerResponse.getAvatar());
+                }
                 customerService.update(customerRequest, accessToken);
             }
             model.setViewName("redirect:/customers");

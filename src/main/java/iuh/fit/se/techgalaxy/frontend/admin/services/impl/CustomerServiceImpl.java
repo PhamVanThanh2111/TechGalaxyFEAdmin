@@ -16,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -99,6 +98,7 @@ public class CustomerServiceImpl implements CustomerService {
                     DataResponse<UserRegisterResponse> dataAccountResponse = null;
                     if (response.getBody().available() > 0) {
                         dataAccountResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+                        System.out.println("Data Account Response: " + dataAccountResponse);
                     }
                     assert dataAccountResponse != null;
                     return dataAccountResponse;
@@ -126,9 +126,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(customerRequest)
                 .exchange((request, response) -> {
-                    String responseBody = new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8);
-                    System.out.println("Response Body: " + responseBody);
-
                     DataResponse<CustomerResponse> dataResponse = null;
                     if (response.getBody().available() > 0) {
                         dataResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {
@@ -148,12 +145,10 @@ public class CustomerServiceImpl implements CustomerService {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(customerRequest)
                 .exchange((request, response) -> {
-                    String responseBody = new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8);
-                    System.out.println("Response Body: " + responseBody);
-
                     DataResponse<CustomerResponse> dataResponse = null;
                     if (response.getBody().available() > 0) {
                         dataResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+                        System.out.println("Data Response: " + dataResponse.getData());
                     }
                     assert dataResponse != null;
                     return dataResponse;
