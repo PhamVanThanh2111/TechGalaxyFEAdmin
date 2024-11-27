@@ -6,15 +6,15 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
 
 public interface CustomerService {
-    DataResponse<CustomerResponse> findByEmail(String email);
+    DataResponse<CustomerResponse> findByEmail(String email, String accessToken);
 
-    DataResponse<CustomerResponse> findAll();
+    DataResponse<CustomerResponse> findAll(String accessToken);
 
-    DataResponse<CustomerResponse> findById(String id);
+    DataResponse<CustomerResponse> findById(String id, String accessToken);
 
-    DataResponse<CustomerResponse> save(CustomerRequest customerRequest) throws JsonProcessingException;
+    DataResponse<CustomerResponse> save(CustomerRequest customerRequest, String accessToken) throws JsonProcessingException;
 
-    DataResponse<CustomerResponse> update(CustomerRequest customerRequest);
+    DataResponse<CustomerResponse> update(CustomerRequest customerRequest, String accessToken) throws JsonProcessingException;
 
-    DataResponse<Boolean> delete(String id);
+    DataResponse<Boolean> delete(String id, String accessToken);
 }

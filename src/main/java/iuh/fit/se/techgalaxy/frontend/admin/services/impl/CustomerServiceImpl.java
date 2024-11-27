@@ -11,6 +11,7 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UserRegisterResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Account;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.Gender;
 import iuh.fit.se.techgalaxy.frontend.admin.services.CustomerService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -51,27 +52,30 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public DataResponse<CustomerResponse> findByEmail(String email) {
+    public DataResponse<CustomerResponse> findByEmail(String email, String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/customers/email/" + email)
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
-    public DataResponse<CustomerResponse> findAll() {
+    public DataResponse<CustomerResponse> findAll(String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/customers")
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
-    public DataResponse<CustomerResponse> findById(String id) {
+    public DataResponse<CustomerResponse> findById(String id, String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/customers/" + id)
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {
@@ -80,7 +84,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     // save account and customer information
     @Override
-    public DataResponse<CustomerResponse> save(CustomerRequest customerRequest) throws JsonProcessingException {
+    public DataResponse<CustomerResponse> save(CustomerRequest customerRequest, String accessToken) throws JsonProcessingException {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setEmail(customerRequest.getAccount().getEmail());
         userRegisterRequest.setPassword("123456");
@@ -88,6 +92,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         DataResponse<UserRegisterResponse> accountResponse = restClient.post()
                 .uri(ENDPOINT + "/api/accounts/auth/create-customer-account")
+                .header("Authorization", "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(userRegisterRequest)
@@ -118,6 +123,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         return restClient.post()
                 .uri(ENDPOINT + "/customers")
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(customerRequest)
                 .exchange((request, response) -> {
@@ -135,10 +141,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public DataResponse<CustomerResponse> update(CustomerRequest customerRequest) {
+    public DataResponse<CustomerResponse> update(CustomerRequest customerRequest, String accessToken) throws JsonProcessingException {
         setDefaultAvatarIfMissing(customerRequest);
         return restClient.put()
                 .uri(ENDPOINT + "/customers/" + customerRequest.getId())
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(customerRequest)
                 .exchange((request, response) -> {
@@ -155,9 +162,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public DataResponse<Boolean> delete(String id) {
+    public DataResponse<Boolean> delete(String id, String accessToken) {
         return restClient.delete()
                 .uri(ENDPOINT + "/customers/" + id)
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {
