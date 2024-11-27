@@ -20,27 +20,30 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public DataResponse<AccountResponse> findAll() {
+    public DataResponse<AccountResponse> findAll(String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/api/accounts")
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
-    public DataResponse<AccountResponse> findById(String id) {
+    public DataResponse<AccountResponse> findById(String id, String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/api/accounts/" + id)
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
-    public DataResponse<AccountUpdateResponse> update(AccountUpdateRequest accountUpdateRequest) {
+    public DataResponse<AccountUpdateResponse> update(AccountUpdateRequest accountUpdateRequest, String accessToken) {
         return restClient.put()
                 .uri(ENDPOINT + "/api/accounts")
+                .header("Authorization", "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(accountUpdateRequest)
@@ -49,9 +52,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public DataResponse<AccountUpdateResponse> updateWithoutPassword(AccountUpdateRequest accountUpdateRequest) {
+    public DataResponse<AccountUpdateResponse> updateWithoutPassword(AccountUpdateRequest accountUpdateRequest, String accessToken) {
         return restClient.put()
                 .uri(ENDPOINT + "/api/accounts/update-account-without-password")
+                .header("Authorization", "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(accountUpdateRequest)
@@ -60,9 +64,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean existsByEmail(String email) {
+    public boolean existsByEmail(String email, String accessToken) {
         return Boolean.TRUE.equals(restClient.get()
                 .uri(ENDPOINT + "/api/accounts/exists-by-email/" + email)
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(Boolean.class));
