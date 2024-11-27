@@ -16,9 +16,11 @@ import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.OrderStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.PaymentStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.mapper.OrderMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.services.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
@@ -52,8 +54,34 @@ public class OrderController {
     }
 
     @GetMapping
-    public ModelAndView showOrders(ModelAndView model) {
-        DataResponse<OrderResponse> response = orderService.getAll();
+    public ModelAndView showOrders(ModelAndView model, HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            model.setViewName("redirect:/login");
+            return model;
+        }
+        try {
+            DataResponse<OrderResponse> response = orderService.getAll(accessToken);
+            List<OrderResponse> orders = getOrderResponses(response);
+            model.setViewName("html/Order/showOrder");
+            model.addObject("orders", orders);
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
+            return model;
+        }
+    }
+
+    private List<OrderResponse> getOrderResponses(DataResponse<OrderResponse> response) {
         List<OrderResponse> orders = null;
         if (response != null) {
             orders = (List<OrderResponse>) response.getData();
@@ -66,10 +94,7 @@ public class OrderController {
                 order.setOrderDetails(orderDetails);
             });
         }
-
-        model.setViewName("html/Order/showOrder");
-        model.addObject("orders", orders);
-        return model;
+        return orders;
     }
 
     @GetMapping("/add")
@@ -102,116 +127,178 @@ public class OrderController {
     public ModelAndView saveOrder(@ModelAttribute("order") OrderRequest orderRequest,
                                   @RequestParam("productCount") int productCount,
                                   @RequestParam Map<String, String> params,
-                                  ModelAndView model) {
-        // Customer
-        CustomerResponse customer = orderRequest.getCustomer();
-        if (accountService.existsByEmail(orderRequest.getCustomer().getAccount().getEmail())) { // co customer trong dbs
-            CustomerResponse customerFindByEmail = ((List<CustomerResponse>) customerService.findByEmail(orderRequest.getCustomer().getAccount().getEmail()).getData()).get(0);
-            orderRequest.setCustomer(customerFindByEmail);
-        } else {
-            CustomerRequest customerRequest = new CustomerRequest();
-            customerRequest.setUserStatus(CustomerStatus.ACTIVE);
-            customerRequest.setAccount(orderRequest.getCustomer().getAccount());
-            orderRequest.setCustomer(customer);
+                                  ModelAndView model,
+                                  HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            model.setViewName("redirect:/login");
+            return model;
         }
+        try {
+            // Customer
+            CustomerResponse customer = orderRequest.getCustomer();
+            if (accountService.existsByEmail(orderRequest.getCustomer().getAccount().getEmail())) { // co customer trong dbs
+                CustomerResponse customerFindByEmail = ((List<CustomerResponse>) customerService.findByEmail(orderRequest.getCustomer().getAccount().getEmail(), accessToken).getData()).get(0);
+                orderRequest.setCustomer(customerFindByEmail);
+            } else {
+                CustomerRequest customerRequest = new CustomerRequest();
+                customerRequest.setUserStatus(CustomerStatus.ACTIVE);
+                customerRequest.setAccount(orderRequest.getCustomer().getAccount());
+                orderRequest.setCustomer(customer);
+            }
 
-        // SystemUser
-        SystemUserResponse systemUser = new SystemUserResponse();
-        systemUser.setId("b9fb6795-edb9-4ed1-9804-615b9e381f2a");
-        orderRequest.setSystemUser(systemUser);
+            // SystemUser
+            SystemUserResponse systemUser = new SystemUserResponse();
+            systemUser.setId("b9fb6795-edb9-4ed1-9804-615b9e381f2a");
+            orderRequest.setSystemUser(systemUser);
 
-        // Address
-        String address = orderRequest.getAddress();
-        orderRequest.setAddress(address);
+            // Address
+            String address = orderRequest.getAddress();
+            orderRequest.setAddress(address);
 
-        // Payment status
-        orderRequest.setPaymentStatus(PaymentStatus.PENDING);
+            // Payment status
+            orderRequest.setPaymentStatus(PaymentStatus.PENDING);
 
-        // Order status
-        orderRequest.setOrderStatus(OrderStatus.NEW);
+            // Order status
+            orderRequest.setOrderStatus(OrderStatus.NEW);
 
-        // Save order
-        OrderResponse orderResponse = ((List<OrderResponse>) orderService.create(orderRequest).getData()).get(0);
+            // Save order
+            OrderResponse orderResponse = ((List<OrderResponse>) orderService.create(orderRequest, accessToken).getData()).get(0);
 
-        // Save order detail
-        OrderDetailRequest orderDetailRequest = new OrderDetailRequest();
-        for (int i = 1; i <= productCount; i++) {
-            String productVariantId = params.get("productName[" + i + "]");
-            int quantity = Integer.parseInt(params.get("quantity[" + i + "]"));
-            String memoryId = params.get("memory[" + i + "]");
-            String colorId = params.get("color[" + i + "]");
-            double price = Double.parseDouble(params.get("price[" + i + "]").replaceAll(",", ""));
+            // Save order detail
+            OrderDetailRequest orderDetailRequest = new OrderDetailRequest();
+            for (int i = 1; i <= productCount; i++) {
+                String productVariantId = params.get("productName[" + i + "]");
+                int quantity = Integer.parseInt(params.get("quantity[" + i + "]"));
+                String memoryId = params.get("memory[" + i + "]");
+                String colorId = params.get("color[" + i + "]");
+                double price = Double.parseDouble(params.get("price[" + i + "]").replaceAll(",", ""));
 //            System.out.println(productVariantId + " " + quantity + " " + memoryId + " " + colorId + " " + price);
 
-            ProductVariantResponse productVariant = new ProductVariantResponse();
-            productVariant.setId(productVariantId);
+                ProductVariantResponse productVariant = new ProductVariantResponse();
+                productVariant.setId(productVariantId);
 
-            ProductVariantDetailResponse productVariantDetail = new ProductVariantDetailResponse();
-            ProductDetailResponse response = ((List<ProductDetailResponse>) productService.findProductVariantDetailByProductVariantAndColorAndMemory(productVariantId, colorId, memoryId).getData()).get(0);
-            productVariantDetail.setId(response.getId());
+                ProductVariantDetailResponse productVariantDetail = new ProductVariantDetailResponse();
+                ProductDetailResponse response = ((List<ProductDetailResponse>) productService.findProductVariantDetailByProductVariantAndColorAndMemory(productVariantId, colorId, memoryId).getData()).get(0);
+                productVariantDetail.setId(response.getId());
 
-            orderDetailRequest.setDetailStatus(DetailStatus.PENDING);
-            orderDetailRequest.setOrder(orderResponse);
-            orderDetailRequest.setProductVariantDetail(productVariantDetail);
-            orderDetailRequest.setQuantity(quantity);
-            orderDetailRequest.setPrice(price / quantity);
+                orderDetailRequest.setDetailStatus(DetailStatus.PENDING);
+                orderDetailRequest.setOrder(orderResponse);
+                orderDetailRequest.setProductVariantDetail(productVariantDetail);
+                orderDetailRequest.setQuantity(quantity);
+                orderDetailRequest.setPrice(price / quantity);
 
-            orderDetailService.createOrderDetail(orderDetailRequest);
+                orderDetailService.createOrderDetail(orderDetailRequest);
+            }
+
+            model.setViewName("redirect:/orders");
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
+            return model;
         }
-
-        model.setViewName("redirect:/orders");
-        return model;
     }
 
     @GetMapping("/confirm/{id}")
-    public ModelAndView confirm(@PathVariable String id, ModelAndView model) {
-        OrderResponse order = ((List<OrderResponse>) orderService.getById(id).getData()).get(0);
-        order.setOrderStatus(OrderStatus.PROCESSING);
-        Order orderUpdate = OrderMapper.INSTANCE.toOrderFromResponse(order);
-        orderService.update(OrderMapper.INSTANCE.toOrderRequest(orderUpdate));
-        model.setViewName("redirect:/orders");
-        return model;
+    public ModelAndView confirm(@PathVariable String id,
+                                ModelAndView model,
+                                HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            model.setViewName("redirect:/login");
+            return model;
+        }
+        try {
+            OrderResponse order = ((List<OrderResponse>) orderService.getById(id, accessToken).getData()).get(0);
+            order.setOrderStatus(OrderStatus.PROCESSING);
+            Order orderUpdate = OrderMapper.INSTANCE.toOrderFromResponse(order);
+            orderService.update(OrderMapper.INSTANCE.toOrderRequest(orderUpdate), accessToken);
+            model.setViewName("redirect:/orders");
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
+            return model;
+        }
     }
 
     @GetMapping("/update/{id}")
-    public ModelAndView updateOrder(ModelAndView model, @PathVariable String id) {
-        List<ProductVariantResponse> productVariants = (List<ProductVariantResponse>) productService.getAllVariants().getData();
-        productVariants.forEach(productVariant -> {
-            List<ProductVariantDetailResponse> productVariantDetails = (List<ProductVariantDetailResponse>) productService.getAllVariantDetailsByVariantId(productVariant.getId()).getData();
-            productVariant.setProductVariantDetails(productVariantDetails);
-        });
+    public ModelAndView updateOrder(ModelAndView model,
+                                    @PathVariable String id,
+                                    HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            model.setViewName("redirect:/login");
+            return model;
+        }
+        try {
+            List<ProductVariantResponse> productVariants = (List<ProductVariantResponse>) productService.getAllVariants().getData();
+            productVariants.forEach(productVariant -> {
+                List<ProductVariantDetailResponse> productVariantDetails = (List<ProductVariantDetailResponse>) productService.getAllVariantDetailsByVariantId(productVariant.getId()).getData();
+                productVariant.setProductVariantDetails(productVariantDetails);
+            });
 
-        List<Memory> memories = (List<Memory>) memoryService.getAllMemories().getData();
-        List<Color> colors = (List<Color>) colorService.getAllColors().getData();
+            List<Memory> memories = (List<Memory>) memoryService.getAllMemories().getData();
+            List<Color> colors = (List<Color>) colorService.getAllColors().getData();
 
-        OrderResponse order = ((List<OrderResponse>) orderService.getById(id).getData()).get(0);
-        List<OrderDetailResponse> orderDetails = (List<OrderDetailResponse>) orderDetailService.getOrderDetail(id).getData();
-        orderDetails.forEach(orderDetail -> {
-            ProductDetailResponse productVariantDetail = ((List<ProductDetailResponse>) productService.getVariantDetailById(orderDetail.getProductVariantDetail().getId()).getData()).get(0);
-            String productVariantName = ((List<ProductVariantResponse>) productService.findProductVariantByProductVariantDetailId(orderDetail.getProductVariantDetail().getId()).getData()).get(0).getName();
-            orderDetail.setName(productVariantName);
-            orderDetail.getProductVariantDetail().setColor(productVariantDetail.getColor());
-            orderDetail.getProductVariantDetail().setMemory(productVariantDetail.getMemory());
-        });
+            OrderResponse order = ((List<OrderResponse>) orderService.getById(id, accessToken).getData()).get(0);
+            List<OrderDetailResponse> orderDetails = (List<OrderDetailResponse>) orderDetailService.getOrderDetail(id).getData();
+            orderDetails.forEach(orderDetail -> {
+                ProductDetailResponse productVariantDetail = ((List<ProductDetailResponse>) productService.getVariantDetailById(orderDetail.getProductVariantDetail().getId()).getData()).get(0);
+                String productVariantName = ((List<ProductVariantResponse>) productService.findProductVariantByProductVariantDetailId(orderDetail.getProductVariantDetail().getId()).getData()).get(0).getName();
+                orderDetail.setName(productVariantName);
+                orderDetail.getProductVariantDetail().setColor(productVariantDetail.getColor());
+                orderDetail.getProductVariantDetail().setMemory(productVariantDetail.getMemory());
+            });
 
 
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .create();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                    .create();
 
-        model.addObject("productVariants", gson.toJson(productVariants));
-        model.addObject("memories", gson.toJson(memories));
-        model.addObject("colors", gson.toJson(colors));
-        model.addObject("order", order);
-        model.addObject("orderDetails", gson.toJson(orderDetails));
-        System.out.println("Order details");
-        System.out.println(gson.toJson(productVariants));
-        System.out.println(gson.toJson(memories));
-        System.out.println(gson.toJson(colors));
-        System.out.println(gson.toJson(orderDetails));
-        model.setViewName("html/Order/updateOrder");
-        return model;
+            model.addObject("productVariants", gson.toJson(productVariants));
+            model.addObject("memories", gson.toJson(memories));
+            model.addObject("colors", gson.toJson(colors));
+            model.addObject("order", order);
+            model.addObject("orderDetails", gson.toJson(orderDetails));
+            System.out.println("Order details");
+            System.out.println(gson.toJson(productVariants));
+            System.out.println(gson.toJson(memories));
+            System.out.println(gson.toJson(colors));
+            System.out.println(gson.toJson(orderDetails));
+            model.setViewName("html/Order/updateOrder");
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
+            return model;
+        }
     }
 
     public static class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {

@@ -23,18 +23,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public DataResponse<OrderResponse> getAll() {
+    public DataResponse<OrderResponse> getAll(String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/orders")
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
-    public DataResponse<OrderResponse> create(OrderRequest orderRequest) {
+    public DataResponse<OrderResponse> create(OrderRequest orderRequest, String accessToken) {
         return restClient.post()
                 .uri(ENDPOINT + "/orders")
+                .header("Authorization", "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(orderRequest)
@@ -50,18 +52,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public DataResponse<OrderResponse> getById(String id) {
+    public DataResponse<OrderResponse> getById(String id, String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/orders/" + id)
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
-    public DataResponse<OrderResponse> update(OrderRequest orderRequest) {
+    public DataResponse<OrderResponse> update(OrderRequest orderRequest, String accessToken) {
         return restClient.put()
                 .uri(ENDPOINT + "/orders/" + orderRequest.getId())
+                .header("Authorization", "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(orderRequest)
