@@ -21,9 +21,9 @@ public class FileServiceImpl implements FileService {
     private final ObjectMapper objectMapper;
     private static final String ENDPOINT = "http://localhost:8081";
 
-    public FileServiceImpl(RestClient restClient, ObjectMapper objectMapper, ObjectMapper objectMapper1) {
+    public FileServiceImpl(RestClient restClient, ObjectMapper objectMapper) {
         this.restClient = restClient;
-        this.objectMapper = objectMapper1;
+        this.objectMapper = objectMapper;
     }
 
     @Override

@@ -98,8 +98,17 @@
                                             <td>${sys_user.address}</td>
                                             <td>${sys_user.systemUserStatus}</td>
                                             <td>${sys_user.level}</td>
-                                            <td><img src="<c:url value="/img/${sys_user.avatar}"/>" alt="avatar"
-                                                     width="55" height="55"></td>
+                                            <td>
+                                                <c:if test="${sys_user.avatar != null}">
+                                                    <img src="<c:url value="http://localhost:8081/storage/systemUser/avatar/${sys_user.avatar}"/>" alt="avatar"
+                                                         width="55" height="55">
+                                                </c:if>
+                                                <c:if test="${sys_user.avatar == null}">
+                                                    <img src="<c:url value='${sys_user.gender == "FEMALE" ? "/img/undraw_profile_1.svg" : "/img/undraw_profile.svg"}' />"
+                                                         alt="avatar"
+                                                         width="55" height="55">
+                                                </c:if>
+                                            </td>
                                             <td style="width: 18%">
                                                 <a
                                                         href="${pageContext.request.contextPath}/systemUsers/update/${sys_user.id}"

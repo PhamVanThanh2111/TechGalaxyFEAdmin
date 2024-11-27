@@ -80,8 +80,7 @@ public class SystemUserController {
                              @RequestParam MultipartFile avatar,
                              BindingResult bindingResult,
                              ModelAndView model,
-                             HttpSession session
-    ) throws IOException, URISyntaxException {
+                             HttpSession session) throws IOException, URISyntaxException {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             new ModelAndView("redirect:/login");
@@ -100,6 +99,10 @@ public class SystemUserController {
             if (request.getId() == null || request.getId().isEmpty()) {
                 systemUserService.create(request, accessToken);
             } else {
+                if (request.getAvatar() == null || request.getAvatar().isEmpty()) {
+                    SystemUserResponseDTO tmp = ((List<SystemUserResponseDTO>) systemUserService.findById(request.getId(), accessToken).getData()).get(0);
+                    request.setAvatar(tmp.getAvatar());
+                }
                 systemUserService.update(request, accessToken);
             }
             model.setViewName("redirect:/systemUsers");

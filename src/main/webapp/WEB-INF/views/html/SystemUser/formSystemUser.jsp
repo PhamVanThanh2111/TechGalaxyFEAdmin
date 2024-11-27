@@ -77,7 +77,8 @@
                             <div class="card-body">
                                 <form:form role="form" action="${pageContext.request.contextPath}/systemUsers/save"
                                            method="POST" modelAttribute="systemUserRequestDTO"
-                                           cssClass="needs-validation">
+                                           cssClass="needs-validation"
+                                           enctype="multipart/form-data">
                                     <c:if test="${systemUserRequestDTO.getId() != null}">
                                         <div class="form-group">
                                             <form:input path="id" type="hidden"/>
