@@ -6,6 +6,7 @@ import iuh.fit.se.techgalaxy.frontend.admin.entities.Color;
 import java.util.List;
 
 public interface ColorService {
-    public DataResponse<Color> getAllColors();
-    public DataResponse<Color> getColorById(String id);
+    DataResponse<Color> getAllColors();
+
+    DataResponse<Color> getColorById(String id);
 }

@@ -137,7 +137,7 @@ public class OrderController {
         try {
             // Customer
             CustomerResponse customer = orderRequest.getCustomer();
-            if (accountService.existsByEmail(orderRequest.getCustomer().getAccount().getEmail())) { // co customer trong dbs
+            if (accountService.existsByEmail(orderRequest.getCustomer().getAccount().getEmail(), accessToken)) { // co customer trong dbs
                 CustomerResponse customerFindByEmail = ((List<CustomerResponse>) customerService.findByEmail(orderRequest.getCustomer().getAccount().getEmail(), accessToken).getData()).get(0);
                 orderRequest.setCustomer(customerFindByEmail);
             } else {

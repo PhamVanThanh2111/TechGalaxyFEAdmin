@@ -96,7 +96,7 @@ public class CustomerController {
                 return model;
             }
             if (!avatar.isEmpty()) {
-                DataResponse<UploadFileResponse> response = fileService.uploadFile(avatar, "customer/avatar");
+                DataResponse<UploadFileResponse> response = fileService.uploadFile(avatar, "customer/avatar", accessToken);
                 UploadFileResponse uploadFileResponse = ((List<UploadFileResponse>) response.getData()).get(0);
                 System.out.println(uploadFileResponse.getFileName());
                 customerRequest.setAvatar(uploadFileResponse.getFileName());

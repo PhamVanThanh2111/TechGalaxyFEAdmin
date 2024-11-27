@@ -92,7 +92,7 @@ public class SystemUserController {
                 return model;
             }
             if (!avatar.isEmpty()) {
-                DataResponse<UploadFileResponse> response = fileService.uploadFile(avatar, "systemUser/avatar");
+                DataResponse<UploadFileResponse> response = fileService.uploadFile(avatar, "systemUser/avatar", accessToken);
                 UploadFileResponse uploadFileResponse = ((List<UploadFileResponse>) response.getData()).get(0);
                 System.out.println(uploadFileResponse.getFileName());
                 request.setAvatar(uploadFileResponse.getFileName());

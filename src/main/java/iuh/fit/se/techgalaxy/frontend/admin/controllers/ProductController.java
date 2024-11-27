@@ -134,7 +134,7 @@ public class ProductController {
                             System.out.println("Avatar bị null hoặc rỗng.");
                         } else {
                             try {
-                                DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(avatar, "products/" + variantRequest.getName().replace(" ", "_"));
+                                DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(avatar, "products/" + variantRequest.getName().replace(" ", "_"), accessToken);
                                 System.out.println("Dữ liệu avatar sau khi lưu:");
 
                                 if (uploadFileResponseDataResponse.getStatus() == 200 && uploadFileResponseDataResponse.getData() == null) {
@@ -214,7 +214,7 @@ public class ProductController {
                                                             System.out.println("Hình ảnh bị null hoặc rỗng.");
                                                         } else {
                                                             System.out.println("Hình ảnh nhận được: " + image.getOriginalFilename());
-                                                            DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(image, "products/" + variantRequest.getName().replace(" ", "_") + "/" + detailRequest.getMemid() + "/" + colorRequest.getColorId());
+                                                            DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(image, "products/" + variantRequest.getName().replace(" ", "_") + "/" + detailRequest.getMemid() + "/" + colorRequest.getColorId(), accessToken);
                                                             if (uploadFileResponseDataResponse.getStatus() == 200 && uploadFileResponseDataResponse.getData() == null) {
                                                                 System.out.println("Dữ liệu hình ảnh bị null.");
                                                             } else {
@@ -562,7 +562,7 @@ public class ProductController {
                     System.out.println("Avatar bị null hoặc rỗng.");
                     variantRequest.setAvatar(variantinDB.getAvatar());
                 } else {
-                    DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(request.getAvatar(), "products/" + request.getName().replace(" ", "_"));
+                    DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(request.getAvatar(), "products/" + request.getName().replace(" ", "_"), accessToken);
                     if (uploadFileResponseDataResponse.getStatus() == 200 && uploadFileResponseDataResponse.getData() == null) {
                         System.out.println("Dữ liệu avatar bị null.");
                     } else {
@@ -710,7 +710,7 @@ public class ProductController {
             try {
                 // Handle avatar upload
                 if (variantRequest.getAvatar() != null && !variantRequest.getAvatar().isEmpty()) {
-                    DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(variantRequest.getAvatar(), "products/" + request.getName().replace(" ", "_"));
+                    DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(variantRequest.getAvatar(), "products/" + request.getName().replace(" ", "_"), accessToken);
                     if (uploadFileResponseDataResponse.getStatus() == 200 && uploadFileResponseDataResponse.getData() == null) {
                         System.out.println("Dữ liệu avatar bị null.");
                     } else {
@@ -831,7 +831,7 @@ public class ProductController {
                         System.out.println("Hình ảnh bị null hoặc rỗng.");
                     } else {
                         System.out.println("Hình ảnh nhận được: " + image.getOriginalFilename());
-                        DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(image, "products/" + variant.getName().replace(" ", "_") + "/" + request.getMemid() + "/" + color.getColorId());
+                        DataResponse<UploadFileResponse> uploadFileResponseDataResponse = fileService.uploadFile(image, "products/" + variant.getName().replace(" ", "_") + "/" + request.getMemid() + "/" + color.getColorId(), accessToken);
                         if (uploadFileResponseDataResponse == null) {
                             System.out.println("Error uploading file.");
                             continue;
