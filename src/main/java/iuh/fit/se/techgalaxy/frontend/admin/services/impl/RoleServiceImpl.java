@@ -18,18 +18,20 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public DataResponse<RoleResponse> findAll() {
+    public DataResponse<RoleResponse> findAll(String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/roles/add")
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
-    public DataResponse<RoleResponse> findById(String id) {
+    public DataResponse<RoleResponse> findById(String id, String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/roles/" + id)
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
