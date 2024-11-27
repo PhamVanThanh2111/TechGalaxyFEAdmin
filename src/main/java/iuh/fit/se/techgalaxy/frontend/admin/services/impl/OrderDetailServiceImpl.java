@@ -25,18 +25,20 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public DataResponse<OrderDetailResponse> getOrderDetail(String orderId) {
+    public DataResponse<OrderDetailResponse> getOrderDetail(String orderId, String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/order-details/order/" + orderId)
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
-    public DataResponse<OrderDetailResponse> createOrderDetail(OrderDetailRequest orderDetailRequest) {
+    public DataResponse<OrderDetailResponse> createOrderDetail(OrderDetailRequest orderDetailRequest, String accessToken) {
         return restClient.post()
                 .uri(ENDPOINT + "/order-details")
+                .header("Authorization", "Bearer " + accessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(orderDetailRequest)

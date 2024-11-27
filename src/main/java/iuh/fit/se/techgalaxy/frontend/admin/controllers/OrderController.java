@@ -62,7 +62,7 @@ public class OrderController {
         }
         try {
             DataResponse<OrderResponse> response = orderService.getAll(accessToken);
-            List<OrderResponse> orders = getOrderResponses(response);
+            List<OrderResponse> orders = getOrderResponses(response, accessToken);
             model.setViewName("html/Order/showOrder");
             model.addObject("orders", orders);
             return model;
@@ -81,12 +81,12 @@ public class OrderController {
         }
     }
 
-    private List<OrderResponse> getOrderResponses(DataResponse<OrderResponse> response) {
+    private List<OrderResponse> getOrderResponses(DataResponse<OrderResponse> response, String accessToken) {
         List<OrderResponse> orders = null;
         if (response != null) {
             orders = (List<OrderResponse>) response.getData();
             orders.forEach(order -> {
-                List<OrderDetailResponse> orderDetails = (List<OrderDetailResponse>) orderDetailService.getOrderDetail(order.getId()).getData();
+                List<OrderDetailResponse> orderDetails = (List<OrderDetailResponse>) orderDetailService.getOrderDetail(order.getId(), accessToken).getData();
                 orderDetails.forEach(orderDetail -> {
                     String productVariantName = ((List<ProductVariantResponse>) productService.findProductVariantByProductVariantDetailId(orderDetail.getProductVariantDetail().getId()).getData()).get(0).getName();
                     orderDetail.setName(productVariantName);
@@ -188,7 +188,11 @@ public class OrderController {
                 orderDetailRequest.setQuantity(quantity);
                 orderDetailRequest.setPrice(price / quantity);
 
-                orderDetailService.createOrderDetail(orderDetailRequest);
+                List<OrderDetailResponse> orderDetailResponse =  ((List<OrderDetailResponse>) orderDetailService.createOrderDetail(orderDetailRequest, accessToken).getData());
+                if (orderDetailResponse == null) {
+                    model.setViewName("html/Order/addOrder");
+                    return model;
+                }
             }
 
             model.setViewName("redirect:/orders");
@@ -259,7 +263,7 @@ public class OrderController {
             List<Color> colors = (List<Color>) colorService.getAllColors().getData();
 
             OrderResponse order = ((List<OrderResponse>) orderService.getById(id, accessToken).getData()).get(0);
-            List<OrderDetailResponse> orderDetails = (List<OrderDetailResponse>) orderDetailService.getOrderDetail(id).getData();
+            List<OrderDetailResponse> orderDetails = (List<OrderDetailResponse>) orderDetailService.getOrderDetail(id, accessToken).getData();
             orderDetails.forEach(orderDetail -> {
                 ProductDetailResponse productVariantDetail = ((List<ProductDetailResponse>) productService.getVariantDetailById(orderDetail.getProductVariantDetail().getId()).getData()).get(0);
                 String productVariantName = ((List<ProductVariantResponse>) productService.findProductVariantByProductVariantDetailId(orderDetail.getProductVariantDetail().getId()).getData()).get(0).getName();
