@@ -27,7 +27,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public DataResponse<UploadFileResponse> uploadFile(MultipartFile file,String folder) throws IOException, URISyntaxException {
+    public DataResponse<UploadFileResponse> uploadFile(MultipartFile file, String folder, String accessToken) throws IOException, URISyntaxException {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", new ByteArrayResource(file.getBytes()) {
             @Override
@@ -38,6 +38,7 @@ public class FileServiceImpl implements FileService {
         body.add("folder", folder);
         return restClient.post()
                 .uri(ENDPOINT + "/file")
+                .header("Authorization", "Bearer " + accessToken)
                 .body(body)
                 .exchange((request, response) -> {
                     System.out.println("Upload 1 file");
@@ -52,7 +53,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public DataResponse<UploadFileResponse> uploadFiles(MultipartFile[] files,String folder) throws IOException {
+    public DataResponse<UploadFileResponse> uploadFiles(MultipartFile[] files, String folder, String accessToken) throws IOException {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         for (MultipartFile file : files) {
             body.add("files", new ByteArrayResource(file.getBytes()) {
@@ -65,6 +66,7 @@ public class FileServiceImpl implements FileService {
         body.add("folder", folder);
         return restClient.post()
                 .uri(ENDPOINT + "/files")
+                .header("Authorization", "Bearer " + accessToken)
                 .body(body)
                 .exchange((request, response) -> {
                     System.out.println("Upload many file");

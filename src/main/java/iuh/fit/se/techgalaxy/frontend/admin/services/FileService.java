@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface FileService {
-    public DataResponse<UploadFileResponse> uploadFile(MultipartFile file,String folder) throws IOException, URISyntaxException;
+    public DataResponse<UploadFileResponse> uploadFile(MultipartFile file, String folder, String accessToken) throws IOException, URISyntaxException;
 
 
-    public DataResponse<UploadFileResponse> uploadFiles(MultipartFile[] files, String folder) throws IOException, URISyntaxException;
+    public DataResponse<UploadFileResponse> uploadFiles(MultipartFile[] files, String folder, String accessToken) throws IOException, URISyntaxException;
 }
