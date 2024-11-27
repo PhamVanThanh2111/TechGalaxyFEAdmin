@@ -98,7 +98,6 @@ public class CustomerController {
             if (!avatar.isEmpty()) {
                 DataResponse<UploadFileResponse> response = fileService.uploadFile(avatar, "customer/avatar", accessToken);
                 UploadFileResponse uploadFileResponse = ((List<UploadFileResponse>) response.getData()).get(0);
-                System.out.println(uploadFileResponse.getFileName());
                 customerRequest.setAvatar(uploadFileResponse.getFileName());
             }
             if (customerRequest.getId() == null || customerRequest.getId().isEmpty()) { // add new customer
@@ -108,7 +107,6 @@ public class CustomerController {
             }
             model.setViewName("redirect:/customers");
             return model;
-
         } catch (
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
@@ -120,6 +118,7 @@ public class CustomerController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }

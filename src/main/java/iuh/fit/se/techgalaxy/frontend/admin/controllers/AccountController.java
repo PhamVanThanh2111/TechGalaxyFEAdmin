@@ -124,7 +124,7 @@ public class AccountController {
         try {
             AccountResponse account = ((List<AccountResponse>) accountService.findById(id, accessToken).getData()).get(0);
             SystemUserResponseDTO user = ((List<SystemUserResponseDTO>) systemUserService.findByEmail(account.getEmail(), accessToken).getData()).get(0);
-            List<RoleResponse> roles = (List<RoleResponse>) account.getRolesIds().stream().map(roleService::findById).findFirst().get().getData();
+            List<RoleResponse> roles = (List<RoleResponse>) account.getRolesIds().stream().map(roleId -> roleService.findById(roleId, accessToken)).findFirst().get().getData();
 
             model.addObject("account", account);
             model.addObject("user", user);
