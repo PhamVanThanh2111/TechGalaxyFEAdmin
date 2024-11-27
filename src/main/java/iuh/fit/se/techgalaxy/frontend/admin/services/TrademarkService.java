@@ -9,20 +9,20 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.TrademarkResponse;
 public interface TrademarkService {
 
 
-    public DataResponse<TrademarkResponse> getTrademarkById(String id) ;
+    DataResponse<TrademarkResponse> getTrademarkById(String id);
 
-    public DataResponse<TrademarkResponse> getTrademarkByName(String name) ;
+    DataResponse<TrademarkResponse> getTrademarkByName(String name);
 
-    public DataResponse<TrademarkResponse> getAllTrademarks();
+    DataResponse<TrademarkResponse> getAllTrademarks();
 
     DataResponse<TrademarkResponse> findAll();
 
     DataResponse<TrademarkResponse> findById(String id);
 
-    DataResponse<TrademarkResponse> save(String name);
+    DataResponse<TrademarkResponse> save(String name, String accessToken);
 
-    DataResponse<Object> delete(String id);
+    DataResponse<Object> delete(String id, String accessToken);
 
-    DataResponse<TrademarkResponse> update(TrademarkRequest trademarkRequest);
+    DataResponse<TrademarkResponse> update(TrademarkRequest trademarkRequest, String accessToken);
 
 }

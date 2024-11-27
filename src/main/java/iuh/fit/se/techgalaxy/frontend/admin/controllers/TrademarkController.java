@@ -6,11 +6,11 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.TrademarkResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Trademark;
 import iuh.fit.se.techgalaxy.frontend.admin.mapper.TrademarkMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.services.TrademarkService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -66,20 +66,62 @@ public class TrademarkController {
     }
 
     @PostMapping("/save")
-    public ModelAndView save(@ModelAttribute("trademarkRequest") TrademarkRequest trademarkRequest, ModelAndView model, BindingResult binding) {
-        if (trademarkRequest.getId() == null && trademarkRequest.getId().isEmpty()) {
-            trademarkService.save(trademarkRequest.getName());
-        } else {
-            trademarkService.update(trademarkRequest);
+    public ModelAndView save(@ModelAttribute("trademarkRequest") TrademarkRequest trademarkRequest,
+                             ModelAndView model,
+                             HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            model.setViewName("redirect:/login");
+            return model;
         }
-        model.setViewName("redirect:/trademarks");
-        return model;
+        try {
+            if (trademarkRequest.getId() == null && trademarkRequest.getId().isEmpty()) {
+                trademarkService.save(trademarkRequest.getName(), accessToken);
+            } else {
+                trademarkService.update(trademarkRequest, accessToken);
+            }
+            model.setViewName("redirect:/trademarks");
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
+            return model;
+        }
     }
 
     @GetMapping("/delete/{id}")
-    public ModelAndView delete(ModelAndView model, @PathVariable String id) {
-        trademarkService.delete(id);
-        model.setViewName("redirect:/trademarks");
-        return model;
+    public ModelAndView delete(ModelAndView model,
+                               @PathVariable String id,
+                               HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            model.setViewName("redirect:/login");
+            return model;
+        }
+        try {
+            trademarkService.delete(id, accessToken);
+            model.setViewName("redirect:/trademarks");
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
+            return model;
+        }
     }
 }
