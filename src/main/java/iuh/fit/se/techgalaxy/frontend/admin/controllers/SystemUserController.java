@@ -6,11 +6,13 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponseDTO;
 import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UploadFileResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.services.FileService;
 import iuh.fit.se.techgalaxy.frontend.admin.services.SystemUserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,15 +38,33 @@ public class SystemUserController {
     }
 
     @GetMapping
-    public ModelAndView showUsersSystem(ModelAndView model) {
-        DataResponse<SystemUserResponseDTO> response = systemUserService.findAll();
-        List<SystemUserResponseDTO> list = null;
-        if (response != null) {
-            list = (List<SystemUserResponseDTO>) response.getData();
+    public ModelAndView showUsersSystem(ModelAndView model, HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            new ModelAndView("redirect:/login");
         }
-        model.addObject("sys_users", list);
-        model.setViewName("html/SystemUser/showSystemUser");
-        return model;
+        try {
+            DataResponse<SystemUserResponseDTO> response = systemUserService.findAll(accessToken);
+            List<SystemUserResponseDTO> list = null;
+            if (response != null) {
+                list = (List<SystemUserResponseDTO>) response.getData();
+            }
+            model.addObject("sys_users", list);
+            model.setViewName("html/SystemUser/showSystemUser");
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
+            return model;
+        }
     }
 
     @GetMapping("/add")
@@ -56,46 +76,129 @@ public class SystemUserController {
     }
 
     @PostMapping("/save")
-    public ModelAndView save(@ModelAttribute("systemUserRequestDTO") SystemUserRequestDTO request, @RequestParam MultipartFile avatar, BindingResult bindingResult, ModelAndView model) throws IOException, URISyntaxException {
-        if (bindingResult.hasErrors()) {
-            model.setViewName("html/SystemUser/formSystemUser");
+    public ModelAndView save(@ModelAttribute("systemUserRequestDTO") SystemUserRequestDTO request,
+                             @RequestParam MultipartFile avatar,
+                             BindingResult bindingResult,
+                             ModelAndView model,
+                             HttpSession session
+    ) throws IOException, URISyntaxException {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            new ModelAndView("redirect:/login");
+        }
+        try {
+            if (bindingResult.hasErrors()) {
+                model.setViewName("html/SystemUser/formSystemUser");
+                return model;
+            }
+            if (!avatar.isEmpty()) {
+                DataResponse<UploadFileResponse> response = fileService.uploadFile(avatar, "systemUser/avatar");
+                UploadFileResponse uploadFileResponse = ((List<UploadFileResponse>) response.getData()).get(0);
+                System.out.println(uploadFileResponse.getFileName());
+                request.setAvatar(uploadFileResponse.getFileName());
+            }
+            if (request.getId() == null || request.getId().isEmpty()) {
+                systemUserService.create(request, accessToken);
+            } else {
+                systemUserService.update(request, accessToken);
+            }
+            model.setViewName("redirect:/systemUsers");
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
             return model;
         }
-        if (!avatar.isEmpty()) {
-            DataResponse<UploadFileResponse> response = fileService.uploadFile(avatar, "systemUser/avatar");
-            UploadFileResponse uploadFileResponse = ((List<UploadFileResponse>)response.getData()).get(0);
-            System.out.println(uploadFileResponse.getFileName());
-            request.setAvatar(uploadFileResponse.getFileName());
-        }
-        if (request.getId() == null || request.getId().isEmpty()) {
-            systemUserService.create(request);
-        } else {
-            systemUserService.update(request);
-        }
-        model.setViewName("redirect:/systemUsers");
-        return model;
     }
 
     @GetMapping("/update/{id}")
-    public ModelAndView formUpdate(ModelAndView model, @PathVariable String id) {
-        List<SystemUserResponseDTO> list = (List<SystemUserResponseDTO>) systemUserService.findById(id).getData();
-        model.addObject("systemUserRequestDTO", list.get(0));
-        model.setViewName("html/SystemUser/formSystemUser");
-        return model;
+    public ModelAndView formUpdate(ModelAndView model,
+                                   @PathVariable String id,
+                                   HttpSession session) {
+        try {
+            String accessToken = (String) session.getAttribute("accessToken");
+            if (accessToken == null) {
+                new ModelAndView("redirect:/login");
+            }
+            List<SystemUserResponseDTO> list = (List<SystemUserResponseDTO>) systemUserService.findById(id, accessToken).getData();
+            model.addObject("systemUserRequestDTO", list.get(0));
+            model.setViewName("html/SystemUser/formSystemUser");
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
+            return model;
+        }
     }
 
     @GetMapping("/delete/{id}")
-    public ModelAndView delete(ModelAndView model, @PathVariable String id) {
-        systemUserService.delete(id);
-        model.setViewName("redirect:/systemUsers");
-        return model;
+    public ModelAndView delete(ModelAndView model,
+                               @PathVariable String id,
+                               HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            new ModelAndView("redirect:/login");
+        }
+        try {
+            systemUserService.delete(id, accessToken);
+            model.setViewName("redirect:/systemUsers");
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
+            return model;
+        }
     }
 
     @GetMapping("/detail/{id}")
-    public ModelAndView detail(ModelAndView model, @PathVariable String id) {
-        List<SystemUserResponseDTO> list = (List<SystemUserResponseDTO>) systemUserService.findById(id).getData();
-        model.addObject("systemUser", list.get(0));
-        model.setViewName("html/SystemUser/detailSystemUser");
-        return model;
+    public ModelAndView detail(ModelAndView model,
+                               @PathVariable String id,
+                               HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken == null) {
+            new ModelAndView("redirect:/login");
+        }
+        try {
+            List<SystemUserResponseDTO> list = (List<SystemUserResponseDTO>) systemUserService.findById(id, accessToken).getData();
+            model.addObject("systemUser", list.get(0));
+            model.setViewName("html/SystemUser/detailSystemUser");
+            return model;
+        } catch (
+                HttpClientErrorException.Unauthorized e) {
+            System.out.println("Unauthorized request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (HttpClientErrorException.Forbidden e) {
+            System.out.println("Forbidden request: " + e.getMessage());
+            model.setViewName("redirect:/home");
+            return model;
+        } catch (Exception e) {
+            model.setViewName("redirect:/home");
+            return model;
+        }
     }
 }

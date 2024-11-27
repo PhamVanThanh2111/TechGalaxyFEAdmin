@@ -8,18 +8,15 @@ import iuh.fit.se.techgalaxy.frontend.admin.entities.SystemUser;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface SystemUserService {
-    DataResponse<SystemUserResponseDTO> findAll();
+    DataResponse<SystemUserResponseDTO> findAll(String accessToken);
 
-    DataResponse<SystemUserResponseDTO> findById(String id);
+    DataResponse<SystemUserResponseDTO> findById(String id, String accessToken);
 
-    DataResponse<SystemUserResponseDTO> findByEmail(String email);
+    DataResponse<SystemUserResponseDTO> findByEmail(String email, String accessToken);
 
-    //Sua thanh vay
-    DataResponse<SystemUserResponseDTO> findByEmail(String email,String accessToken);
+    DataResponse<SystemUserResponseDTO> create(SystemUserRequestDTO systemUserRequestDTO, String accessToken);
 
-    DataResponse<SystemUserResponseDTO> create(SystemUserRequestDTO systemUserRequestDTO);
+    DataResponse<SystemUserResponseDTO> update(SystemUserRequestDTO systemUserRequestDTO, String accessToken);
 
-    DataResponse<SystemUserResponseDTO> update(SystemUserRequestDTO systemUserRequestDTO);
-
-    DataResponse<Void> delete(String id);
+    DataResponse<Void> delete(String id, String accessToken);
 }

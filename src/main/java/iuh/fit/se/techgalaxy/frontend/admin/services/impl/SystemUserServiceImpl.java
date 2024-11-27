@@ -49,34 +49,26 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public DataResponse<SystemUserResponseDTO> findAll() {
+    public DataResponse<SystemUserResponseDTO> findAll(String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/system-users/all")
+                .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
-    public DataResponse<SystemUserResponseDTO> findById(String id) {
+    public DataResponse<SystemUserResponseDTO> findById(String id, String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/system-users/" + id)
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
 
     @Override
-    public DataResponse<SystemUserResponseDTO> findByEmail(String email) {
-        return restClient.get()
-                .uri(ENDPOINT + "/system-users/email/" + email)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .body(new ParameterizedTypeReference<>() {});
-    }
-
-    //Sua thanh vay
-    @Override
-    public DataResponse<SystemUserResponseDTO> findByEmail(String email,String accessToken) {
+    public DataResponse<SystemUserResponseDTO> findByEmail(String email, String accessToken) {
         return restClient.get()
                 .uri(ENDPOINT + "/system-users/email/" + email)
                 .header("Authorization", "Bearer " + accessToken)
@@ -86,7 +78,7 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public DataResponse<SystemUserResponseDTO> create(SystemUserRequestDTO systemUserRequestDTO) {
+    public DataResponse<SystemUserResponseDTO> create(SystemUserRequestDTO systemUserRequestDTO, String accessToken) {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setEmail(systemUserRequestDTO.getAccount().getEmail());
         userRegisterRequest.setPassword("123456");
@@ -94,6 +86,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
         DataResponse<UserRegisterResponse> accountResponse = restClient.post()
                 .uri(ENDPOINT + "/api/accounts/auth/create-system-user-account")
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(userRegisterRequest)
                 .exchange((request, response) -> {
@@ -119,6 +112,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
         return restClient.post()
                 .uri(ENDPOINT + "/system-users")
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(systemUserRequestDTO)
                 .exchange((request, response) -> {
@@ -133,11 +127,12 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public DataResponse<SystemUserResponseDTO> update(SystemUserRequestDTO systemUserRequestDTO) {
+    public DataResponse<SystemUserResponseDTO> update(SystemUserRequestDTO systemUserRequestDTO, String accessToken) {
         setDefaultAvatarIfMissing(systemUserRequestDTO);
 
         return restClient.put()
                 .uri(ENDPOINT + "/system-users/" + systemUserRequestDTO.getId())
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(systemUserRequestDTO)
                 .exchange((request, response) -> {
@@ -151,7 +146,7 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public DataResponse<Void> delete(String id) {
+    public DataResponse<Void> delete(String id, String accessToken) {
         return restClient.delete()
                 .uri(ENDPOINT + "/system-users/" + id)
                 .accept(MediaType.APPLICATION_JSON)
