@@ -11,7 +11,6 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.UserRegisterResponse;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Account;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.Gender;
 import iuh.fit.se.techgalaxy.frontend.admin.services.CustomerService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
