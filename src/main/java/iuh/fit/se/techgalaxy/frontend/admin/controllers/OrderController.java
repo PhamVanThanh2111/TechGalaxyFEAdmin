@@ -41,9 +41,10 @@ public class OrderController {
     private final ColorService colorService;
     private final AccountService accountService;
     private final CustomerService customerService;
+    private final AuthService authService;
 
     @Autowired
-    public OrderController(OrderService orderService, OrderDetailService orderDetailService, ProductService productService, MemoryService memoryService, ColorService colorService, AccountService accountService, CustomerService customerService) {
+    public OrderController(OrderService orderService, OrderDetailService orderDetailService, ProductService productService, MemoryService memoryService, ColorService colorService, AccountService accountService, CustomerService customerService, AuthService authService) {
         this.orderService = orderService;
         this.orderDetailService = orderDetailService;
         this.productService = productService;
@@ -51,6 +52,7 @@ public class OrderController {
         this.colorService = colorService;
         this.accountService = accountService;
         this.customerService = customerService;
+        this.authService = authService;
     }
 
     @GetMapping
@@ -137,7 +139,6 @@ public class OrderController {
         }
         try {
             // Customer
-            CustomerResponse customer = orderRequest.getCustomer();
             if (accountService.existsByEmail(orderRequest.getCustomer().getAccount().getEmail(), accessToken)) { // co customer trong dbs
                 CustomerResponse customerFindByEmail = ((List<CustomerResponse>) customerService.findByEmail(orderRequest.getCustomer().getAccount().getEmail(), accessToken).getData()).get(0);
                 orderRequest.setCustomer(customerFindByEmail);
@@ -145,13 +146,15 @@ public class OrderController {
                 CustomerRequest customerRequest = new CustomerRequest();
                 customerRequest.setUserStatus(CustomerStatus.ACTIVE);
                 customerRequest.setAccount(orderRequest.getCustomer().getAccount());
+                customerRequest.setName("unknown");
                 CustomerResponse customerResponse = ((List<CustomerResponse>) customerService.save(customerRequest, accessToken).getData()).get(0);
                 orderRequest.setCustomer(customerResponse);
             }
 
             // SystemUser
             SystemUserResponse systemUser = new SystemUserResponse();
-            systemUser.setId("b9fb6795-edb9-4ed1-9804-615b9e381f2a");
+            SystemUserResponseDTO systemUserLogin = authService.getSystemUserLogin(accessToken);
+            systemUser.setId(systemUserLogin.getId());
             orderRequest.setSystemUser(systemUser);
 
             // Address
@@ -190,7 +193,7 @@ public class OrderController {
                 orderDetailRequest.setQuantity(quantity);
                 orderDetailRequest.setPrice(price / quantity);
 
-                List<OrderDetailResponse> orderDetailResponse =  ((List<OrderDetailResponse>) orderDetailService.createOrderDetail(orderDetailRequest, accessToken).getData());
+                List<OrderDetailResponse> orderDetailResponse = ((List<OrderDetailResponse>) orderDetailService.createOrderDetail(orderDetailRequest, accessToken).getData());
                 if (orderDetailResponse == null) {
                     model.setViewName("html/Order/addOrder");
                     return model;

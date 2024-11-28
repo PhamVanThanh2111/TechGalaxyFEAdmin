@@ -1,9 +1,15 @@
 package iuh.fit.se.techgalaxy.frontend.admin.services.impl;
 
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.LoginResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponseDTO;
 import iuh.fit.se.techgalaxy.frontend.admin.services.AuthService;
+import iuh.fit.se.techgalaxy.frontend.admin.services.SystemUserService;
 import jakarta.servlet.http.Cookie;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -16,9 +22,11 @@ import java.util.Map;
 @Service
 public class AuthServiceImpl implements AuthService {
     private final RestClient restClient;
+    private final SystemUserService systemUserService;
 
-    public AuthServiceImpl(RestClient restClient) {
+    public AuthServiceImpl(RestClient restClient, SystemUserService systemUserService) {
         this.restClient = restClient;
+        this.systemUserService = systemUserService;
     }
 
     @Override
@@ -95,5 +103,17 @@ public class AuthServiceImpl implements AuthService {
             // Invalidate session
             session.invalidate();
         }
+    }
+
+    @Override
+    public SystemUserResponseDTO getSystemUserLogin(String accessToken) {
+        DataResponse<LoginResponse.AccountGetAccount> loginResponse = restClient.get()
+                .uri("http://localhost:8081/api/accounts/auth/account")
+                .header("Authorization", "Bearer " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+        LoginResponse.AccountGetAccount account = ((List<LoginResponse.AccountGetAccount>) loginResponse.getData()).get(0);
+        return ((List<SystemUserResponseDTO>) systemUserService.findByEmail(account.getAccount().getEmail(), accessToken).getData()).get(0);
     }
 }

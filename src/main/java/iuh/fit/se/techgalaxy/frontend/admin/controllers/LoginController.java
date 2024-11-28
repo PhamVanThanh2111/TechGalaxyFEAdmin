@@ -1,17 +1,14 @@
 package iuh.fit.se.techgalaxy.frontend.admin.controllers;
 
-import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.DataResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.RoleResponse;
+import iuh.fit.se.techgalaxy.frontend.admin.dto.response.SystemUserResponseDTO;
 import iuh.fit.se.techgalaxy.frontend.admin.services.impl.AuthServiceImpl;
 import iuh.fit.se.techgalaxy.frontend.admin.services.impl.RoleServiceImpl;
 import iuh.fit.se.techgalaxy.frontend.admin.services.impl.SystemUserServiceImpl;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,14 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Map;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Controller
 public class LoginController {
