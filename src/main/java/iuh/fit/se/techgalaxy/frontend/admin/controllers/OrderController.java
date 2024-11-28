@@ -77,6 +77,7 @@ public class OrderController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -208,6 +209,7 @@ public class OrderController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -239,6 +241,7 @@ public class OrderController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -301,6 +304,7 @@ public class OrderController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }

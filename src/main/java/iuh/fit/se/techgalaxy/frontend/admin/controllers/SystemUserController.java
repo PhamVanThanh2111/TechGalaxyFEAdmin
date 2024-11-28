@@ -63,6 +63,7 @@ public class SystemUserController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -118,6 +119,7 @@ public class SystemUserController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -146,6 +148,7 @@ public class SystemUserController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -173,6 +176,7 @@ public class SystemUserController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -201,6 +205,7 @@ public class SystemUserController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }

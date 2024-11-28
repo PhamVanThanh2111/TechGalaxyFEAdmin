@@ -67,6 +67,7 @@ public class CustomerController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -105,7 +106,6 @@ public class CustomerController {
             } else { // update customer
                 if (customerRequest.getAvatar() == null || customerRequest.getAvatar().isEmpty()) {
                     CustomerResponse customerResponse = ((List<CustomerResponse>) customerService.findById(customerRequest.getId(), accessToken).getData()).get(0);
-                    System.out.println(customerResponse.getAvatar());
                     customerRequest.setAvatar(customerResponse.getAvatar());
                 }
                 customerService.update(customerRequest, accessToken);
@@ -156,6 +156,7 @@ public class CustomerController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -187,6 +188,7 @@ public class CustomerController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -215,6 +217,7 @@ public class CustomerController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }

@@ -93,6 +93,7 @@ public class TrademarkController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
@@ -121,6 +122,7 @@ public class TrademarkController {
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
+            e.printStackTrace();
             return model;
         }
     }
