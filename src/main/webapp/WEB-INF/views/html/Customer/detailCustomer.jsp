@@ -1,8 +1,7 @@
 <%@ page import="java.time.LocalDate" %>
-<%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.response.CustomerResponse" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="iuh.fit.se.techgalaxy.frontend.admin.dto.request.CustomerRequest" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
@@ -71,9 +70,15 @@
 
                                 <!-- Profile Picture -->
                                 <div class="mb-3 text-center">
-                                    <img src="<%--@elvariable id="customerRequest" type="java"--%>
-                                        <c:url value="/img/${customerRequest.avatar}"/>" class="img-thumbnail"
-                                         alt="Customer Photo" style="width: 200px; height: 200px; border-width: 0">
+                                    <c:if test="${customerRequest.avatar != null}">
+                                        <img src="<c:url value="http://localhost:8081/storage/customer/avatar/${customerRequest.avatar}"/>" alt="avatar"
+                                             class="img-thumbnail" style="width: 200px; height: 200px; border-width: 0; border-radius: 50%;">
+                                    </c:if>
+                                    <c:if test="${customerRequest.avatar == null}">
+                                        <img src="<c:url value='${customerRequest.gender == "FEMALE" ? "/img/undraw_profile_1.svg" : "/img/undraw_profile.svg"}' />"
+                                             alt="avatar"
+                                             class="img-thumbnail" style="width: 200px; height: 200px; border-width: 0; border-radius: 50%;">
+                                    </c:if>
                                 </div>
 
                                 <!-- User General Information -->

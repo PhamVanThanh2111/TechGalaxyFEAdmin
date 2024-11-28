@@ -67,9 +67,15 @@
 
                                 <!-- Profile Picture -->
                                 <div class="mb-3 text-center">
-                                    <img src="<%--@elvariable id="systemUser" type="java"--%>
-                                        <c:url value="/img/${systemUser.avatar}"/>" class="img-thumbnail"
-                                         alt="Customer Photo" style="width: 200px; height: 200px; border-width: 0">
+                                    <c:if test="${systemUser.avatar != null}">
+                                        <img src="<c:url value="http://localhost:8081/storage/systemUser/avatar/${systemUser.avatar}"/>" alt="avatar"
+                                             class="img-thumbnail" style="width: 200px; height: 200px; border-width: 0; border-radius: 50%;">
+                                    </c:if>
+                                    <c:if test="${systemUser.avatar == null}">
+                                        <img src="<c:url value='${systemUser.gender == "FEMALE" ? "/img/undraw_profile_1.svg" : "/img/undraw_profile.svg"}' />"
+                                             alt="avatar"
+                                             class="img-thumbnail" style="width: 200px; height: 200px; border-width: 0; border-radius: 50%;">
+                                    </c:if>
                                 </div>
 
                                 <!-- User General Information -->
