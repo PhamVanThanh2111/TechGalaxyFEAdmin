@@ -18,6 +18,7 @@ import iuh.fit.se.techgalaxy.frontend.admin.mapper.OrderMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.services.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -214,8 +215,9 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/confirm/{id}")
+    @GetMapping("/confirm/{id}/{orderStatus}")
     public ModelAndView confirm(@PathVariable String id,
+                                @PathVariable String orderStatus,
                                 ModelAndView model,
                                 HttpSession session) {
         String accessToken = (String) session.getAttribute("accessToken");
@@ -225,7 +227,18 @@ public class OrderController {
         }
         try {
             OrderResponse order = ((List<OrderResponse>) orderService.getById(id, accessToken).getData()).get(0);
-            order.setOrderStatus(OrderStatus.PROCESSING);
+
+            switch (orderStatus) {
+                case "NEW" -> order.setOrderStatus(OrderStatus.NEW);
+                case "PROCESSING" -> order.setOrderStatus(OrderStatus.PROCESSING);
+                case "SHIPPED" -> order.setOrderStatus(OrderStatus.SHIPPED);
+                case "DELIVERED" -> order.setOrderStatus(OrderStatus.DELIVERED);
+                case "CANCELLED" -> order.setOrderStatus(OrderStatus.CANCELLED);
+                case "RETURNED" -> order.setOrderStatus(OrderStatus.RETURNED);
+                case "COMPLETED" -> order.setOrderStatus(OrderStatus.COMPLETED);
+                case "OUT_FOR_DELIVERY" -> order.setOrderStatus(OrderStatus.OUT_FOR_DELIVERY);
+            }
+
             Order orderUpdate = OrderMapper.INSTANCE.toOrderFromResponse(order);
             orderService.update(OrderMapper.INSTANCE.toOrderRequest(orderUpdate), accessToken);
             model.setViewName("redirect:/orders");

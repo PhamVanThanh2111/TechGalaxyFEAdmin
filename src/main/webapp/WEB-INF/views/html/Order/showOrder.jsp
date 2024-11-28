@@ -75,7 +75,7 @@
                                     <th>Address</th>
                                     <th>Payment Status</th>
                                     <th>Order Status</th>
-                                    <th>Action</th>
+                                    <th>Edit Status</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -85,7 +85,7 @@
                                     <th>Address</th>
                                     <th>Payment Status</th>
                                     <th>Order Status</th>
-                                    <th>Action</th>
+                                    <th>Edit Status</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
@@ -96,36 +96,58 @@
                                             aria-expanded="false"
                                             aria-controls="collapse-${order.id}" style="cursor: pointer;"
                                             class="card-header"
-                                            >
+                                        >
                                             <td>${order.customer.name}</td>
                                             <td>${order.systemUser.name}</td>
                                             <td>${order.address}</td>
                                             <td>${order.paymentStatus}</td>
                                             <td>${order.orderStatus}</td>
                                             <td>
-                                                <c:if test="${order.orderStatus == 'NEW'}">
-                                                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal"
-                                                       data-target="#confirmOrderModal_${order.id}">Confirm</a>
-                                                    <!-- Confirm Order Modal-->
-                                                    <div class="modal fade" id="confirmOrderModal_${order.id}" tabindex="-1" role="dialog" aria-labelledby="confirmOrderModalLabel"
-                                                         aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="confirmOrderModalLabel">Ready to confirm?</h5>
-                                                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">×</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">Select "Yes" below if you are ready to confirm this order.</div>
-                                                                <div class="modal-footer">
-                                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                                                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/orders/confirm/${order.id}">Yes</a>
+                                                    <%--                                                <c:if test="${order.orderStatus == 'NEW'}">--%>
+                                                <a href="#" class="btn btn-success btn-sm" data-toggle="modal"
+                                                   data-target="#confirmOrderModal_${order.id}">Edit</a>
+                                                <!-- Confirm Order Modal-->
+                                                <div class="modal fade" id="confirmOrderModal_${order.id}" tabindex="-1"
+                                                     role="dialog" aria-labelledby="confirmOrderModalLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="confirmOrderModalLabel">
+                                                                    Update the status of the order!</h5>
+                                                                <button class="close" type="button" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">×</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">Select the statuses below if you are
+                                                                sure that this order is in the appropriate status.
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                    <%--                                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>--%>
+                                                                <div class="text-center align-middle">
+                                                                    <a class="btn btn-success m-1"
+                                                                       href="${pageContext.request.contextPath}/orders/confirm/${order.id}/NEW">NEW</a>
+                                                                    <a class="btn btn-secondary m-1"
+                                                                       href="${pageContext.request.contextPath}/orders/confirm/${order.id}/PROCESSING">PROCESSING</a>
+                                                                    <a class="btn btn-info m-1"
+                                                                       href="${pageContext.request.contextPath}/orders/confirm/${order.id}/SHIPPED">SHIPPED</a>
+                                                                    <a class="btn btn-primary m-1"
+                                                                       href="${pageContext.request.contextPath}/orders/confirm/${order.id}/DELIVERED">DELIVERED</a>
+                                                                    <a class="btn btn-danger m-1"
+                                                                       href="${pageContext.request.contextPath}/orders/confirm/${order.id}/CANCELLED">CANCELLED</a>
+                                                                    <a class="btn btn-warning m-1"
+                                                                       href="${pageContext.request.contextPath}/orders/confirm/${order.id}/RETURNED">RETURNED</a>
+                                                                    <a class="btn btn-success m-1"
+                                                                       href="${pageContext.request.contextPath}/orders/confirm/${order.id}/COMPLETED">COMPLETED</a>
+                                                                    <a class="btn btn-danger m-1"
+                                                                       href="${pageContext.request.contextPath}/orders/confirm/${order.id}/OUT_FOR_DELIVERY">OUT_FOR_DELIVERY</a>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </c:if>
+                                                </div>
+                                                    <%--                                                </c:if>--%>
                                             </td>
                                         </tr>
 
