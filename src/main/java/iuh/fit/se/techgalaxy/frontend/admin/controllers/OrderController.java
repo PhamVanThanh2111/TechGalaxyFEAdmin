@@ -18,7 +18,6 @@ import iuh.fit.se.techgalaxy.frontend.admin.mapper.OrderMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.services.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -146,7 +145,8 @@ public class OrderController {
                 CustomerRequest customerRequest = new CustomerRequest();
                 customerRequest.setUserStatus(CustomerStatus.ACTIVE);
                 customerRequest.setAccount(orderRequest.getCustomer().getAccount());
-                orderRequest.setCustomer(customer);
+                CustomerResponse customerResponse = ((List<CustomerResponse>) customerService.save(customerRequest, accessToken).getData()).get(0);
+                orderRequest.setCustomer(customerResponse);
             }
 
             // SystemUser

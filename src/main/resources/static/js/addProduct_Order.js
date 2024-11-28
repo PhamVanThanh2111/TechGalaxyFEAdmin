@@ -129,6 +129,8 @@ const updateProductOrder = () => {
             newCount++;
         }
     });
+
+    productCount = newCount - 1; // Cập nhật lại biến productCount
 };
 
 // Xử lý sự kiện xóa sản phẩm
@@ -239,10 +241,13 @@ addProductButton.addEventListener('click', () => {
 
     // Gắn sự kiện cho productName mới
     const productSelect = document.getElementById(`productName-${productCount}`);
-    productSelect.addEventListener('change', () => {
-        handleProductChange(productSelect.value, productCount);
-        updatePrice(productCount); // Cập nhật giá khi thay đổi product
-    });
+    if (productSelect) {
+        productSelect.addEventListener('change', () => {
+            handleProductChange(productSelect.value, productCount);
+            updatePrice(productCount); // Cập nhật giá khi thay đổi product
+        });
+    } else
+        console.error("Product select not found!");
 
     // Gắn sự kiện cho memory, color và quantity
     handleColorChange(productCount);
