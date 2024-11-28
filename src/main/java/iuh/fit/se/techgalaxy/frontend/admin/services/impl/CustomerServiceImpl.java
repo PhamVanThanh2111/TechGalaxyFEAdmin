@@ -114,7 +114,7 @@ public class CustomerServiceImpl implements CustomerService {
         account.setId(userRegisterResponse.getId());
         customerRequest.setAccount(account);
 
-        if (customerRequest.getPhone().isEmpty())
+        if (customerRequest.getPhone() == null || customerRequest.getPhone().isEmpty())
             customerRequest.setPhone(null);
 
         setDefaultAvatarIfMissing(customerRequest);
