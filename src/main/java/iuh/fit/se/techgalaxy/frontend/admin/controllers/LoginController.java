@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -63,7 +65,6 @@ public class LoginController {
 
             if (loginResponse.getStatusCode().is2xxSuccessful()) {
                 DataResponse<RoleResponse> roleResponse = roleService.getRoleByEmail(username, (String) session.getAttribute("accessToken"));
-                //Phai la role admin moi duoc dang nhap
                 if (roleResponse.getStatus() == 200 && roleResponse.getData() != null) {
                     List<RoleResponse> roles = (List<RoleResponse>) roleResponse.getData();
                     for (RoleResponse role : roles) {
@@ -78,6 +79,7 @@ public class LoginController {
                                 session.setAttribute("username", systemUser.getName());
                                 session.setAttribute("profileImage", systemUser.getAvatar());
                             }
+                            System.out.println("Login successfully!");
                             return "redirect:/home";
                         }
                     }
@@ -85,7 +87,8 @@ public class LoginController {
                     model.addAttribute("errorMessage", "Login failed!");
                     authService.logout(session, (String) session.getAttribute("accessToken"), response);
                     return "redirect:/login?error=true";
-                } else {
+                }
+                else {
                     redirectAttributes.addFlashAttribute("errorMessage", "Login failed!");
                     model.addAttribute("errorMessage", "Login failed!");
                     return "redirect:/login?error=true";
@@ -96,14 +99,20 @@ public class LoginController {
                 model.addAttribute("errorMessage", "Login failed!");
                 return "redirect:/login?error=true";
             }
-        } catch (HttpClientErrorException.Unauthorized e) {
-            System.out.println("Unauthorized request: " + e.getMessage());
+        }
+        catch (HttpClientErrorException e) {
+            System.out.println("Client error: " + e.getMessage());
+            authService.logout(session, (String) session.getAttribute("accessToken"), response);
             return "redirect:/login?error=true";
-        } catch (HttpClientErrorException.Forbidden e) {
-            System.out.println("Forbidden request: " + e.getMessage());
+        }catch (RestClientException e) {
+            System.out.println("Error calling external service: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Service is unavailable!");
+            authService.logout(session, (String) session.getAttribute("accessToken"), response);
             return "redirect:/login?error=true";
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());
+            authService.logout(session, (String) session.getAttribute("accessToken"), response);
             return "redirect:/login?error=true";
         }
     }
