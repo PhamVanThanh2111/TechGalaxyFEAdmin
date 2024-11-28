@@ -28,7 +28,23 @@
             border-radius: 0.375rem;
             overflow: hidden;
         }
-        </style>
+        .alert {
+            border-radius: 10px; /* Bo góc */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+        }
+
+        .fas {
+            animation: shake 0.5s ease-in-out; /* Hiệu ứng rung */
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+</style>
 </head>
 
 <body class="bg-gradient-primary">
@@ -36,24 +52,26 @@
 <div class="container">
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
         <!-- Success Toast -->
-        <c:if test="${not empty flash.successMessage}">
+        <c:if test="${not empty successMessage}">
             <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                            ${flash.successMessage}
+                            ${successMessage}
                     </div>
                 </div>
             </div>
         </c:if>
 
-        <c:if test="${not empty flash.errorMessage}">
+
+        <c:if test="${param.error == 'true'}">
             <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                            ${flash.errorMessage}
+                        Invalid username or password. Please try again.
                     </div>
                 </div>
             </div>
+
         </c:if>
 
     </div>
@@ -61,10 +79,34 @@
     <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-12 col-md-9">
             <div class="card o-hidden border-0 shadow-lg my-5">
+                <c:if test="${param.error == 'true'}">
+                    <div class="alert alert-danger p-3">
+                        <div class="row align-items-center">
+                            <!-- Icon -->
+                            <div class="col-md-4 text-center">
+                                <i class="fas fa-exclamation-triangle fa-3x text-danger"></i>
+                            </div>
+                            <!-- Error Message -->
+                            <div class="col-md-8">
+                                <div class="text-center text-md-start">
+                                    <strong>Error:</strong> Invalid username or password.<br>Please try again.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </c:if>
                 <div class="card-body p-0">
                     <!-- Nested Row within Card Body -->
                     <div class="row">
-                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <!-- Left Column (with Background and Error Message) -->
+                        <div class="col-lg-6 d-none d-lg-block bg-login-image position-relative">
+                            <img src="<c:url value='/images/logo.jpg'/>"
+                                 class="img-fluid text-center translate-middle w-100 h-100"
+                                 alt="Login Logo">
+                        </div>
+
+                        <!-- Right Column (Login Form) -->
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
@@ -73,20 +115,19 @@
                                 <!-- Form Login -->
                                 <form class="user" method="post" action="/login">
                                     <div class="form-group">
+                                        <label for="username" class="form-label">Username</label>
                                         <input type="text" name="username" class="form-control form-control-user"
                                                id="username" placeholder="Enter Username..." required>
                                     </div>
                                     <div class="form-group">
+                                        <label for="password" class="form-label">Password</label>
                                         <input type="password" name="password" class="form-control form-control-user"
                                                id="password" placeholder="Enter Password..." required>
                                     </div>
-
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
                                         Login
                                     </button>
-
                                 </form>
-
                             </div>
                         </div>
                     </div>
@@ -94,6 +135,7 @@
             </div>
         </div>
     </div>
+
 </div>
 <script>
     // Wait until DOM is fully loaded

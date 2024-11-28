@@ -14,7 +14,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         if (session == null || session.getAttribute("accessToken") == null) {
             System.out.println("No access token found in session. Redirecting to /login.");
-            response.sendRedirect("/login");
+            response.sendRedirect("/login?error=true");
             return false;
         }
 

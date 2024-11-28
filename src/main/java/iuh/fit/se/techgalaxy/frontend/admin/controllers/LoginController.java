@@ -41,9 +41,11 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public String showLoginPage(Model model) {
+    public String showLoginPage(Model model,HttpSession session) {
+        if (session.getAttribute("accessToken") != null) {
+            return "redirect:/home";
+        }
         model.addAttribute("errorMessage", null);
-
         return "html/login";
     }
 
@@ -82,27 +84,27 @@ public class LoginController {
                     redirectAttributes.addFlashAttribute("errorMessage", "Login failed!");
                     model.addAttribute("errorMessage", "Login failed!");
                     authService.logout(session, (String) session.getAttribute("accessToken"), response);
-                    return "redirect:/login";
+                    return "redirect:/login?error=true";
                 } else {
                     redirectAttributes.addFlashAttribute("errorMessage", "Login failed!");
                     model.addAttribute("errorMessage", "Login failed!");
-                    return "redirect:/login";
+                    return "redirect:/login?error=true";
                 }
 
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "Login failed!");
                 model.addAttribute("errorMessage", "Login failed!");
-                return "redirect:/login";
+                return "redirect:/login?error=true";
             }
         } catch (HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
-            return "redirect:/login";
+            return "redirect:/login?error=true";
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
-            return "redirect:/login";
+            return "redirect:/login?error=true";
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());
-            return "redirect:/login";
+            return "redirect:/login?error=true";
         }
     }
 
