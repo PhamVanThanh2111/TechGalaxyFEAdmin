@@ -60,6 +60,7 @@ const createProductCard = (count) => {
                     <div class="mb-3">
                         <label for="quantity-${count}" class="form-label">Quantity</label>
                         <input type="number" class="form-control quantity-input" id="quantity-${count}" min="1" placeholder="Quantity" name="quantity[${count}]" value="1" required>
+                        <label for="quantity-${count}" class="">Remaining: 2</label>
                     </div>
                     <div class="mb-3">
                         <label for="memory-${count}" class="form-label">Memory</label>
