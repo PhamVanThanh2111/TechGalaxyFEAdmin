@@ -88,6 +88,7 @@
                                         <form:label path="name" for="name">Name</form:label>
                                         <form:input path="name" type="text" cssClass="form-control" id="name"
                                                     placeholder="Name" required="required"/>
+                                        <form:errors path="name" cssClass="text-danger"/>
                                     </div>
 
                                     <div class="form-group">
@@ -100,12 +101,14 @@
                                         <form:label path="phone" for="phone">Phone</form:label>
                                         <form:input path="phone" type="text" cssClass="form-control" id="phone"
                                                     placeholder="Phone" required="required"/>
+                                        <form:errors path="phone" cssClass="text-danger"/>
                                     </div>
 
                                     <div class="form-group">
                                         <form:label path="address" for="address">Address</form:label>
                                         <form:input path="address" cssClass="form-control" id="address"
                                                     placeholder="Address"/>
+                                        <form:errors path="address" cssClass="text-danger"/>
                                     </div>
 
                                     <div class="form-group">

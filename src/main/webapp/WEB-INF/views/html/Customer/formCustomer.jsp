@@ -79,24 +79,24 @@
                                            method="POST" modelAttribute="customerRequest" cssClass="needs-validation"
                                            enctype="multipart/form-data">
                                     <div class="form-group">
-                                        <form:input path="id" type="hidden"/>
-                                    </div>
-                                    <div class="form-group">
                                         <form:label path="name" for="name">Name</form:label>
                                         <form:input path="name" type="text" cssClass="form-control" id="name"
                                                     placeholder="Name" required="required"/>
+                                        <form:errors path="name" cssClass="text-danger"/>
                                     </div>
 
                                     <div class="form-group">
                                         <form:label path="account.email" for="email">Email</form:label>
                                         <form:input path="account.email" type="email" cssClass="form-control" id="email"
                                                     placeholder="E-mail" required="required"/>
+                                        <form:errors path="account.email" cssClass="text-danger"/>
                                     </div>
 
                                     <div class="form-group">
                                         <form:label path="dateOfBirth" for="birthDate">Birthday</form:label>
                                         <form:input path="dateOfBirth" type="date" cssClass="form-control"
                                                     id="birthDate" value="${dateOfBirth}"/>
+                                        <form:errors path="dateOfBirth" cssClass="text-danger"/>
                                     </div>
 
                                     <div class="form-group">
@@ -113,6 +113,7 @@
                                         <form:label path="phone" for="phoneNumber">Phone number</form:label>
                                         <form:input path="phone" type="tel" cssClass="form-control" id="phoneNumber"
                                                     placeholder="Type the phone number"/>
+                                        <form:errors path="phone" cssClass="text-danger"/>
                                     </div>
 
                                     <div class="form-group">
@@ -135,6 +136,7 @@
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-primary align-self-center">Save</button>
                                     </div>
+                                    <form:input path="id" type="hidden"/>
                                     <form:input path="account.id" type="hidden" value="${customerRequest.account.id}"/>
                                     <form:input path="account.password" type="hidden"
                                                 value="${customerRequest.account.password}"/>
