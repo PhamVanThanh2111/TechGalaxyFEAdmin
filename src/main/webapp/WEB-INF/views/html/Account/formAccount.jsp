@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,46 +70,53 @@
                                            method="POST" modelAttribute="account" cssClass="needs-validation">
                                     <div class="form-group">
                                         <label>Roles</label>
-                                        <div class="form-check">
-                                            <c:if test="${account.rolesIds.contains('28886b1b-69bf-4331-8193-e1d86c824125')}">
-                                                <input class="form-check-input" type="checkbox" name="roles"
-                                                       value="28886b1b-69bf-4331-8193-e1d86c824125" id="roleAdmin" checked>
+                                        <c:forEach items="${roles}" var="role">
+                                            <c:if test="${role.name == 'Admin'}">
+                                                <div class="form-check">
+                                                    <c:if test="${fn:contains(accountRoles, role.id)}">
+                                                        <input class="form-check-input" type="checkbox" name="roles"
+                                                               value="${role.id}" id="roleAdmin" checked>
+                                                    </c:if>
+                                                    <c:if test="${!fn:contains(accountRoles, role.id)}">
+                                                        <input class="form-check-input" type="checkbox" name="roles"
+                                                               value="${role.id}" id="roleAdmin">
+                                                    </c:if>
+                                                    <label class="form-check-label" for="roleAdmin">Admin</label>
+                                                </div>
                                             </c:if>
-                                            <c:if test="${!account.rolesIds.contains('28886b1b-69bf-4331-8193-e1d86c824125')}">
-                                                <input class="form-check-input" type="checkbox" name="roles"
-                                                       value="28886b1b-69bf-4331-8193-e1d86c824125" id="roleAdmin">
+                                            <c:if test="${role.name == 'Customer'}">
+                                                <div class="form-check">
+                                                    <c:if test="${fn:contains(accountRoles, role.id)}">
+                                                        <input class="form-check-input" type="checkbox" name="roles"
+                                                               value="${role.id}" id="roleCustomer" checked>
+                                                    </c:if>
+                                                    <c:if test="${!fn:contains(accountRoles, role.id)}">
+                                                        <input class="form-check-input" type="checkbox" name="roles"
+                                                               value="${role.id}" id="roleCustomer">
+                                                    </c:if>
+                                                    <label class="form-check-label" for="roleCustomer">Customer</label>
+                                                </div>
                                             </c:if>
-                                            <label class="form-check-label" for="roleAdmin">Admin</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <c:if test="${account.rolesIds.contains('6822d329-0e58-4a7f-9ef8-e91295d15180')}">
-                                                <input class="form-check-input" type="checkbox" name="roles"
-                                                       value="6822d329-0e58-4a7f-9ef8-e91295d15180" id="roleCustomer" checked>
+                                            <c:if test="${role.name == 'Employee'}">
+                                                <div class="form-check">
+                                                    <c:if test="${fn:contains(accountRoles, role.id)}">
+                                                        <input class="form-check-input" type="checkbox" name="roles"
+                                                               value="${role.id}" id="roleEmployee" checked>
+                                                    </c:if>
+                                                    <c:if test="${!fn:contains(accountRoles, role.id)}">
+                                                        <input class="form-check-input" type="checkbox" name="roles"
+                                                               value="${role.id}" id="roleEmployee">
+                                                    </c:if>
+                                                    <label class="form-check-label" for="roleEmployee">Employee</label>
+                                                </div>
                                             </c:if>
-                                            <c:if test="${!account.rolesIds.contains('6822d329-0e58-4a7f-9ef8-e91295d15180')}">
-                                                <input class="form-check-input" type="checkbox" name="roles"
-                                                       value="6822d329-0e58-4a7f-9ef8-e91295d15180" id="roleCustomer">
-                                            </c:if>
-                                            <label class="form-check-label" for="roleCustomer">Customer</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <c:if test="${account.rolesIds.contains('9823d890-0e58-4a7f-9ef8-e91295d15180')}">
-                                                <input class="form-check-input" type="checkbox" name="roles"
-                                                       value="9823d890-0e58-4a7f-9ef8-e91295d15180" id="roleEmployee"
-                                                       checked>
-                                            </c:if>
-                                            <c:if test="${!account.rolesIds.contains('9823d890-0e58-4a7f-9ef8-e91295d15180')}">
-                                                <input class="form-check-input" type="checkbox" name="roles"
-                                                       value="9823d890-0e58-4a7f-9ef8-e91295d15180" id="roleEmployee">
-                                            </c:if>
-                                            <label class="form-check-label" for="roleEmployee">Employee</label>
-                                        </div>
+                                        </c:forEach>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="password">Password</label>
                                         <form:password path="password" cssClass="form-control"
-                                                       id="password" placeholder="New password" />
+                                                       id="password" placeholder="New password"/>
                                     </div>
 
                                     <%-- Hidden --%>
