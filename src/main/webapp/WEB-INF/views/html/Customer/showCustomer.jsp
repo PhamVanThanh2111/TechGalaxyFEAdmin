@@ -30,9 +30,40 @@
     <!-- Custom styles for this page -->
     <link href="<c:url value="/datatables/dataTables.bootstrap4.min.css" />" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="<c:url value="/css/toast.css"/> " rel="stylesheet">
+
 </head>
 
 <body id="page-top">
+
+<c:if test="${not empty successMessage}">
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="successToast" class="toast success-toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Success!</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                    ${successMessage}
+            </div>
+        </div>
+    </div>
+</c:if>
+<c:if test="${not empty errorMessage}">
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="errorToast" class="toast error-toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Unsuccessful!</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                    ${errorMessage}
+            </div>
+        </div>
+    </div>
+</c:if>
 
 <!-- Page Wrapper -->
 <div id="wrapper">
@@ -208,6 +239,22 @@
 
 <!-- Page level custom scripts -->
 <script src="<c:url value="/js/demo/datatables-demo.js" />"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Thêm script để hiển thị Toast -->
+<script>
+    var successToast = new bootstrap.Toast(document.getElementById('successToast'));
+    var errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+
+    // Hiển thị các toast
+    <c:if test="${not empty successMessage}">
+        successToast.show();
+    </c:if>
+    <c:if test="${not empty errorMessage}">
+        errorToast.show();
+    </c:if>
+</script>
 
 </body>
 

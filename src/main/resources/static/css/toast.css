@@ -1,0 +1,49 @@
+/* Cấu trúc chung cho Toast */
+.toast {
+    border-radius: 12px; /* Bo tròn góc */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ */
+    animation: fadeIn 0.5s ease-in-out; /* Hiệu ứng xuất hiện */
+}
+
+.toast-header > .me-auto {
+    font-weight: 700; /* Chữ đậm */
+    color: white; /* Màu chữ trắng */
+}
+
+.toast-body {
+    color: white; /* Màu chữ trắng */
+}
+
+.btn-close {
+    background-color: white;
+}
+
+/* Hiệu ứng fadeIn cho toast */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Toast màu xanh biển */
+.success-toast .toast-header {
+    background-color: #0056b3; /* Màu nền xanh đậm cho header */
+}
+
+.success-toast .toast-body {
+    background-color: #007bff; /* Màu nền sáng hơn cho body */
+}
+
+/* Toast màu đỏ */
+.error-toast .toast-header {
+    background-color: #dc3545; /* Màu nền đỏ cho header */
+}
+
+.error-toast .toast-body {
+    background-color: #e74c3c; /* Màu nền sáng hơn cho body */
+}

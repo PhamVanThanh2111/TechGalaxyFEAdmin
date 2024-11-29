@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -85,7 +86,8 @@ public class CustomerController {
                              @RequestParam("avatar") MultipartFile avatar,
                              BindingResult bindingResult,
                              ModelAndView model,
-                             HttpSession session) throws IOException, URISyntaxException {
+                             HttpSession session,
+                             RedirectAttributes redirectAttributes) throws IOException, URISyntaxException {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             model.setViewName("redirect:/login");
@@ -101,14 +103,24 @@ public class CustomerController {
                 UploadFileResponse uploadFileResponse = ((List<UploadFileResponse>) response.getData()).get(0);
                 customerRequest.setAvatar(uploadFileResponse.getFileName());
             }
+            boolean isSaved = false;
             if (customerRequest.getId() == null || customerRequest.getId().isEmpty()) { // add new customer
-                customerService.save(customerRequest, accessToken);
+                if (customerService.save(customerRequest, accessToken).getData() != null) {
+                    isSaved = true;
+                }
             } else { // update customer
                 if (customerRequest.getAvatar() == null || customerRequest.getAvatar().isEmpty()) {
                     CustomerResponse customerResponse = ((List<CustomerResponse>) customerService.findById(customerRequest.getId(), accessToken).getData()).get(0);
                     customerRequest.setAvatar(customerResponse.getAvatar());
                 }
-                customerService.update(customerRequest, accessToken);
+                if (customerService.update(customerRequest, accessToken).getData() != null) {
+                    isSaved = true;
+                }
+            }
+            if (isSaved) {
+                redirectAttributes.addFlashAttribute("successMessage", "Save customer success");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Save customer failed");
             }
             model.setViewName("redirect:/customers");
             return model;
@@ -196,7 +208,8 @@ public class CustomerController {
     @GetMapping("/delete/{id}")
     public ModelAndView deleteCustomer(@PathVariable String id,
                                        ModelAndView model,
-                                       HttpSession session) {
+                                       HttpSession session,
+                                       RedirectAttributes redirectAttributes) {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             model.setViewName("redirect:/login");
@@ -204,20 +217,24 @@ public class CustomerController {
         }
         try {
             customerService.delete(id, accessToken);
+            redirectAttributes.addFlashAttribute("successMessage", "Delete customer success");
             model.setViewName("redirect:/customers");
             return model;
         } catch (
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Delete customer failed");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Delete customer failed");
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
             e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Delete customer failed");
             return model;
         }
     }
