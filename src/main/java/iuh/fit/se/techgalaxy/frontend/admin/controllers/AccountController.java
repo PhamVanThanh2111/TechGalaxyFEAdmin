@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -66,16 +67,20 @@ public class AccountController {
         }
         try {
             AccountResponse account = ((List<AccountResponse>) accountService.findById(id, accessToken).getData()).get(0);
+            List<RoleResponse> roles = (List<RoleResponse>) roleService.findAll(accessToken).getData();
+            String accountRoles = "";
+            if (!account.getRolesIds().isEmpty())
+                accountRoles = String.join(",", account.getRolesIds());
+            model.addObject("accountRoles", accountRoles);
+            model.addObject("roles", roles);
             model.addObject("account", account);
             model.setViewName("html/Account/formAccount");
             return model;
         } catch (
                 HttpClientErrorException.Unauthorized e) {
-            System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
-            System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
             return model;
         } catch (Exception e) {
@@ -88,7 +93,8 @@ public class AccountController {
     @GetMapping("/delete/{email}")
     public ModelAndView delete(@PathVariable String email,
                                ModelAndView model,
-                               HttpSession session) {
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             model.setViewName("redirect:/login");
@@ -97,20 +103,26 @@ public class AccountController {
         try {
             SystemUserResponseDTO user = ((List<SystemUserResponseDTO>) systemUserService.findByEmail(email, accessToken).getData()).get(0);
             systemUserService.delete(user.getId(), accessToken);
+            accountService.deleteAccount(user.getAccount().getId(), accessToken);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Account deleted successfully");
             model.setViewName("redirect:/accounts");
             return model;
         } catch (
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Account deleted failed");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Account deleted failed");
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
             e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Account deleted failed");
             return model;
         }
     }
@@ -126,8 +138,12 @@ public class AccountController {
         }
         try {
             AccountResponse account = ((List<AccountResponse>) accountService.findById(id, accessToken).getData()).get(0);
+            account.setPassword(null);
             SystemUserResponseDTO user = ((List<SystemUserResponseDTO>) systemUserService.findByEmail(account.getEmail(), accessToken).getData()).get(0);
-            List<RoleResponse> roles = (List<RoleResponse>) account.getRolesIds().stream().map(roleId -> roleService.findById(roleId, accessToken)).findFirst().get().getData();
+            List<RoleResponse> roles = null;
+            if (!account.getRolesIds().isEmpty()) {
+                roles = (List<RoleResponse>) account.getRolesIds().stream().map(roleId -> roleService.findById(roleId, accessToken)).findFirst().get().getData();
+            }
 
             model.addObject("account", account);
             model.addObject("user", user);
@@ -154,7 +170,8 @@ public class AccountController {
     public ModelAndView update(@ModelAttribute("account") AccountResponse account,
                                @RequestParam(name = "roles", required = false) List<String> rolesIds,
                                ModelAndView model,
-                               HttpSession session) {
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             model.setViewName("redirect:/login");
@@ -182,7 +199,11 @@ public class AccountController {
 
             if (result == null) {
                 model.setViewName("html/Account/formAccount");
+                redirectAttributes.addFlashAttribute("errorMessage", "Account updated failed");
                 return model;
+            }
+            else {
+                redirectAttributes.addFlashAttribute("successMessage", "Account updated successfully");
             }
             model.setViewName("redirect:/accounts");
             return model;
@@ -190,14 +211,17 @@ public class AccountController {
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Account updated failed");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Account updated failed");
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
             e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Account updated failed");
             return model;
         }
     }
