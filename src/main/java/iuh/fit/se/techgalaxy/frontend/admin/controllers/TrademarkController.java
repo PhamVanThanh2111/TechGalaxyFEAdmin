@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class TrademarkController {
 
     @GetMapping
     public ModelAndView findAll(ModelAndView model) {
-        DataResponse<TrademarkResponse> response = trademarkService.findAll();
+        DataResponse<TrademarkResponse> response = trademarkService.getAllTrademarks();
         List<TrademarkResponse> trademarks = null;
         if (response != null) {
             trademarks = (List<TrademarkResponse>) response.getData();
@@ -68,17 +69,26 @@ public class TrademarkController {
     @PostMapping("/save")
     public ModelAndView save(@ModelAttribute("trademarkRequest") TrademarkRequest trademarkRequest,
                              ModelAndView model,
-                             HttpSession session) {
+                             HttpSession session,
+                             RedirectAttributes redirectAttributes) {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             model.setViewName("redirect:/login");
             return model;
         }
         try {
-            if (trademarkRequest.getId() == null && trademarkRequest.getId().isEmpty()) {
-                trademarkService.save(trademarkRequest.getName(), accessToken);
+            boolean isSaved = false;
+            if (trademarkRequest.getId() == null || trademarkRequest.getId().isEmpty()) {
+                if (trademarkService.save(trademarkRequest.getName(), accessToken).getData() != null)
+                    isSaved = true;
             } else {
-                trademarkService.update(trademarkRequest, accessToken);
+                if (trademarkService.update(trademarkRequest, accessToken).getData() != null)
+                    isSaved = true;
+            }
+            if (isSaved) {
+                redirectAttributes.addFlashAttribute("successMessage", "Save trademark success");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Save trademark failed");
             }
             model.setViewName("redirect:/trademarks");
             return model;
@@ -86,14 +96,17 @@ public class TrademarkController {
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Save trademark failed");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Save trademark failed");
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
             e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Save trademark failed");
             return model;
         }
     }
@@ -101,7 +114,8 @@ public class TrademarkController {
     @GetMapping("/delete/{id}")
     public ModelAndView delete(ModelAndView model,
                                @PathVariable String id,
-                               HttpSession session) {
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             model.setViewName("redirect:/login");
@@ -109,20 +123,24 @@ public class TrademarkController {
         }
         try {
             trademarkService.delete(id, accessToken);
+            redirectAttributes.addFlashAttribute("successMessage", "Delete trademark success");
             model.setViewName("redirect:/trademarks");
             return model;
         } catch (
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Delete trademark failed");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Delete trademark failed");
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
             e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Delete trademark failed");
             return model;
         }
     }
