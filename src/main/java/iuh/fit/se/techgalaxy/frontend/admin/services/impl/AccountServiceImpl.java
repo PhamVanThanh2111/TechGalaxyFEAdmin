@@ -72,4 +72,14 @@ public class AccountServiceImpl implements AccountService {
                 .retrieve()
                 .body(Boolean.class));
     }
+
+    @Override
+    public DataResponse<Void> deleteAccount(String id, String accessToken) {
+        return restClient.delete()
+                .uri(ENDPOINT + "/api/accounts/" + id)
+                .header("Authorization", "Bearer " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
 }

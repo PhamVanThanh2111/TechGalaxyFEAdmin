@@ -15,4 +15,6 @@ public interface AccountService {
     DataResponse<AccountUpdateResponse> updateWithoutPassword(AccountUpdateRequest accountUpdateRequest, String accessToken);
 
     boolean existsByEmail(String email, String accessToken);
+
+    DataResponse<Void> deleteAccount(String id, String accessToken);
 }
