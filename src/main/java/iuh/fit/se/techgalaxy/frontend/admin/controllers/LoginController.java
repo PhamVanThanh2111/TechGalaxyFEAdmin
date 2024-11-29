@@ -68,7 +68,7 @@ public class LoginController {
                 if (roleResponse.getStatus() == 200 && roleResponse.getData() != null) {
                     List<RoleResponse> roles = (List<RoleResponse>) roleResponse.getData();
                     for (RoleResponse role : roles) {
-                        if (role.getName().equals("Admin")) {
+                        if (role.getName().equals("Admin")||role.getName().equals("Employee")) {
                             redirectAttributes.addFlashAttribute("successMessage", "Login successfully!");
                             DataResponse<SystemUserResponseDTO> systemUserResponse = systemUserService.findByEmail(username, (String) session.getAttribute("accessToken"));
 //                        DataResponse<SystemUserResponseDTO> systemUserResponse = systemUserService.findByEmail(username);

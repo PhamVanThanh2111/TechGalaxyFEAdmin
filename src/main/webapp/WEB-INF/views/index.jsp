@@ -3,14 +3,24 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <!-- Meta thông tin cơ bản -->
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="SB Admin Dashboard Template">
 
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <!-- Favicon -->
+    <!-- Favicon -->
+    <link rel="icon" href="<c:url value='/images/favicon/favicon.ico' />">
+    <link rel="icon" type="image/png" sizes="16x16" href="<c:url value='/images/favicon/favicon-16x16.png' />">
+    <link rel="icon" type="image/png" sizes="32x32" href="<c:url value='/images/favicon/favicon-32x32.png' />">
+    <link rel="icon" type="image/png" sizes="192x192" href="<c:url value='/images/favicon/android-chrome-192x192.png' />">
+    <link rel="icon" type="image/png" sizes="512x512" href="<c:url value='/images/favicon/android-chrome-512x512.png' />">
+    <link rel="apple-touch-icon" sizes="180x180" href="<c:url value='/images/favicon/apple-touch-icon.png' />">
+    <link rel="manifest" href="<c:url value='/images/favicon/site.webmanifest' />">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="<c:url value='/images/favicon/android-chrome-192x192.png' />">
+    <meta name="theme-color" content="#ffffff">
 
     <title>SB Admin 2 - Dashboard</title>
 
@@ -281,6 +291,7 @@
 <!-- Page level custom scripts -->
 <script src="<c:url value="js/demo/chart-area-demo.js"/>"></script>
 <script src="<c:url value="js/demo/chart-pie-demo.js"/>"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Thêm script để hiển thị Toast -->
