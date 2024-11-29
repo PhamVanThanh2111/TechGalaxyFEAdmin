@@ -20,7 +20,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public DataResponse<RoleResponse> findAll(String accessToken) {
         return restClient.get()
-                .uri(ENDPOINT + "/roles/add")
+                .uri(ENDPOINT + "/roles/all")
                 .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
