@@ -148,6 +148,7 @@ public class SystemUserServiceImpl implements SystemUserService {
     public DataResponse<Void> delete(String id, String accessToken) {
         return restClient.delete()
                 .uri(ENDPOINT + "/system-users/" + id)
+                .header("Authorization", "Bearer " + accessToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
