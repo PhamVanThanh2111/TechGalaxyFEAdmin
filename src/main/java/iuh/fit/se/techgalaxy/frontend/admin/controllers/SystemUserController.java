@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -81,7 +82,8 @@ public class SystemUserController {
                              @RequestParam MultipartFile avatar,
                              BindingResult bindingResult,
                              ModelAndView model,
-                             HttpSession session) throws IOException, URISyntaxException {
+                             HttpSession session,
+                             RedirectAttributes redirectAttributes) throws IOException, URISyntaxException {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             new ModelAndView("redirect:/login");
@@ -97,14 +99,22 @@ public class SystemUserController {
                 System.out.println(uploadFileResponse.getFileName());
                 request.setAvatar(uploadFileResponse.getFileName());
             }
+            boolean isSaved = false;
             if (request.getId() == null || request.getId().isEmpty()) {
-                systemUserService.create(request, accessToken);
+                if (systemUserService.create(request, accessToken).getData() != null)
+                    isSaved = true;
             } else {
                 if (request.getAvatar() == null || request.getAvatar().isEmpty()) {
                     SystemUserResponseDTO tmp = ((List<SystemUserResponseDTO>) systemUserService.findById(request.getId(), accessToken).getData()).get(0);
                     request.setAvatar(tmp.getAvatar());
                 }
-                systemUserService.update(request, accessToken);
+                if (systemUserService.update(request, accessToken).getData() != null)
+                    isSaved = true;
+            }
+            if (isSaved) {
+                redirectAttributes.addFlashAttribute("successMessage", "Save system user success");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Save system user failed");
             }
             model.setViewName("redirect:/systemUsers");
             return model;
@@ -112,14 +122,17 @@ public class SystemUserController {
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Save system user failed");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Save system user failed");
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
             e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Save system user failed");
             return model;
         }
     }
@@ -156,27 +169,32 @@ public class SystemUserController {
     @GetMapping("/delete/{id}")
     public ModelAndView delete(ModelAndView model,
                                @PathVariable String id,
-                               HttpSession session) {
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             new ModelAndView("redirect:/login");
         }
         try {
             systemUserService.delete(id, accessToken);
+            redirectAttributes.addFlashAttribute("successMessage", "Delete system user success");
             model.setViewName("redirect:/systemUsers");
             return model;
         } catch (
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Delete system user failed");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Delete system user failed");
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
             e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Delete system user failed");
             return model;
         }
     }
