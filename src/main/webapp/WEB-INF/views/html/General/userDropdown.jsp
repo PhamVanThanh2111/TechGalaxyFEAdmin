@@ -8,7 +8,7 @@
             <c:out value="${sessionScope.username}" />
         </span>
         <img class="img-profile rounded-circle"
-             src="<c:url value='http://localhost:8081/storage/customer/avatar/${sessionScope.profileImage}' />"
+             src="<c:url value='http://localhost:8081/storage/systemUser/avatar/${sessionScope.profileImage}' />"
              alt="avatar"/>
     </a>
     <!-- Dropdown - User Information -->
