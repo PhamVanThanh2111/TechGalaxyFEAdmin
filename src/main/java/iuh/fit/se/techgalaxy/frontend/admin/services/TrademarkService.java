@@ -8,14 +8,7 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.TrademarkResponse;
 
 public interface TrademarkService {
 
-
-    DataResponse<TrademarkResponse> getTrademarkById(String id);
-
-    DataResponse<TrademarkResponse> getTrademarkByName(String name);
-
     DataResponse<TrademarkResponse> getAllTrademarks();
-
-    DataResponse<TrademarkResponse> findAll();
 
     DataResponse<TrademarkResponse> findById(String id);
 

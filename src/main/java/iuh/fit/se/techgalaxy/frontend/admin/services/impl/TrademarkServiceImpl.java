@@ -20,37 +20,7 @@ public class TrademarkServiceImpl implements TrademarkService {
     }
 
     @Override
-    public DataResponse<TrademarkResponse> getTrademarkById(String id) {
-        return restClient.get()
-                .uri(ENDPOINT + "/trademarks/" + id)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .body(new ParameterizedTypeReference<>() {
-                });
-    }
-
-    @Override
-    public DataResponse<TrademarkResponse> getTrademarkByName(String name) {
-        return restClient.get()
-                .uri(ENDPOINT + "/trademarks/" + name)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .body(new ParameterizedTypeReference<>() {
-                });
-    }
-
-    @Override
     public DataResponse<TrademarkResponse> getAllTrademarks() {
-        return restClient.get()
-                .uri(ENDPOINT + "/trademarks")
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .body(new ParameterizedTypeReference<>() {
-                });
-    }
-
-    @Override
-    public DataResponse<TrademarkResponse> findAll() {
         return restClient.get()
                 .uri(ENDPOINT + "/trademarks")
                 .accept(MediaType.APPLICATION_JSON)
@@ -98,6 +68,4 @@ public class TrademarkServiceImpl implements TrademarkService {
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }
-
-
 }
