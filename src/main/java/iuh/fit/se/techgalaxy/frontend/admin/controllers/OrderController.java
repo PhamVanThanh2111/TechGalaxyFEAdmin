@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -115,9 +116,6 @@ public class OrderController {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .create();
 
-        System.out.println(gson.toJson(productVariants));
-        System.out.println(gson.toJson(memories));
-        System.out.println(gson.toJson(colors));
         model.addObject("productVariants", gson.toJson(productVariants));
         model.addObject("memories", gson.toJson(memories));
         model.addObject("colors", gson.toJson(colors));
@@ -131,7 +129,8 @@ public class OrderController {
                                   @RequestParam("productCount") int productCount,
                                   @RequestParam Map<String, String> params,
                                   ModelAndView model,
-                                  HttpSession session) {
+                                  HttpSession session,
+                                  RedirectAttributes redirectAttributes) {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             model.setViewName("redirect:/login");
@@ -199,21 +198,24 @@ public class OrderController {
                     return model;
                 }
             }
-
             model.setViewName("redirect:/orders");
+            redirectAttributes.addFlashAttribute("successMessage", "Order created successfully");
             return model;
         } catch (
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Order created failed");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Order created failed");
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
             e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Order created failed");
             return model;
         }
     }
@@ -222,7 +224,8 @@ public class OrderController {
     public ModelAndView confirm(@PathVariable String id,
                                 @PathVariable String orderStatus,
                                 ModelAndView model,
-                                HttpSession session) {
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes) {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             model.setViewName("redirect:/login");
@@ -245,19 +248,23 @@ public class OrderController {
             Order orderUpdate = OrderMapper.INSTANCE.toOrderFromResponse(order);
             orderService.update(OrderMapper.INSTANCE.toOrderRequest(orderUpdate), accessToken);
             model.setViewName("redirect:/orders");
+            redirectAttributes.addFlashAttribute("successMessage", "Order updated status successfully");
             return model;
         } catch (
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Order updated status failed");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
+            redirectAttributes.addFlashAttribute("errorMessage", "Order updated status failed");
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
             e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Order updated status failed");
             return model;
         }
     }
