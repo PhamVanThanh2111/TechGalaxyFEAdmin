@@ -72,7 +72,6 @@
                                         </li>
                                         <li class="list-group-item">
                                             <strong>Email:</strong> ${account.email}</li>
-                                        <li class="list-group-item"><strong>Password:</strong> ${account.password}</li>
                                     </ul>
                                 </div>
 
