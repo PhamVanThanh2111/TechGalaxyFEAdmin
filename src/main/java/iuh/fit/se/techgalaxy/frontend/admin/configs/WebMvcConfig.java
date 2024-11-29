@@ -17,7 +17,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/css/**", "/js/**", "/images/**");
+                .addPathPatterns("/**") // Áp dụng cho mọi đường dẫn
+                .excludePathPatterns(
+                        "/login",           // Loại trừ login
+                        "/css/**",          // Loại trừ các file trong thư mục css
+                        "/js/**",           // Loại trừ các file trong thư mục js
+                        "/images/**",       // Loại trừ các file trong thư mục images
+                        "/bootstrap.js/**", // Loại trừ thư mục bootstrap.js
+                        "/chart.js/**",     // Loại trừ thư mục chart.js
+                        "/datatables/**",   // Loại trừ thư mục datatables
+                        "/fontawesome-free/**", // Loại trừ thư mục fontawesome-free
+                        "/img/**",          // Loại trừ thư mục img
+                        "/jquery/**",       // Loại trừ thư mục jquery
+                        "/jquery-easing/**" // Loại trừ thư mục jquery-easing
+                );
     }
 }
