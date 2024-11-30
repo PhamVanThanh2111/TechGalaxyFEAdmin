@@ -10,6 +10,8 @@ public interface AccountService {
 
     DataResponse<AccountResponse> findById(String id, String accessToken);
 
+    DataResponse<AccountResponse> findByEmail(String email, String accessToken);
+
     DataResponse<AccountUpdateResponse> update(AccountUpdateRequest accountUpdateRequest, String accessToken);
 
     DataResponse<AccountUpdateResponse> updateWithoutPassword(AccountUpdateRequest accountUpdateRequest, String accessToken);

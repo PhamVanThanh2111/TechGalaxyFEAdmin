@@ -40,6 +40,16 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public DataResponse<AccountResponse> findByEmail(String email, String accessToken) {
+        return restClient.get()
+                .uri(ENDPOINT + "/api/accounts/email/" + email)
+                .header("Authorization", "Bearer " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
+    @Override
     public DataResponse<AccountUpdateResponse> update(AccountUpdateRequest accountUpdateRequest, String accessToken) {
         return restClient.put()
                 .uri(ENDPOINT + "/api/accounts")

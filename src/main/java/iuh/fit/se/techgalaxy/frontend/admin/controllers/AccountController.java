@@ -188,7 +188,7 @@ public class AccountController {
             accountUpdateRequest.setEmail(account.getEmail());
             accountUpdateRequest.setPassword(account.getPassword());
 
-            DataResponse<AccountUpdateResponse> result = null;
+            DataResponse<AccountUpdateResponse> result;
             if (account.getPassword().isEmpty()) {
                 System.out.println("Update without password");
                 result = accountService.updateWithoutPassword(accountUpdateRequest, accessToken);
