@@ -170,7 +170,6 @@ public class ProductController {
                             } else {
                                 List<ProductFullRequest.ProductVariantRequest.ProductVariantDetailRequest> details = variantRequest.getDetails();
                                 for (ProductFullRequest.ProductVariantRequest.ProductVariantDetailRequest detailRequest : details) {
-                                    List<ProductVariantDetailRequest> productVariantDetails = new ArrayList<>();
                                     ProductVariantDetailRequest productVariantDetailRequest = new ProductVariantDetailRequest();
                                     productVariantDetailRequest.setMemid(detailRequest.getMemid());
                                     productVariantDetailRequest.setPrice(detailRequest.getPrice());
@@ -180,23 +179,25 @@ public class ProductController {
                                     } else {
                                         List<ProductsImageRequest> imagesProductsImageRequests = new ArrayList<>();
                                         for (ProductFullRequest.ProductVariantRequest.ProductVariantDetailRequest.ColorRequest colorRequest : detailRequest.getColors()) {
+                                            List<ProductVariantDetailRequest> productVariantDetails = new ArrayList<>();
                                             ProductVariantDetailRequest.ColorRequest colorRequest1 = new ProductVariantDetailRequest.ColorRequest();
+                                            System.out.println("Dữ liệu màu:");
+                                            System.out.println(colorRequest.getColorId());
                                             colorRequest1.setColorId(colorRequest.getColorId());
                                             colorRequest1.setQuantity(colorRequest.getQuantity());
-
+                                            List<ProductVariantDetailRequest.ColorRequest> colorRequests1 = List.of(colorRequest1);
+                                            productVariantDetailRequest.setColors(colorRequests1);
+                                            System.out.println("Dữ liệu chi tiết variant detail:");
+                                            System.out.println(productVariantDetailRequest);
+                                            productVariantDetails.add(productVariantDetailRequest);
+                                            System.out.println("Dữ liệu chi tiết variant trước khi lưu:");
+                                            productVariantDetails.forEach(
+                                                    System.out::println
+                                            );
+                                            DataResponse<String> productVariantDetailResponseDataResponse = productService.createVariantDetail(variantId, productVariantDetails, accessToken);
                                             if (colorRequest.getImages() == null || colorRequest.getImages().length == 0) {
                                                 System.out.println("Không có hình ảnh nào được tạo.");
                                             } else {
-                                                List<ProductVariantDetailRequest.ColorRequest> colorRequests = List.of(colorRequest1);
-                                                productVariantDetailRequest.setColors(colorRequests);
-                                                System.out.println("Dữ liệu chi tiết variant detail:");
-                                                System.out.println(productVariantDetailRequest);
-                                                productVariantDetails.add(productVariantDetailRequest);
-                                                System.out.println("Dữ liệu chi tiết variant trước khi lưu:");
-                                                productVariantDetails.forEach(
-                                                        System.out::println
-                                                );
-                                                DataResponse<String> productVariantDetailResponseDataResponse = productService.createVariantDetail(variantId, productVariantDetails, accessToken);
                                                 if (productVariantDetailResponseDataResponse.getStatus() != 200) {
                                                     System.out.println("Lỗi khi lưu chi tiết variant.");
                                                     redirectAttributes.addFlashAttribute("errorMessage", "Error saving variant detail.");
@@ -220,7 +221,7 @@ public class ProductController {
                                                             } else {
                                                                 List<UploadFileResponse> uploadFileResponses = (List<UploadFileResponse>) uploadFileResponseDataResponse.getData();
                                                                 String imageUrl = uploadFileResponses.get(0).getFileName();
-                                                                ProductsImageRequest productsImageRequest = new ProductsImageRequest(imageUrl, false);
+                                                                ProductsImageRequest productsImageRequest = new ProductsImageRequest("products/" + variantRequest.getName().replace(" ", "_") + "/" + detailRequest.getMemid() + "/" + colorRequest.getColorId() + imageUrl, false);
                                                                 imagesProductsImageRequests.add(productsImageRequest);
 
                                                                 DataResponse<ProductsImageResponse> productImageResponseDataResponse = productImgService.createProductImg(detailId, imagesProductsImageRequests, accessToken);

@@ -84,6 +84,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public DataResponse<String> createVariantDetail(String variantId, List<ProductVariantDetailRequest> detailRequest, String accessToken) {
+        detailRequest.forEach(System.out::println);
         return restClient.post()
                 .uri(ENDPOINT + "/products/variants/" + variantId + "/details")
                 .header("Authorization", "Bearer " + accessToken)

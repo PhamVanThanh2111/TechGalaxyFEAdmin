@@ -96,7 +96,6 @@
                                     <th>Status</th>
                                     <th>Memory</th>
                                     <th>Color</th>
-                                    <th>Views</th>
                                     <th>Price</th>
                                     <th>Sale</th>
                                     <th>Quantity</th>
@@ -125,11 +124,12 @@
                                                 <!-- Hiển thị tên Color -->
                                                 <td>${colorMap[color.colorId]}</td>
 
-                                                <td>${color.viewsCount}</td>
                                                 <td>
                                                     <fmt:formatNumber value="${color.price}" pattern="#,##0.00" />
                                                 </td>
                                                 <td><fmt:formatNumber value="${color.sale}" pattern="#,##0.00" /></td>
+                                                <td>${color.quantity}</td>
+
                                                 <td>
                                                     <form action="/products/${productId}/variants/${variantId}/details/update/${detailItem.id}" method="get" style="display:inline;">
                                                         <button type="submit" class="btn btn-primary btn-sm">Update</button>
