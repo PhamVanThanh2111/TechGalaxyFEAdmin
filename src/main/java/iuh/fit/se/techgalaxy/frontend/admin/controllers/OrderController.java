@@ -271,7 +271,7 @@ public class OrderController {
     }
 
     @GetMapping("/update/{id}")
-    public ModelAndView updateOrder(ModelAndView model,
+    public ModelAndView showFormUpdateOrder(ModelAndView model,
                                     @PathVariable String id,
                                     HttpSession session) {
         String accessToken = (String) session.getAttribute("accessToken");
@@ -311,6 +311,7 @@ public class OrderController {
             model.addObject("order", order);
             model.addObject("orderDetails", gson.toJson(orderDetails));
             System.out.println("Order details");
+            System.out.println(order.getCustomer().getAccount().getEmail());
             System.out.println(gson.toJson(productVariants));
             System.out.println(gson.toJson(memories));
             System.out.println(gson.toJson(colors));

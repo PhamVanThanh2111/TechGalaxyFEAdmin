@@ -143,7 +143,8 @@
                                             <td>${order.orderStatus}</td>
                                             <td>
                                                     <%--                                                <c:if test="${order.orderStatus == 'NEW'}">--%>
-                                                <a href="#" class="btn btn-success btn-sm" data-toggle="modal"
+                                                        <a href="${pageContext.request.contextPath}/orders/update/${order.id}" class="btn btn-warning btn-sm">Update</a>
+                                                        <a href="#" class="btn btn-success btn-sm" data-toggle="modal"
                                                    data-target="#confirmOrderModal_${order.id}">Edit</a>
                                                 <!-- Confirm Order Modal-->
                                                 <div class="modal fade" id="confirmOrderModal_${order.id}" tabindex="-1"
