@@ -195,6 +195,7 @@ public class OrderController {
                 List<OrderDetailResponse> orderDetailResponse = ((List<OrderDetailResponse>) orderDetailService.createOrderDetail(orderDetailRequest, accessToken).getData());
                 if (orderDetailResponse == null) {
                     model.setViewName("html/Order/addOrder");
+                    redirectAttributes.addFlashAttribute("errorMessage", "Order created failed");
                     return model;
                 }
             }

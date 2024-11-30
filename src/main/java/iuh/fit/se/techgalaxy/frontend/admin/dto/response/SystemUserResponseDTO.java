@@ -28,7 +28,6 @@ public class SystemUserResponseDTO {
     private String avatar;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
     private AccountResponse account;
 
     @Getter

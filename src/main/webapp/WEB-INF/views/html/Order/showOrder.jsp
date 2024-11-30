@@ -124,8 +124,7 @@
                                         <tr data-toggle="collapse" data-target="#collapse-${order.id}"
                                             aria-expanded="false"
                                             aria-controls="collapse-${order.id}" style="cursor: pointer;"
-                                            class="card-header"
-                                        >
+                                            class="card-header">
                                             <td>${order.customer.name}</td>
                                             <td>${order.systemUser.name}</td>
                                             <td>${order.address}</td>
@@ -182,7 +181,7 @@
 
                                         <!-- Dòng collapse hiển thị chi tiết -->
                                         <tr class="collapse" id="collapse-${order.id}">
-                                            <td colspan="7">
+                                            <td colspan="6">
                                                 <div class="p-3">
                                                     <h6>Order Details:</h6>
                                                     <ul>
