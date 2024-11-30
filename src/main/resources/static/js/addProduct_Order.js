@@ -60,7 +60,7 @@ const createProductCard = (count) => {
                     <div class="mb-3">
                         <label for="quantity-${count}" class="form-label">Quantity</label>
                         <input type="number" class="form-control quantity-input" id="quantity-${count}" min="1" placeholder="Quantity" name="quantity[${count}]" value="1" required>
-                        <label for="quantity-${count}" class="">Remaining: 2</label>
+                        <label for="quantity-${count}" class="">Remaining: 0</label>
                     </div>
                     <div class="mb-3">
                         <label for="memory-${count}" class="form-label">Memory</label>
@@ -171,6 +171,27 @@ const updatePrice = (count) => {
     }
 };
 
+// Cập nhật remaining dựa trên các lựa chọn
+const updateRemaining = (count) => {
+    const productId = document.getElementById(`productName-${count}`).value;
+    const memoryId = document.getElementById(`memory-${count}`).value;
+    const colorId = document.getElementById(`color-${count}`).value;
+
+    if (productId && memoryId && colorId) {
+        const product = productVariants.find(p => p.id === productId);
+        if (product) {
+            const memoryData = product.productVariantDetails[0].memories[memoryId];
+            const colorData = memoryData.find(color => color.colorId === colorId);
+            if (colorData) {
+                const remainingLabel = document.querySelector(`#quantity-${count} ~ label`);
+                if (remainingLabel) {
+                    remainingLabel.textContent = `Remaining: ${colorData.quantity}`;
+                }
+            }
+        }
+    }
+};
+
 // Xử lý khi thay đổi sản phẩm
 const handleProductChange = (productId, count) => {
     const product = productVariants.find(p => p.id === productId);
@@ -196,6 +217,7 @@ const handleProductChange = (productId, count) => {
 
             // Cập nhật giá sau khi thay đổi
             updatePrice(count);
+            updateRemaining(count);
         });
 
         // Cập nhật danh sách màu sắc (color) mặc định theo bộ nhớ đầu tiên
@@ -206,6 +228,7 @@ const handleProductChange = (productId, count) => {
 
         // Cập nhật giá ngay sau khi thay đổi product
         updatePrice(count);
+        updateRemaining(count);
     } else {
         console.warn(`Product ${productId} does not have variant details or memories.`);
     }
@@ -217,6 +240,7 @@ const handleColorChange = (count) => {
     if (colorSelect) {
         colorSelect.addEventListener('change', () => {
             updatePrice(count); // Gọi hàm cập nhật giá khi thay đổi màu
+            updateRemaining(count); // Gọi hàm cập nhật remaining khi thay đổi màu
         });
     }
 };
