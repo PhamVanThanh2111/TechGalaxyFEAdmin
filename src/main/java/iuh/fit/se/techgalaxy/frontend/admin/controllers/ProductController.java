@@ -221,7 +221,7 @@ public class ProductController {
                                                             } else {
                                                                 List<UploadFileResponse> uploadFileResponses = (List<UploadFileResponse>) uploadFileResponseDataResponse.getData();
                                                                 String imageUrl = uploadFileResponses.get(0).getFileName();
-                                                                ProductsImageRequest productsImageRequest = new ProductsImageRequest("products/" + variantRequest.getName().replace(" ", "_") + "/" + detailRequest.getMemid() + "/" + colorRequest.getColorId() + imageUrl, false);
+                                                                ProductsImageRequest productsImageRequest = new ProductsImageRequest("products/" + variantRequest.getName().replace(" ", "_") + "/" + detailRequest.getMemid() + "/" + colorRequest.getColorId() + "/" + imageUrl, false);
                                                                 imagesProductsImageRequests.add(productsImageRequest);
 
                                                                 DataResponse<ProductsImageResponse> productImageResponseDataResponse = productImgService.createProductImg(detailId, imagesProductsImageRequests, accessToken);
@@ -843,7 +843,7 @@ public class ProductController {
                         } else {
                             List<UploadFileResponse> uploadFileResponses = (List<UploadFileResponse>) uploadFileResponseDataResponse.getData();
                             String imageURL = uploadFileResponses.get(0).getFileName();
-                            ProductsImageRequest productsImageRequest = new ProductsImageRequest(imageURL, false);
+                            ProductsImageRequest productsImageRequest = new ProductsImageRequest("products/" + variant.getName().replace(" ", "_") + "/" + request.getMemid() + "/" + color.getColorId() + "/" + imageURL, false);
                             imagesProductsImageRequests.add(productsImageRequest);
                         }
                     }
