@@ -187,23 +187,19 @@ public class OrderController {
                 String memoryId = params.get("memory[" + i + "]");
                 String colorId = params.get("color[" + i + "]");
                 double price = Double.parseDouble(params.get("price[" + i + "]").replaceAll(",", ""));
-//            System.out.println(productVariantId + " " + quantity + " " + memoryId + " " + colorId + " " + price);
 
                 ProductVariantResponse productVariant = new ProductVariantResponse();
                 productVariant.setId(productVariantId);
 
                 ProductVariantDetailResponse productVariantDetail = new ProductVariantDetailResponse();
-                System.out.println("test find product variant detail by product variant and color and memory");
-                System.out.println(params);
-                System.out.println(productCount);
-                System.out.println(productVariantId);
-                System.out.println(colorId);
-                System.out.println(memoryId);
                 productVariantDetail.setId(productVariantId);
 
 
                 OrderDetailResponse orderDetailResponse = null;
                 if (source.equals("addOrder")) {
+                    ProductDetailResponse response = ((List<ProductDetailResponse>) productService.findProductVariantDetailByProductVariantAndColorAndMemory(productVariantId, colorId, memoryId).getData()).get(0);
+                    productVariantDetail.setId(response.getId());
+
                     orderDetailRequest.setDetailStatus(DetailStatus.PENDING);
                     orderDetailRequest.setOrder(orderResponse);
                     orderDetailRequest.setProductVariantDetail(productVariantDetail);
@@ -214,14 +210,6 @@ public class OrderController {
                     orderDetailResponse = ((List<OrderDetailResponse>) orderDetailService.getOrderDetailByOrderIdAndProductVariantDetailId(orderResponse.getId(), productVariantDetail.getId(), accessToken).getData()).get(0);
                     orderDetailResponse.setQuantity(quantity);
                     orderDetailResponse.setPrice(price);
-
-                    System.out.println("test get order detail by order id and product variant detail id");
-                    System.out.println(orderDetailResponse.getId());
-                    System.out.println(orderDetailResponse.getQuantity());
-                    System.out.println(orderDetailResponse.getPrice());
-                    System.out.println(orderDetailResponse.getProductVariantDetail().getId());
-                    System.out.println(orderDetailResponse.getOrder().getId());
-                    System.out.println(orderDetailResponse.getDetailStatus());
 
                     OrderDetail orderDetailUpdate = OrderDetailMapper.INSTANCE.toOrderDetailFromResponse(orderDetailResponse);
                     orderDetailService.updateOrderDetail(orderDetailResponse.getId(), OrderDetailMapper.INSTANCE.toOrderDetailRequest(orderDetailUpdate), accessToken);
