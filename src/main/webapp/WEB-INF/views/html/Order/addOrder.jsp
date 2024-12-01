@@ -78,6 +78,7 @@
                             <div class="card-body">
                                 <form:form role="form" action="${pageContext.request.contextPath}/orders/save"
                                            method="POST" modelAttribute="order" cssClass="needs-validation">
+                                    <input name="source" type="hidden" value="addOrder">
                                     <input type="hidden" id="productCount" name="productCount" value="0">
                                     <!-- Collapsable Card Customer -->
                                     <div class="card shadow mb-4">

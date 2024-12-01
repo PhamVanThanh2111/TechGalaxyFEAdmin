@@ -51,4 +51,32 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                     return dataAccountResponse;
                 });
     }
+
+    @Override
+    public DataResponse<OrderDetailResponse> updateOrderDetail(String id, OrderDetailRequest orderDetailRequest, String accessToken) {
+        return restClient.put()
+                .uri(ENDPOINT + "/order-details/" + id)
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(orderDetailRequest)
+                .exchange((request, response)->{
+                    DataResponse<OrderDetailResponse> dataAccountResponse = null;
+                    if (response.getBody().available() > 0) {
+                        dataAccountResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+                    }
+                    assert dataAccountResponse != null;
+                    return dataAccountResponse;
+                });
+    }
+
+    @Override
+    public DataResponse<OrderDetailResponse> getOrderDetailByOrderIdAndProductVariantDetailId(String orderId, String productVariantDetailId, String accessToken) {
+        return restClient.get()
+                .uri(ENDPOINT + "/order-details/order/" + orderId + "/product-variant-detail/" + productVariantDetailId)
+                .header("Authorization", "Bearer " + accessToken)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
 }

@@ -2,6 +2,7 @@
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -78,7 +79,9 @@
                             <div class="card-body">
                                 <form:form role="form" action="${pageContext.request.contextPath}/orders/save"
                                            method="POST" modelAttribute="order" cssClass="needs-validation">
+                                    <input type="hidden" name="source" value="updateOrder">
                                     <input type="hidden" id="productCount" name="productCount" value="0">
+                                    <input:hidden path="id"/>
                                     <!-- Collapsable Card Customer -->
                                     <div class="card shadow mb-4">
                                         <a href="#collapseCardCustomer" class="d-block card-header py-3"
@@ -110,13 +113,6 @@
 
                                         <div class="collapse show" id="collapseCardOrder">
                                             <div class="card-body">
-                                                <a href="#" class="btn btn-primary btn-icon-split" id="addProduct">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fa-solid fa-plus"></i>
-                                                    </span>
-                                                    <span class="text">Add product</span>
-                                                </a>
-
                                                 <div id="productCards" class="row"></div>
 
                                                 <div class="form-group mt-2">

@@ -362,6 +362,7 @@ public class ProductServiceImpl implements ProductService {
                         "productVariantId=" + productVariantId
                         + "&color=" + color
                         + "&memory=" + memory)
+                .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }

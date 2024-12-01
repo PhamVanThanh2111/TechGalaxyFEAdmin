@@ -10,10 +10,12 @@ import iuh.fit.se.techgalaxy.frontend.admin.dto.response.*;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Color;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Memory;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.Order;
+import iuh.fit.se.techgalaxy.frontend.admin.entities.OrderDetail;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.CustomerStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.DetailStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.OrderStatus;
 import iuh.fit.se.techgalaxy.frontend.admin.entities.enumeration.PaymentStatus;
+import iuh.fit.se.techgalaxy.frontend.admin.mapper.OrderDetailMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.mapper.OrderMapper;
 import iuh.fit.se.techgalaxy.frontend.admin.services.*;
 import jakarta.servlet.http.HttpSession;
@@ -128,6 +130,7 @@ public class OrderController {
     public ModelAndView saveOrder(@ModelAttribute("order") OrderRequest orderRequest,
                                   @RequestParam("productCount") int productCount,
                                   @RequestParam Map<String, String> params,
+                                  @RequestParam("source") String source,
                                   ModelAndView model,
                                   HttpSession session,
                                   RedirectAttributes redirectAttributes) {
@@ -167,7 +170,14 @@ public class OrderController {
             orderRequest.setOrderStatus(OrderStatus.NEW);
 
             // Save order
-            OrderResponse orderResponse = ((List<OrderResponse>) orderService.create(orderRequest, accessToken).getData()).get(0);
+            OrderResponse orderResponse = null;
+            if (source.equals("addOrder")) {
+                orderResponse = ((List<OrderResponse>) orderService.create(orderRequest, accessToken).getData()).get(0);
+            } else {
+                System.out.println("test update order");
+                System.out.println(orderRequest.getId());
+                orderResponse = ((List<OrderResponse>) orderService.update(orderRequest, accessToken).getData()).get(0);
+            }
 
             // Save order detail
             OrderDetailRequest orderDetailRequest = new OrderDetailRequest();
@@ -183,40 +193,64 @@ public class OrderController {
                 productVariant.setId(productVariantId);
 
                 ProductVariantDetailResponse productVariantDetail = new ProductVariantDetailResponse();
-                ProductDetailResponse response = ((List<ProductDetailResponse>) productService.findProductVariantDetailByProductVariantAndColorAndMemory(productVariantId, colorId, memoryId).getData()).get(0);
-                productVariantDetail.setId(response.getId());
+                System.out.println("test find product variant detail by product variant and color and memory");
+                System.out.println(params);
+                System.out.println(productCount);
+                System.out.println(productVariantId);
+                System.out.println(colorId);
+                System.out.println(memoryId);
+                productVariantDetail.setId(productVariantId);
 
-                orderDetailRequest.setDetailStatus(DetailStatus.PENDING);
-                orderDetailRequest.setOrder(orderResponse);
-                orderDetailRequest.setProductVariantDetail(productVariantDetail);
-                orderDetailRequest.setQuantity(quantity);
-                orderDetailRequest.setPrice(price / quantity);
 
-                List<OrderDetailResponse> orderDetailResponse = ((List<OrderDetailResponse>) orderDetailService.createOrderDetail(orderDetailRequest, accessToken).getData());
+                OrderDetailResponse orderDetailResponse = null;
+                if (source.equals("addOrder")) {
+                    orderDetailRequest.setDetailStatus(DetailStatus.PENDING);
+                    orderDetailRequest.setOrder(orderResponse);
+                    orderDetailRequest.setProductVariantDetail(productVariantDetail);
+                    orderDetailRequest.setQuantity(quantity);
+                    orderDetailRequest.setPrice(price / quantity);
+                    orderDetailResponse = ((List<OrderDetailResponse>) orderDetailService.createOrderDetail(orderDetailRequest, accessToken).getData()).get(0);
+                } else {
+                    orderDetailResponse = ((List<OrderDetailResponse>) orderDetailService.getOrderDetailByOrderIdAndProductVariantDetailId(orderResponse.getId(), productVariantDetail.getId(), accessToken).getData()).get(0);
+                    orderDetailResponse.setQuantity(quantity);
+                    orderDetailResponse.setPrice(price);
+
+                    System.out.println("test get order detail by order id and product variant detail id");
+                    System.out.println(orderDetailResponse.getId());
+                    System.out.println(orderDetailResponse.getQuantity());
+                    System.out.println(orderDetailResponse.getPrice());
+                    System.out.println(orderDetailResponse.getProductVariantDetail().getId());
+                    System.out.println(orderDetailResponse.getOrder().getId());
+                    System.out.println(orderDetailResponse.getDetailStatus());
+
+                    OrderDetail orderDetailUpdate = OrderDetailMapper.INSTANCE.toOrderDetailFromResponse(orderDetailResponse);
+                    orderDetailService.updateOrderDetail(orderDetailResponse.getId(), OrderDetailMapper.INSTANCE.toOrderDetailRequest(orderDetailUpdate), accessToken);
+                    System.out.println("update thanh cong");
+                }
                 if (orderDetailResponse == null) {
                     model.setViewName("html/Order/addOrder");
-                    redirectAttributes.addFlashAttribute("errorMessage", "Order created failed");
+                    redirectAttributes.addFlashAttribute("errorMessage", "Order save failed");
                     return model;
                 }
             }
             model.setViewName("redirect:/orders");
-            redirectAttributes.addFlashAttribute("successMessage", "Order created successfully");
+            redirectAttributes.addFlashAttribute("successMessage", "Order save successfully");
             return model;
         } catch (
                 HttpClientErrorException.Unauthorized e) {
             System.out.println("Unauthorized request: " + e.getMessage());
             model.setViewName("redirect:/home");
-            redirectAttributes.addFlashAttribute("errorMessage", "Order created failed");
+            redirectAttributes.addFlashAttribute("errorMessage", "Order save failed");
             return model;
         } catch (HttpClientErrorException.Forbidden e) {
             System.out.println("Forbidden request: " + e.getMessage());
             model.setViewName("redirect:/home");
-            redirectAttributes.addFlashAttribute("errorMessage", "Order created failed");
+            redirectAttributes.addFlashAttribute("errorMessage", "Order save failed");
             return model;
         } catch (Exception e) {
             model.setViewName("redirect:/home");
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "Order created failed");
+            redirectAttributes.addFlashAttribute("errorMessage", "Order save failed");
             return model;
         }
     }
@@ -272,8 +306,8 @@ public class OrderController {
 
     @GetMapping("/update/{id}")
     public ModelAndView showFormUpdateOrder(ModelAndView model,
-                                    @PathVariable String id,
-                                    HttpSession session) {
+                                            @PathVariable String id,
+                                            HttpSession session) {
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
             model.setViewName("redirect:/login");
@@ -290,6 +324,7 @@ public class OrderController {
             List<Color> colors = (List<Color>) colorService.getAllColors().getData();
 
             OrderResponse order = ((List<OrderResponse>) orderService.getById(id, accessToken).getData()).get(0);
+            order.setId(id);
             List<OrderDetailResponse> orderDetails = (List<OrderDetailResponse>) orderDetailService.getOrderDetail(id, accessToken).getData();
             orderDetails.forEach(orderDetail -> {
                 ProductDetailResponse productVariantDetail = ((List<ProductDetailResponse>) productService.getVariantDetailById(orderDetail.getProductVariantDetail().getId()).getData()).get(0);
