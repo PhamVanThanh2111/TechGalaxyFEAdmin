@@ -159,23 +159,20 @@ public class OrderController {
             systemUser.setId(systemUserLogin.getId());
             orderRequest.setSystemUser(systemUser);
 
-            // Address
-            String address = orderRequest.getAddress();
-            orderRequest.setAddress(address);
-
-            // Payment status
-            orderRequest.setPaymentStatus(PaymentStatus.PENDING);
-
-            // Order status
-            orderRequest.setOrderStatus(OrderStatus.NEW);
-
             // Save order
-            OrderResponse orderResponse = null;
+            OrderResponse orderResponse;
             if (source.equals("addOrder")) {
+                // Address
+                String address = orderRequest.getAddress();
+                orderRequest.setAddress(address);
+
+                // Payment status
+                orderRequest.setPaymentStatus(PaymentStatus.PENDING);
+
+                // Order status
+                orderRequest.setOrderStatus(OrderStatus.NEW);
                 orderResponse = ((List<OrderResponse>) orderService.create(orderRequest, accessToken).getData()).get(0);
             } else {
-                System.out.println("test update order");
-                System.out.println(orderRequest.getId());
                 orderResponse = ((List<OrderResponse>) orderService.update(orderRequest, accessToken).getData()).get(0);
             }
 
@@ -195,7 +192,7 @@ public class OrderController {
                 productVariantDetail.setId(productVariantId);
 
 
-                OrderDetailResponse orderDetailResponse = null;
+                OrderDetailResponse orderDetailResponse;
                 if (source.equals("addOrder")) {
                     ProductDetailResponse response = ((List<ProductDetailResponse>) productService.findProductVariantDetailByProductVariantAndColorAndMemory(productVariantId, colorId, memoryId).getData()).get(0);
                     productVariantDetail.setId(response.getId());
